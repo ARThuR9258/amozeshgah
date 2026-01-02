@@ -1,0 +1,46 @@
+{% load render_partial %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'shared/header_references.html' %}
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-2" href="{% url 'first_page' %}">🚗 آیین‌نامه پلاس</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link fs-5" href="{% url 'first_page' %}">خانه</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5" href="{% url 'sample_questions:question_list' %}">نمونه سوال ها</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5" href="#">نکات مربی</a></li>
+                    {% if not user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'sign_up_page' %}">ثبت‌ نام</a></li>
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'sign_in_page' %}">ورود</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'log_out_page' %}">خروج</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div style="padding-top: 76px;">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% include 'shared/footer_references.html' %}
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
