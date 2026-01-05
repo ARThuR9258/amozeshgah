@@ -129,3 +129,7 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
+LOGIN_URL = '/account/sign-in/'
+LOGIN_REDIRECT_URL = 'first_page'
+
+

@@ -33,10 +33,9 @@ class QuizListView(LoginRequiredMixin, ListView):
         return context
 
 
+# In quizbuilder_module/views.py
+
 class TakeQuizView(LoginRequiredMixin, View):
-    """View for taking a quiz"""
-    template_name = 'quizbuilder_module/take_quiz.html'
-    
     def get(self, request, quiz_id):
         quiz = get_object_or_404(
             Quiz.objects.prefetch_related('questions', 'questions__choices'), 
@@ -44,28 +43,25 @@ class TakeQuizView(LoginRequiredMixin, View):
             status='open'
         )
         
-        # Check if user has already taken this quiz
-        user_quiz = UserQuiz.objects.filter(
+        # Delete any existing incomplete attempts
+        UserQuiz.objects.filter(
             user=request.user,
-            quiz=quiz
-        ).first()
+            quiz=quiz,
+            status='pending'
+        ).delete()
         
-        if user_quiz and user_quiz.status != UserQuizChoice.PENDING:
-            messages.info(request, 'شما قبلاً در این آزمون شرکت کرده‌اید.')
-            return redirect('quizbuilder:quiz_result', quiz_id=quiz.id)
+        # Create a new quiz attempt
+        user_quiz = UserQuiz.objects.create(
+            user=request.user,
+            quiz=quiz,
+            status='pending',
+            start_time=timezone.now()
+        )
         
-        # If no existing UserQuiz, create one
-        if not user_quiz:
-            user_quiz = UserQuiz.objects.create(
-                user=request.user,
-                quiz=quiz,
-                status=UserQuizChoice.PENDING,
-                start_time=timezone.now()
-            )
-        
+        # Get all questions with their choices
         questions = quiz.questions.all().prefetch_related('choices')
         
-        return render(request, self.template_name, {
+        return render(request, 'quizbuilder_module/take_quiz.html', {
             'quiz': quiz,
             'questions': questions,
             'user_quiz': user_quiz
@@ -77,7 +73,7 @@ class TakeQuizView(LoginRequiredMixin, View):
             UserQuiz, 
             user=request.user, 
             quiz=quiz,
-            status=UserQuizChoice.PENDING
+            status='pending'
         )
         
         # Calculate score
@@ -111,10 +107,9 @@ class TakeQuizView(LoginRequiredMixin, View):
             
             # Update user quiz status and score
             user_quiz.score = score
-            user_quiz.status = UserQuizChoice.DONE
+            user_quiz.status = 'done'
             user_quiz.save()
         
-        messages.success(request, 'پاسخ‌های شما با موفقیت ثبت شد.')
         return redirect('quizbuilder:quiz_result', quiz_id=quiz.id)
 
 
@@ -125,11 +120,15 @@ class QuizResultView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         quiz = get_object_or_404(Quiz, id=self.kwargs['quiz_id'])
-        user_quiz = get_object_or_404(
-            UserQuiz, 
+        
+        # Get the most recent attempt
+        user_quiz = UserQuiz.objects.filter(
             user=self.request.user, 
             quiz=quiz
-        )
+        ).order_by('-start_time').first()
+        
+        if not user_quiz:
+            raise Http404("شما هنوز در این آزمون شرکت نکرده‌اید.")
         
         # Prepare questions data with user answers and choices
         questions_data = []
