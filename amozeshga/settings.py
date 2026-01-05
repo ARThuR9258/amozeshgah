@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_render_partial',
     'account_module',
     'sample_questions',
+    'quizbuilder_module',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,248 @@
+/* Quiz Container */
+.quiz-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 900px;
+}
+
+/* Quiz Header */
+.quiz-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.quiz-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.quiz-timer {
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    color: #e74c3c;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quiz-timer i {
+    font-size: 1.1rem;
+}
+
+.quiz-description {
+    color: #555;
+    margin: 1.5rem 0;
+    line-height: 1.7;
+}
+
+.quiz-meta {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.quiz-meta .badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Question Card */
+.question-card {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.question-card:hover {
+    border-color: #4dabf7;
+    box-shadow: 0 5px 15px rgba(77, 171, 247, 0.1);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px dashed #dee2e6;
+}
+
+.question-number {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.question-score {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.2rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.question-text {
+    color: #34495e;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+/* Answer Choices */
+.question-choices {
+    margin-right: 1.5rem;
+}
+
+.form-check {
+    margin-bottom: 0.8rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.form-check:hover {
+    background: rgba(77, 171, 247, 0.05);
+    border-color: rgba(77, 171, 247, 0.2);
+}
+
+.form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    margin-left: 0.8rem;
+    margin-top: 0.2em;
+    border: 2px solid #adb5bd;
+}
+
+.form-check-input:checked {
+    background-color: #4dabf7;
+    border-color: #4dabf7;
+}
+
+.form-check-label {
+    color: #2c3e50;
+    font-size: 1.05rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.correct-answer-badge {
+    margin-right: auto;
+    background: #28a745;
+    color: white;
+    padding: 0.2rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-right: 1rem;
+}
+
+/* Quiz Actions */
+.quiz-actions {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+    border-top: 1px solid #eee;
+}
+
+.quiz-actions .btn {
+    min-width: 200px;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    transition: all 0.3s ease;
+}
+
+.quiz-actions .btn i {
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .quiz-container {
+        padding: 1.2rem;
+        margin: 1rem;
+    }
+    
+    .quiz-title {
+        font-size: 1.5rem;
+    }
+    
+    .question-card {
+        padding: 1.2rem;
+    }
+    
+    .question-choices {
+        margin-right: 0.5rem;
+    }
+    
+    .form-check {
+        padding: 0.7rem 0.8rem;
+    }
+    
+    .form-check-label {
+        font-size: 1rem;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .quiz-container {
+        background: #2d3436;
+        color: #f8f9fa;
+    }
+    
+    .quiz-title, .question-number, .form-check-label {
+        color: #f8f9fa;
+    }
+    
+    .quiz-description, .question-text {
+        color: #dee2e6;
+    }
+    
+    .question-card {
+        background: #343a40;
+        border-color: #495057;
+    }
+    
+    .form-check:hover {
+        background: rgba(77, 171, 247, 0.1);
+        border-color: rgba(77, 171, 247, 0.3);
+    }
+    
+    .form-check-input {
+        background-color: #495057;
+        border-color: #6c757d;
+    }
+    
+    .form-check-input:checked {
+        background-color: #4dabf7;
+        border-color: #4dabf7;
+    }
+}

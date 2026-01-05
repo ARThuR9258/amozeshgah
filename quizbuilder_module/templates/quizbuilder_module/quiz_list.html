@@ -1,0 +1,75 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}آزمون‌ها - آیین‌نامه پلاس{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quiz_list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="page-header mb-5">
+                <h1 class="page-title">آزمون‌های در دسترس</h1>
+                <p class="page-subtitle">آزمون‌های فعال را مشاهده و شروع کنید</p>
+            </div>
+
+            {% if quizzes %}
+                <div class="quiz-cards">
+                    {% for quiz in quizzes %}
+                    <div class="quiz-card">
+                        <div class="quiz-card-body">
+                            <div class="quiz-card-header">
+                                <h3 class="quiz-title">{{ quiz.title }}</h3>
+                                <span class="quiz-status badge bg-{{ quiz.get_status_class }}">
+                                    {{ quiz.get_status }}
+                                </span>
+                            </div>
+                            
+                            <p class="quiz-desc">{{ quiz.desc|truncatewords:30 }}</p>
+                            
+                            <div class="quiz-meta">
+                                {% if quiz.time %}
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ quiz.time }} دقیقه</span>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="meta-item">
+                                    <i class="fas fa-question-circle"></i>
+                                    <span>{{ quiz.questions.count }} سوال</span>
+                                </div>
+                                
+                                {% if quiz.expire_time %}
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>تا {{ quiz.expire_time|date:"Y/m/d H:i" }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="quiz-card-footer">
+                            <a href="{% url 'quizbuilder:take_quiz' quiz.id %}" class="btn btn-primary btn-start-quiz">
+                                شروع آزمون
+                                <i class="fas fa-arrow-left me-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-clipboard-question"></i>
+                    </div>
+                    <h3>آزمونی برای نمایش وجود ندارد</h3>
+                    <p>در حال حاضر هیچ آزمون فعالی وجود ندارد. لطفاً بعداً مراجعه کنید.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

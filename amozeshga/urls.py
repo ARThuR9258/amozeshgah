@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('index_module.urls')),
     path('account/', include('account_module.urls')),
-    path('questions/', include('sample_questions.urls'))
+    path('questions/', include('sample_questions.urls')),
+    path('quiz/', include('quizbuilder_module.urls')),
 ]
 
 # Serve media files in development

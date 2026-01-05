@@ -1,0 +1,175 @@
+/* Header Styles */
+.navbar {
+    transition: all 0.3s ease-in-out;
+    padding: 0.8rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: translateY(-2px);
+}
+
+.navbar .nav-link {
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.navbar .nav-link:not(.btn)::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    right: 1rem;
+    background-color: #fff;
+    transition: width 0.3s ease;
+}
+
+.navbar .nav-link:not(.btn):hover::after {
+    width: calc(100% - 2rem);
+}
+
+.navbar .nav-link.active::after {
+    width: calc(100% - 2rem);
+}
+
+.navbar .btn-outline-light {
+    border-width: 2px;
+    font-weight: 500;
+    padding: 0.4rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer Styles */
+footer {
+    background: #343a40;
+    color: #fff;
+    padding: 1.5rem 0;
+    margin-top: auto;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+footer a:hover {
+    color: #4dabf7;
+    text-decoration: none;
+}
+
+footer .fas, 
+footer .far {
+    color: #4dabf7;
+    margin-left: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .text-md-start {
+        text-align: center !important;
+    }
+    
+    footer .row > div {
+        margin-bottom: 1rem;
+    }
+    
+    footer .row > div:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Button Styles */
+.btn-footer {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4dabf7, #339af0);
+    color: white;
+    box-shadow: 0 4px 15px rgba(77, 171, 247, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #339af0, #228be6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(77, 171, 247, 0.4);
+}
+
+.btn-outline-light {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #000000;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #020202;
+}
+
+/* Responsive Styles */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        padding: 1rem 0;
+        background: rgba(13, 110, 253, 0.98);
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+    
+    .navbar-nav {
+        margin-top: 0.5rem;
+    }
+    
+    .nav-item {
+        margin: 0.3rem 0;
+    }
+    
+    .footer-section {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .footer-links h5::after {
+        right: 50%;
+        transform: translateX(50%);
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+}
+
+/* Animation for navbar on scroll */
+.navbar-shrink {
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}

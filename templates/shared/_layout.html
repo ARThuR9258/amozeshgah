@@ -1,7 +1,7 @@
 {% load render_partial %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" class="h-100">
 
 <head>
     <meta charset="UTF-8">
@@ -9,26 +9,81 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{% block title %}{% endblock %}</title>
     {% include 'shared/header_references.html' %}
+    <link rel="stylesheet" href="{% static 'css/header_footer.css' %}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 76px; /* Height of the fixed navbar */
+        }
+        .content-wrapper {
+            flex: 1 0 auto;
+            width: 100%;
+            padding-bottom: 2rem;
+        }
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-lg fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-2" href="{% url 'first_page' %}">🚗 آیین‌نامه پلاس</a>
+            <a class="navbar-brand" href="{% url 'first_page' %}">
+                <i class="fas fa-car-side me-2"></i>
+                آیین‌نامه پلاس
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link fs-5" href="{% url 'first_page' %}">خانه</a></li>
-                    <li class="nav-item"><a class="nav-link fs-5" href="{% url 'sample_questions:question_list' %}">نمونه سوال ها</a></li>
-                    <li class="nav-item"><a class="nav-link fs-5" href="#">نکات مربی</a></li>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center {% if request.path == '/' %}active{% endif %}" 
+                           href="{% url 'first_page' %}">
+                            <i class="fas fa-home d-lg-none me-2"></i>
+                            خانه
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center {% if 'questions' in request.path %}active{% endif %}" 
+                           href="{% url 'sample_questions:question_list' %}">
+                            <i class="fas fa-file-alt d-lg-none me-2"></i>
+                            نمونه سوالات
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href="{% url 'quizbuilder:quiz_list' %}">
+                            <i class="fas fa-chalkboard-teacher d-lg-none me-2"></i>
+                            امتحان آیین نامه
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
                     {% if not user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'sign_up_page' %}">ثبت‌ نام</a></li>
-                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'sign_in_page' %}">ورود</a></li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a class="nav-link me-3" href="{% url 'sign_up_page' %}">
+                                <i class="fas fa-user-plus d-lg-none me-2"></i>
+                                ثبت‌ نام
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light" href="{% url 'sign_in_page' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i>
+                                ورود
+                            </a>
+                        </li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'log_out_page' %}">خروج</a></li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light" href="{% url 'log_out_page' %}">
+                                <i class="fas fa-sign-out-alt me-1"></i>
+                                خروج
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -36,10 +91,31 @@
     </nav>
 
     <!-- Main Content -->
-    <div style="padding-top: 76px;">
+    <div class="content-wrapper">
         {% block content %}{% endblock %}
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-auto">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-12 col-md-6 text-center text-md-start">
+                    <h5 class="mb-2">🚗 آیین‌نامه پلاس</h5>
+                    <p class="mb-2 mb-md-0">سایت تخصصی آزمون آنلاین آیین‌نامه رانندگی - به‌روزرسانی ۱۴۰۴</p>
+                </div>
+                <div class="col-12 col-md-6 text-center text-md-start">
+                    <p class="mb-1">
+                        <i class="fas fa-envelope me-2"></i>
+                        <a href="mailto:info@ayinnamehplus.ir" class="text-white text-decoration-none">info@ayinnamehplus.ir</a>
+                    </p>
+                    <p class="mb-0">
+                        <i class="far fa-copyright me-2"></i>
+                        ۱۴۰۴ - تمام حقوق محفوظ است
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
     {% include 'shared/footer_references.html' %}
     {% block extra_js %}{% endblock %}
 </body>

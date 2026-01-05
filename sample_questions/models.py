@@ -16,8 +16,8 @@ class SampleQuestion(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ به‌روزرسانی')
 
     class Meta:
-        verbose_name = 'سوال نمونه'
-        verbose_name_plural = 'سوالات نمونه'
+        verbose_name = 'نمونه سوال ها'
+        verbose_name_plural = 'نمونه سوال ها'
         ordering = ['-created_at']
 
     def __str__(self):

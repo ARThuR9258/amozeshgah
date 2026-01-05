@@ -1,0 +1,232 @@
+/* Quiz Result Page Styles */
+.quiz-result-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Result Header */
+.result-header {
+    padding: 2rem 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 2rem;
+}
+
+.result-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+}
+
+.result-icon .success {
+    color: #28a745;
+}
+
+.result-icon .danger {
+    color: #dc3545;
+}
+
+.result-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.result-subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+/* Result Summary */
+.result-summary {
+    margin: 2rem 0;
+}
+
+.result-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.score-display {
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+.score-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 8px solid #e9ecef;
+    position: relative;
+    margin: 0 auto 1.5rem;
+}
+
+.score {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1;
+}
+
+.divider {
+    font-size: 2.5rem;
+    color: #adb5bd;
+    margin: 0 0.5rem;
+    line-height: 1;
+}
+
+.total {
+    font-size: 2rem;
+    color: #6c757d;
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 1.2rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.result-details {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed #dee2e6;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item .label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.detail-item .value {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+/* Result Actions */
+.result-actions {
+    margin: 3rem 0;
+}
+
+.result-actions .btn {
+    min-width: 200px;
+    padding: 0.8rem 2rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Quiz Answers Section */
+.quiz-answers {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.section-title {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f1f3f5;
+}
+
+/* Answer Status Badges */
+.correct-answer-badge {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.wrong-answer-badge {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Highlight correct/wrong answers */
+.correct-answer {
+    background-color: rgba(40, 167, 69, 0.05);
+    border-left: 3px solid #28a745;
+}
+
+.wrong-answer {
+    background-color: rgba(220, 53, 69, 0.05);
+    border-left: 3px solid #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .quiz-result-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .result-title {
+        font-size: 1.8rem;
+    }
+    
+    .score-circle {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .score {
+        font-size: 2.8rem;
+    }
+    
+    .divider {
+        font-size: 2rem;
+    }
+    
+    .total {
+        font-size: 1.8rem;
+    }
+    
+    .result-actions .btn {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .result-actions .btn:last-child {
+        margin-bottom: 0;
+    }
+}
