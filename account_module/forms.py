@@ -3,37 +3,56 @@ from account_module.models import User
 
 
 class SignUpForm(forms.ModelForm):
-    username = forms.CharField(
+    first_name = forms.CharField(
+        max_length=30,
+        required=True,
+        widget=forms.TextInput(attrs={'placeholder': 'نام', 'class': 'form-control'}),
+        label='نام',
+        error_messages={'required': 'نام الزامی است.'}
+    )
+    last_name = forms.CharField(
         max_length=150,
         required=True,
-        widget=forms.TextInput(attrs={'placeholder': 'نام کاربری' , 'class' : 'form-control'}),
-        label='نام کاربری',
-        error_messages={'required': 'نام کاربری الزامی است.'}
+        widget=forms.TextInput(attrs={'placeholder': 'نام خانوادگی', 'class': 'form-control'}),
+        label='نام خانوادگی',
+        error_messages={'required': 'نام خانوادگی الزامی است.'}
+    )
+    phone_number = forms.CharField(
+        max_length=11,
+        required=True,
+        widget=forms.TextInput(attrs={'placeholder': 'شماره موبایل (09123456789)', 'class': 'form-control'}),
+        label='شماره موبایل',
+        error_messages={
+            'required': 'شماره موبایل الزامی است.',
+            'unique': 'این شماره موبایل قبلاً ثبت‌نام کرده است.'
+        }
     )
     password = forms.CharField(
         min_length=8,
         max_length=200,
         required=True,
-        widget=forms.PasswordInput(attrs={'placeholder': 'رمز عبور' , 'class' : 'form-control'}),
+        widget=forms.PasswordInput(attrs={'placeholder': 'رمز عبور', 'class': 'form-control'}),
         label='رمز عبور',
-        error_messages={'required': 'رمز عبور الزامی است.', 'min_length': 'رمز عبور باید حداقل ۸ کاراکتر باشد.'}
+        error_messages={
+            'required': 'رمز عبور الزامی است.',
+            'min_length': 'رمز عبور باید حداقل ۸ کاراکتر باشد.'
+        }
     )
     password2 = forms.CharField(
         min_length=8,
         max_length=200,
         required=True,
-        widget=forms.PasswordInput(attrs={'placeholder': 'تکرار رمز عبور' , 'class': 'form-control'}),
+        widget=forms.PasswordInput(attrs={'placeholder': 'تکرار رمز عبور', 'class': 'form-control'}),
         label='تکرار رمز عبور',
-        error_messages={'required': 'تکرار رمز عبور الزامی است.', 'min_length': 'تکرار رمز عبور باید حداقل ۸ کاراکتر باشد.'}
+        error_messages={
+            'required': 'تکرار رمز عبور الزامی است.',
+            'min_length': 'تکرار رمز عبور باید حداقل ۸ کاراکتر باشد.'
+        }
     )
 
     class Meta:
         model = User
-        # Bind only model fields; password fields are handled manually
-        fields = ['email', 'username']
-        widgets = {
-            'email': forms.EmailInput(attrs={'placeholder': 'ایمیل', 'class': 'form-control'})
-        }
+        fields = ['first_name', 'last_name', 'phone_number']
 
 
     def __init__(self, *args, **kwargs):
@@ -41,17 +60,13 @@ class SignUpForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email and User.objects.filter(email = email).exists():
-            raise forms.ValidationError('این ایمیل قبلاً ثبت‌نام شده است!')
-        return email
-
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
-        if username and User.objects.filter(username=username).exists():
-            raise forms.ValidationError('این نام کاربری قبلاً استفاده شده است!')
-        return username
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if not phone_number.isdigit() or len(phone_number) != 11:
+            raise forms.ValidationError('شماره موبایل معتبر نیست. لطفاً شماره موبایل را به درستی وارد کنید.')
+        if User.objects.filter(phone_number=phone_number).exists():
+            raise forms.ValidationError('این شماره موبایل قبلاً ثبت‌نام کرده است!')
+        return phone_number
 
     def clean_password2(self):
         password = self.cleaned_data.get('password')
@@ -61,27 +76,40 @@ class SignUpForm(forms.ModelForm):
         return password2
 
 
-    def save(self , commit=True):
+    def save(self, commit=True):
         user = super().save(commit=False)
-        password = self.cleaned_data.get('password')
-        if password:
-            user.set_password(password)
+        user.phone_number = self.cleaned_data['phone_number']
+        user.set_password(self.cleaned_data['password'])
+        
+        # Generate a unique username if not provided
+        if not user.username:
+            base_username = f"user_{self.cleaned_data['phone_number']}"
+            username = base_username
+            counter = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}_{counter}"
+                counter += 1
+            user.username = username
+            
         if commit:
             user.save()
         return user
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
-        max_length=150,
+    phone_number = forms.CharField(
+        max_length=11,
         required=True,
         widget=forms.TextInput(attrs={
-            'placeholder': 'نام کاربری یا ایمیل',
+            'placeholder': 'شماره موبایل (09123456789)',
             'class': 'form-control',
-            'autocomplete': 'username'
+            'autocomplete': 'tel'
         }),
-        label='نام کاربری یا ایمیل',
-        error_messages={'required': 'لطفاً نام کاربری یا ایمیل خود را وارد کنید.'}
+        label='شماره موبایل',
+        error_messages={
+            'required': 'لطفاً شماره موبایل خود را وارد کنید.',
+            'invalid': 'شماره موبایل معتبر نیست.'
+        }
     )
     password = forms.CharField(
         required=True,
@@ -104,18 +132,35 @@ class LoginForm(forms.Form):
         self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
 
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if not phone_number or not phone_number.isdigit() or len(phone_number) != 11:
+            raise forms.ValidationError('شماره موبایل معتبر نیست. لطفاً شماره موبایل ۱۱ رقمی را به درستی وارد کنید.')
+        
+        # Check if user exists with this phone number
+        try:
+            user = User.objects.get(phone_number=phone_number)
+            self.user_cache = user
+        except User.DoesNotExist:
+            raise forms.ValidationError('کاربری با این شماره موبایل ثبت‌نام نکرده است.')
+            
+        return phone_number
+
     def clean(self):
         cleaned_data = super().clean()
-        username = cleaned_data.get('username')
+        phone_number = cleaned_data.get('phone_number')
         password = cleaned_data.get('password')
         
-        if username and password:
+        if phone_number and password:
             from django.contrib.auth import authenticate
-            user = authenticate(request=self.request, username=username, password=password)
+            user = authenticate(request=self.request, username=phone_number, password=password)
             if user is None:
-                raise forms.ValidationError('نام کاربری یا رمز عبور اشتباه است.')
+                raise forms.ValidationError('شماره موبایل یا رمز عبور اشتباه است.')
             if not user.is_active:
                 raise forms.ValidationError('حساب کاربری شما غیرفعال شده است.')
             cleaned_data['user'] = user
             
         return cleaned_data
+
+    def get_user(self):
+        return self.user_cache if hasattr(self, 'user_cache') else None

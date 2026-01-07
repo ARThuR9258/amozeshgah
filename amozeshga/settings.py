@@ -106,6 +106,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'account_module.User'
 
+AUTHENTICATION_BACKENDS = [
+    'account_module.backends.PhoneNumberBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Keep the default backend as fallback
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
