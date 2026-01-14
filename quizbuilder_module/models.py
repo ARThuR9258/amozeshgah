@@ -156,3 +156,4 @@ class UserQuizQuestionAnswer(models.Model):
     @property
     def get_user(self):
         return self.user_quiz.user
+

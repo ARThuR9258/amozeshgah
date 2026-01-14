@@ -56,4 +56,4 @@ class User(AbstractUser):
         verbose_name_plural = 'کاربران'
 
     def __str__(self):
-        return self.phone_number or self.email or self.username
+        return self.phone_number and self.email or self.username
