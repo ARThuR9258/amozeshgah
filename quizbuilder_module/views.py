@@ -6,9 +6,20 @@ from django.db import transaction
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.contrib.auth import get_user_model
+from django.views.decorators.http import require_POST
+from django.views.decorators.clickjacking import xframe_options_exempt
+from django.contrib import messages
+from django.urls import reverse
+from account_module.models import User
 from .models import Quiz, QuizQuestion, UserQuiz, UserQuizQuestionAnswer, QuizQuestionChoice
 from .helpers import UserQuizChoice
+
+User = get_user_model()
 
 
 class QuizListView(LoginRequiredMixin, ListView):
@@ -36,12 +47,51 @@ class QuizListView(LoginRequiredMixin, ListView):
 # In quizbuilder_module/views.py
 
 class TakeQuizView(LoginRequiredMixin, View):
+    MAX_FREE_ATTEMPTS = 2
+    PAYMENT_AMOUNT = 99000  # 100,000 Tomans
+
+    def check_exam_attempts(self, user):
+        today = timezone.now().date()
+        
+        # Reset attempts if it's a new day
+        if user.last_attempt_date != today:
+            user.exam_attempts = 0
+            user.last_attempt_date = today
+            user.save(update_fields=['exam_attempts', 'last_attempt_date'])
+        
+        # Check if user has free attempts left
+        if user.exam_attempts < self.MAX_FREE_ATTEMPTS:
+            return True, None
+            
+        # Check if user has paid for additional attempts
+        if user.has_paid_for_exam:
+            return True, None
+            
+        # User needs to pay
+        return False, {
+            'can_take_exam': False,
+            'needs_payment': True,
+            'amount': self.PAYMENT_AMOUNT,
+            'free_attempts_used': user.exam_attempts,
+            'max_free_attempts': self.MAX_FREE_ATTEMPTS
+        }
+
     def get(self, request, quiz_id):
         quiz = get_object_or_404(
             Quiz.objects.prefetch_related('questions', 'questions__choices'), 
             id=quiz_id, 
             status='open'
         )
+        
+        # Check exam attempts and payment status
+        can_take_exam, payment_context = self.check_exam_attempts(request.user)
+        if not can_take_exam:
+            # Add quiz to the context
+            context = {
+                'quiz': quiz,
+                **payment_context
+            }
+            return render(request, 'quizbuilder_module/payment_required.html', context)
         
         # Delete any existing incomplete attempts
         UserQuiz.objects.filter(
@@ -58,13 +108,20 @@ class TakeQuizView(LoginRequiredMixin, View):
             start_time=timezone.now()
         )
         
+        # Update user's exam attempts
+        user = request.user
+        user.exam_attempts += 1
+        user.last_attempt_date = timezone.now().date()
+        user.save(update_fields=['exam_attempts', 'last_attempt_date'])
+        
         # Get all questions with their choices
         questions = quiz.questions.all().prefetch_related('choices')
         
         return render(request, 'quizbuilder_module/take_quiz.html', {
             'quiz': quiz,
             'questions': questions,
-            'user_quiz': user_quiz
+            'user_quiz': user_quiz,
+            'remaining_attempts': max(0, self.MAX_FREE_ATTEMPTS - user.exam_attempts)
         })
     
     def post(self, request, quiz_id):
@@ -173,3 +230,42 @@ class QuizResultView(LoginRequiredMixin, TemplateView):
         })
         
         return context
+
+
+@login_required
+def process_payment(request, quiz_id):
+    """
+    Process payment for exam attempts beyond the free limit.
+    In a real implementation, this would integrate with a payment gateway.
+    For now, it simulates a successful payment.
+    """
+    quiz = get_object_or_404(Quiz, id=quiz_id, status='open')
+    user = request.user
+    
+    # Verify user needs to pay
+    if user.has_paid_for_exam:
+        messages.warning(request, 'شما قبلاً پرداخت خود را انجام داده‌اید.')
+        return redirect('quizbuilder:take_quiz', quiz_id=quiz.id)
+    
+    # In a real implementation, you would:
+    # 1. Connect to a payment gateway (e.g., Zarinpal, IDPay, etc.)
+    # 2. Create a payment request
+    # 3. Redirect to the payment page
+    # 4. Handle the callback/verification
+    
+    # For this example, we'll simulate a successful payment
+    try:
+        with transaction.atomic():
+            # Update user's payment status
+            user.has_paid_for_exam = True
+            user.save(update_fields=['has_paid_for_exam'])
+            
+            # Log the payment (in a real app, you'd have a Payment model)
+            # Payment.objects.create(user=user, amount=TakeQuizView.PAYMENT_AMOUNT, status='completed')
+            
+            messages.success(request, 'پرداخت با موفقیت انجام شد. اکنون می‌توانید در آزمون شرکت کنید.')
+            return redirect('quizbuilder:take_quiz', quiz_id=quiz.id)
+            
+    except Exception as e:
+        messages.error(request, f'خطا در پرداخت: {str(e)}')
+        return redirect('quizbuilder:take_quiz', quiz_id=quiz.id)

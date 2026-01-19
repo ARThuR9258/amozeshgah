@@ -40,9 +40,12 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True, null=True, blank=True, verbose_name='ایمیل')
+    email = models.EmailField(null=True, blank=True, verbose_name='ایمیل')
     phone_number = models.CharField(max_length=11, unique=True, verbose_name='شماره موبایل')
     is_verified = models.BooleanField(default=False, verbose_name='تایید شده')
+    exam_attempts = models.PositiveIntegerField(default=0, verbose_name='تعداد آزمون‌های رایگان امروز')
+    last_attempt_date = models.DateField(null=True, blank=True, verbose_name='تاریخ آخرین آزمون')
+    has_paid_for_exam = models.BooleanField(default=False, verbose_name='آیا برای آزمون پرداخت کرده است؟')
     
     # Make username non-required and email not used for authentication
     username = models.CharField(max_length=150, unique=True, null=True, blank=True, verbose_name='نام کاربری')

@@ -17,6 +17,16 @@ class SignUpForm(forms.ModelForm):
         label='نام خانوادگی',
         error_messages={'required': 'نام خانوادگی الزامی است.'}
     )
+    username = forms.CharField(
+        max_length=200,
+        required=True,
+        widget=forms.TextInput(attrs={'placeholder': 'نام کاربری' , 'class': 'form-control'}),
+        label='نام کاربری',
+        error_messages={
+            'required': 'نام کاربری الزامی است',
+            'unique': 'این نام کاربری قبلا ثبت شده است'
+        }
+    )
     phone_number = forms.CharField(
         max_length=11,
         required=True,
@@ -52,7 +62,7 @@ class SignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'phone_number']
+        fields = ['first_name', 'last_name', 'phone_number' , 'username']
 
 
     def __init__(self, *args, **kwargs):
