@@ -1,0 +1,81 @@
+/*#region ----------------- Orders */
+.information-section {
+  border: 1px solid $borderColor;
+  border-radius: $radius_Regular;
+  padding: 12px;
+  margin-bottom: 15px;
+  ul {
+    @include displayFlex(flex, flex-start, flex-start);
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    li {
+      flex: 0 0 33%33;
+      width: 33.33%;
+      font-size: 14px;
+      margin: 5px 0;
+      .title {
+        color: $textGrey;
+      }
+      .desc {
+        color: $textDark;
+        margin-right: 5px;
+        font-weight: 600;
+        &.color-success,
+        &.color-error,
+        &.color-pending,
+        &.color-processing,
+        &.color-info,
+        &.color-new {
+          padding: 2px 8px;
+          border-radius: 5rem;
+        }
+        &.color-success {
+          background-color: $success;
+          color: white;
+        }
+        &.color-error {
+          background-color: $textSilver;
+          color: white;
+        }
+        &.color-pending {
+          background-color: $warning;
+          color: white;
+        }
+        &.color-processing {
+          background-color: $info;
+          color: white;
+        }
+        &.color-info {
+          background-color: $info;
+          color: white;
+        }
+        &.color-new {
+          background-color: $error;
+          color: white;
+        }
+      }
+      &.full-width {
+        flex: 1 1 100%;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+  .information-section {
+    ul li {
+      flex: 0 0 50%;
+      width: 50%;
+    }
+  }
+}
+@media (max-width: 575px) {
+  .information-section {
+    ul li {
+      flex: 0 0 100%;
+      width: 100%;
+    }
+  }
+}
+/*#endregion -------------- Orders */

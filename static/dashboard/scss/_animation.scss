@@ -1,0 +1,61 @@
+/*#region ----------------- Animation */
+@keyframes swipeupsmall {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes swipeLeft {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes scaleZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes scaleZoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($color: white, $alpha: 0.7),
+      0 0 0 0 rgba($color: white, $alpha: 0.7);
+  }
+  40% {
+    box-shadow: 0 0 0 20px rgba($color: white, $alpha: 0),
+      0 0 0 0 rgba($color: white, $alpha: 0.7);
+  }
+  80% {
+    box-shadow: 0 0 0 20px rgba($color: white, $alpha: 0),
+      0 0 0 20px rgba($color: white, $alpha: 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($color: white, $alpha: 0),
+      0 0 0 20px rgba($color: white, $alpha: 0);
+  }
+}
+
+/*#endregion -------------- Animation */

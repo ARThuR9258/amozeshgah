@@ -1,0 +1,14 @@
+/*#region ----------------- Progress */
+.progress {
+  background-color: $background_light2;
+  width: 100%;
+  height: 5px;
+  border-radius: $radius_Full;
+  .progress-bar {
+    background-color: $secondary;
+    height: 5px;
+    border-radius: $radius_Full;
+  }
+}
+
+/*#endregion -------------- Progress */

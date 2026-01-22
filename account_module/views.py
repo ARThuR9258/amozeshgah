@@ -1,8 +1,14 @@
-from django.shortcuts import render, redirect
-from django.views.generic import CreateView, FormView
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import CreateView, FormView, View
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth import login, logout
-from account_module.forms import SignUpForm, LoginForm
+from django.contrib import messages
+from django.utils import timezone
+from datetime import timedelta
+import random
+
+from account_module.forms import SignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
+from account_module.models import User
 
 
 # Create your views here.
@@ -66,4 +72,105 @@ def user_panel_view(request):
         'date_joined': request.user.date_joined.strftime('%Y/%m/%d - %H:%M')
     }
     return render(request, 'account_module/user_panel.html', context)
+
+
+class ForgotPasswordView(View):
+    template_name = 'account_module/forgot_password.html'
+    form_class = ForgotPasswordForm
+    success_url = reverse_lazy('forgot_password_done')
+    
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('first_page')
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            phone_number = form.cleaned_data['phone_number']
+            user = get_object_or_404(User, phone_number=phone_number)
+            
+            # Generate a 5-digit random code
+            reset_code = ''.join([str(random.randint(0, 9)) for _ in range(5)])
+            
+            # In a real application, you would send this code via SMS or email
+            # For now, we'll store it in the session
+            request.session['reset_code'] = reset_code
+            request.session['reset_phone'] = phone_number
+            request.session['reset_code_time'] = str(timezone.now())
+            
+            # Set session expiry to 30 minutes
+            request.session.set_expiry(1800)
+            
+            # In a real app, you would send the code via SMS here
+            # For testing purposes, we'll just print it to the console
+            print(f"Reset code for {phone_number}: {reset_code}")
+            
+            return redirect('reset_password')
+            
+        return render(request, self.template_name, {'form': form})
+
+
+class ResetPasswordView(View):
+    template_name = 'account_module/reset_password.html'
+    form_class = ResetPasswordForm
+    success_url = reverse_lazy('sign_in_page')
+    
+    def get(self, request):
+        if 'reset_code' not in request.session or 'reset_phone' not in request.session:
+            messages.error(request, 'لطفاً ابتدا درخواست بازیابی رمز عبور دهید.')
+            return redirect('forgot_password')
+            
+        # Check if code is expired (30 minutes)
+        code_time = request.session.get('reset_code_time')
+        if code_time:
+            code_time = timezone.datetime.fromisoformat(code_time)
+            if timezone.now() > code_time + timedelta(minutes=30):
+                del request.session['reset_code']
+                del request.session['reset_phone']
+                del request.session['reset_code_time']
+                messages.error(request, 'کد تایید منقضی شده است. لطفاً مجدداً اقدام کنید.')
+                return redirect('forgot_password')
+        
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        if 'reset_code' not in request.session or 'reset_phone' not in request.session:
+            messages.error(request, 'لطفاً ابتدا درخواست بازیابی رمز عبور دهید.')
+            return redirect('forgot_password')
+            
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            entered_code = form.cleaned_data['code']
+            stored_code = request.session.get('reset_code')
+            phone_number = request.session.get('reset_phone')
+            
+            if entered_code != stored_code:
+                form.add_error('code', 'کد تایید نامعتبر است.')
+                return render(request, self.template_name, {'form': form})
+            
+            try:
+                user = User.objects.get(phone_number=phone_number)
+                user.set_password(form.cleaned_data['new_password'])
+                user.save()
+                
+                # Clean up the session
+                del request.session['reset_code']
+                del request.session['reset_phone']
+                del request.session['reset_code_time']
+                
+                messages.success(request, 'رمز عبور شما با موفقیت تغییر یافت. اکنون می‌توانید با رمز عبور جدید وارد شوید.')
+                return redirect(self.success_url)
+                
+            except User.DoesNotExist:
+                messages.error(request, 'کاربری با این مشخصات یافت نشد.')
+                return redirect('forgot_password')
+                
+        return render(request, self.template_name, {'form': form})
+
+
+def forgot_password_done(request):
+    return render(request, 'account_module/forgot_password_done.html')
 

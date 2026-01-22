@@ -1,0 +1,273 @@
+/*#region ----------------- General */
+@import url(../../css/fontface.css);
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  outline: none !important;
+}
+body {
+  font-family: $bodyFont !important;
+  font-weight: 400;
+  font-size: $fontSize_Regular;
+  line-height: 1.5;
+  direction: rtl;
+  margin: 0;
+  background-color: $background;
+  text-align: right;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+html {
+  scroll-behavior: smooth;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  color: $textDark;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+textarea,
+strong,
+span,
+p {
+  font-family: $bodyFont !important;
+}
+h1 {
+  font-weight: 800;
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2rem;
+  font-weight: 800;
+}
+h3 {
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+h4 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+h6 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  line-height: 25px;
+  font-weight: 400;
+}
+b,
+strong {
+  font-weight: 900;
+}
+hr {
+  margin: 1rem 0;
+  color: inherit;
+  border: 0;
+  border-top: $borderColor solid;
+  opacity: 0.25;
+}
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+ol ol,
+ol ul,
+ul ol,
+ul ul {
+  margin-bottom: 0;
+}
+nav {
+  display: block;
+}
+a {
+  text-decoration: none;
+  color: $textDark;
+  &:hover {
+    color: $primary;
+  }
+  &:not([href]):not([class]) {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+}
+figure {
+  margin: 0 0 1rem;
+}
+img {
+  border-style: none;
+  font-size: 13px;
+  font-weight: 300;
+}
+svg,
+img {
+  vertical-align: middle;
+}
+input,
+button,
+select,
+optgroup,
+textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+textarea {
+  resize: vertical;
+}
+table {
+  caption-side: bottom;
+  border-collapse: collapse;
+}
+th {
+  text-align: inherit;
+  text-align: -webkit-match-parent;
+}
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+}
+label {
+  display: inline-block;
+}
+button {
+  border-radius: 0;
+  cursor: pointer;
+}
+button:focus:not(:focus-visible) {
+  outline: 0;
+}
+[role="button"] {
+  cursor: pointer;
+}
+[type="button"],
+[type="reset"],
+[type="submit"],
+button {
+  -webkit-appearance: button;
+}
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled),
+button:not(:disabled) {
+  cursor: pointer;
+}
+button,
+select {
+  text-transform: none;
+}
+select {
+  word-wrap: normal;
+  &:disabled {
+    opacity: 1;
+  }
+}
+select
+  [list]:not([type="date"]):not([type="datetime-local"]):not(
+    [type="month"]
+  ):not([type="week"]):not([type="time"])::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+::selection {
+  background-color: $secondary;
+  color: white;
+}
+
+::-moz-focus-inner {
+  padding: 0;
+  border-style: none;
+}
+
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-fields-wrapper,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-minute,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-text,
+::-webkit-datetime-edit-year-field {
+  padding: 0;
+}
+::-webkit-inner-spin-button {
+  height: auto;
+}
+[type="search"] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+[type="email"],
+[type="number"],
+[type="tel"],
+[type="url"] {
+  direction: ltr;
+}
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+::-webkit-file-upload-button {
+  font: inherit;
+  -webkit-appearance: button;
+}
+::file-selector-button {
+  font: inherit;
+  -webkit-appearance: button;
+}
+iframe {
+  border: 0;
+}
+
+[hidden],
+.hidden {
+  display: none !important;
+}
+.fixed-position {
+  overflow: hidden !important;
+}
+
+/*#endregion -------------- General */

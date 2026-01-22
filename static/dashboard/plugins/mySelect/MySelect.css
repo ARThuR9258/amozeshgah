@@ -1,0 +1,111 @@
+.select-container {
+    width: 100%;
+    margin: 10px 0;
+    position: relative;
+    box-sizing: border-box;
+}
+.select-container .select-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: black;
+    margin-bottom: 8px;
+    display: block;
+}
+.select-container .selected-items {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    min-height: 44px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.select-container .selected-item {
+    background: #28a745;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    height: 32px;
+    font-size: 14px;
+}
+.select-container .selected-item .remove-item {
+    padding-right: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+}
+.select-container .selected-item .remove-item:hover {
+    color: white;
+}
+.select-container .select-input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 400;
+}
+.select-container .select-input:hover {
+    border-color: #444;
+    box-shadow: none;
+    appearance: none;
+}
+.select-container .select-input:focus {
+    border-color: #444;
+    box-shadow: none;
+    appearance: none;
+}
+.select-container select.dropdown-list {
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+.select-container select.dropdown-list option {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 0;
+    appearance: none !important;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+.select-container select.dropdown-list option:hover {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+.select-container select.dropdown-list option:focus {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+.select-container select.dropdown-list option:disabled {
+    background-color: #f0f0f0;
+}
+.select-container select.dropdown-list option:disabled option:hover {
+    background-color: #f0f0f0;
+}
+
+.select-list-of-items {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}

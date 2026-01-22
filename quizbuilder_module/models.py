@@ -54,6 +54,8 @@ class QuizQuestionChoice(models.Model):
     )
 
     class Meta:
+        verbose_name = 'گزینه ها'
+        verbose_name_plural = 'گزینه ها'
         ordering = ['created_at']
 
     def __str__(self):
@@ -79,6 +81,12 @@ class QuizQuestion(models.Model):
         verbose_name='گزینه های سوال',
         to=QuizQuestionChoice,
     )
+
+    class Meta:
+        verbose_name = 'متن سوال'
+        verbose_name_plural = 'متن سوال ها'
+
+
 
     def __str__(self):
         return f'{self.quiz}, {self.description[:100]}'
@@ -117,6 +125,11 @@ class UserQuiz(models.Model):
         verbose_name='نمره(بارم)'
     )
 
+    class Meta:
+        verbose_name = 'پاسخ نامه کاربر'
+        verbose_name_plural = 'پاسخ نامه های کاربران'
+
+
     def __str__(self):
         return f'{self.user}, {self.quiz}'
 
@@ -149,6 +162,12 @@ class UserQuizQuestionAnswer(models.Model):
         on_delete=models.CASCADE,
         verbose_name='پاسخ کاربر',
     )
+
+
+    class Meta:
+        verbose_name = 'پاسخ های کاربر'
+        verbose_name_plural = 'پاسخ های کاربران'
+
 
     def __str__(self):
         return f'{self.user_quiz}, {self.answer}'

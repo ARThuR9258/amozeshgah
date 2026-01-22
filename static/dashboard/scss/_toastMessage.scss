@@ -1,0 +1,204 @@
+/*#region ----------------- Toast Message */
+.toast-container {
+  position: fixed;
+  top: 0;
+  right: 50%;
+  transform: translateX(50%);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+}
+.toast-content {
+  display: none;
+  padding: 10px 0;
+  width: 300px;
+  max-width: 300px;
+  animation: slideIn 0.3s ease, fadeOut 0.3s ease 3.5s forwards;
+  .inner {
+    display: grid;
+    grid-template-columns: 40px auto;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: $boxshadow_2;
+    position: relative;
+    .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      @include displayFlex(flex, center, center);
+      .fi {
+        display: flex;
+      }
+    }
+    .text {
+      padding: 5px 10px 5px 35px;
+      font-size: 14px;
+      color: $textDark;
+    }
+  }
+  &.show {
+    display: block;
+  }
+  &.success {
+    .inner {
+      .icon {
+        background-color: rgba($color: $success, $alpha: 0.1);
+        color: $success;
+      }
+    }
+  }
+  &.error {
+    .inner {
+      .icon {
+        background-color: rgba($color: $error, $alpha: 0.1);
+        color: $error;
+      }
+    }
+  }
+  &.warning {
+    .inner {
+      .icon {
+        background-color: rgba($color: $warning, $alpha: 0.1);
+        color: $warning;
+      }
+    }
+  }
+  &.info {
+    .inner {
+      .icon {
+        background-color: rgba($color: $info, $alpha: 0.1);
+        color: $info;
+      }
+    }
+  }
+  .close-toastMessage {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #6c757d;
+  }
+}
+
+#blazor-error-ui {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1011;
+  backdrop-filter: blur(10px);
+  text-align: right;
+  padding: 20px 15px 20px 100px;
+  color: white;
+  font-size: 14px;
+  line-height: normal;
+  background-color: rgba($color: $error, $alpha: 0.85);
+  &.error {
+    background-color: rgba($color: $error, $alpha: 0.85);
+  }
+  &.success {
+    background-color: rgba($color: $success, $alpha: 0.85);
+  }
+  &.info {
+    background-color: rgba($color: $info, $alpha: 0.85);
+  }
+  &.warning {
+    background-color: rgba($color: $warning, $alpha: 0.85);
+    color: $textDark;
+    .dismiss {
+      border-color: $textGrey;
+      color: $textGrey;
+      &:hover {
+        background-color: $textGrey;
+        color: $warning;
+      }
+    }
+    .reload {
+      background-color: rgba($color: black, $alpha: 0.1);
+      color: $textGrey;
+      &:hover {
+        background-color: $textGrey;
+        color: $warning;
+      }
+    }
+  }
+  .dismiss {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    background-color: transparent;
+    @include displayFlex(flex, center, center);
+    color: white;
+    border: 1px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    &:hover {
+      background-color: white;
+      color: $error;
+    }
+    .fi {
+      display: flex;
+    }
+  }
+  .reload {
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 36px;
+    width: 36px;
+    background-color: rgba($color: white, $alpha: 0.2);
+    @include displayFlex(flex, center, center);
+    color: white;
+    border-radius: 50%;
+    font-size: 18px;
+    &:hover {
+      background-color: white;
+      color: $error;
+    }
+    .fi {
+      display: flex;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+@media (max-width: 575px) {
+  .toast-container {
+    width: 90%;
+  }
+  .toast-content {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+/*#endregion -------------- Toast Message */

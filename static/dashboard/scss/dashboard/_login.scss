@@ -1,0 +1,88 @@
+/*#region ----------------- Login */
+.login-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  @include displayFlex(flex, center, center);
+  background-color: $background_light1;
+  overflow: hidden;
+  padding: 100px 0;
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 500px;
+    height: 422px;
+    background-image: url(../../images/logo-white.svg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: bottom;
+    opacity: 0.1;
+    z-index: 1;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background-color: $secondary;
+    opacity: 0.9;
+    z-index: 0;
+  }
+  .login-inner {
+    width: 550px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: $boxshadow_2;
+    z-index: 100;
+    .title {
+      margin-bottom: 20px;
+      h1 {
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+      }
+    }
+    .logo {
+      width: 60px;
+      margin: 0 auto 10px auto;
+      img {
+        width: 100%;
+      }
+    }
+    .login-button {
+      text-align: center;
+      padding: 20px 0 5px 0;
+      .btn {
+        min-width: 180px;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .login-wrapper {
+    &::before {
+      width: 50%;
+      height: 50%;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .login-wrapper {
+    &::before {
+      // width: 500px;
+      height: 422px;
+    }
+    .login-inner {
+      width: 100%;
+      margin: 0 20px;
+    }
+  }
+}
+/*#endregion -------------- Login */

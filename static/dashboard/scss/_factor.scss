@@ -1,0 +1,288 @@
+/*#region ----------------- Factor */
+button {
+  font-family: $bodyFont !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.factor-wrapper {
+  width: 297mm;
+  margin: 0 auto;
+}
+.factor-wrapper.size-a5 {
+  width: 210mm;
+  height: auto;
+  margin: 0 auto;
+}
+
+.factor-wrapper .button-action {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.factor-wrapper .button-action #btn-print {
+  background-color: deepskyblue;
+  color: white;
+  border: none;
+  font-weight: 800;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.factor-wrapper .factor-inner .header {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.factor-wrapper .factor-content .grid-layout {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 70% 30%;
+  grid-template-columns: 70% 30%;
+  grid-template-areas:
+    "seller factorInfo"
+    "buyer buyer";
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-seller {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: seller;
+  padding: 2px;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-seller .info-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-seller .info-list li {
+  font-size: 13px;
+  font-weight: 400;
+  padding-left: 30px;
+  margin-bottom: 8px;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-seller .info-list li .name {
+  font-weight: bold;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-factor-info {
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: factorInfo;
+  padding: 2px;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-factor-info .grid-inner {
+  height: 100%;
+  padding: 0 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-factor-info .info-list {
+  width: 100%;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-factor-info .info-list li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 400;
+  margin: 5px 0;
+}
+
+.factor-wrapper
+  .factor-content
+  .grid-layout
+  .grid-factor-info
+  .info-list
+  li
+  .name {
+  font-weight: bold;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-buyer {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: buyer;
+  padding: 2px;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-buyer .info-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-buyer .info-list li {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 25%;
+  flex: 0 0 25%;
+  width: 25%;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-buyer .info-list li .name {
+  font-weight: bold;
+}
+
+.factor-wrapper
+  .factor-content
+  .grid-layout
+  .grid-buyer
+  .info-list
+  li:last-child {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 100%;
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-inner {
+  border: 1px solid black;
+  padding: 10px 5px;
+  border-right: 10px solid #ccc;
+}
+
+.factor-wrapper .factor-content .grid-layout .grid-inner .title {
+  font-size: 14px;
+  font-weight: 800;
+  position: relative;
+}
+
+.factor-wrapper .factor-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.factor-wrapper .factor-content .table-content {
+  padding: 2px;
+}
+
+.factor-wrapper .factor-content .table-content .alert {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.factor-wrapper .factor-content .table-content table {
+  border: 1px solid black;
+  width: 100%;
+  position: relative;
+  border-collapse: collapse;
+}
+
+.factor-wrapper .factor-content .table-content table .table-head {
+  width: 100%;
+  background-color: #f2f2f2;
+}
+
+.factor-wrapper .factor-content .table-content table .table-head tr th {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 10px 8px;
+  vertical-align: middle;
+  border: 1px solid black;
+}
+
+.factor-wrapper .factor-content .table-content table .table-body {
+  width: 100%;
+  position: relative;
+}
+
+.factor-wrapper .factor-content .table-content table .table-body .table-row td {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 8px;
+  vertical-align: middle;
+  border: 1px solid black;
+}
+.factor-wrapper .factor-content .table-content table .table-body img {
+  width: 50px;
+}
+
+.factor-wrapper .factor-content .table-content table .alert {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.factor-wrapper .factor-content .factor-footer {
+  padding: 2px;
+}
+
+.factor-wrapper .factor-content .factor-footer .footer-inner {
+  border: 1px solid black;
+  padding: 10px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 25% 25% 25% 25%;
+  grid-template-columns: 25% 25% 25% 25%;
+}
+
+.factor-wrapper .factor-content .factor-footer .footer-inner .item {
+  text-align: center;
+}
+
+.factor-wrapper .factor-content .factor-footer .footer-inner .item .title {
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.factor-wrapper .factor-content .factor-footer .footer-inner .item .desc {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.factor-wrapper .factor-content .factor-footer .footer-inner .item .stamp {
+  width: 100px;
+  margin: 0 auto;
+}
+
+.factor-wrapper .factor-content .factor-footer .footer-inner .item .stamp img {
+  width: 100%;
+}
+/*#endregion -------------- Factor */

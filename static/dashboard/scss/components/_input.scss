@@ -1,0 +1,87 @@
+/*#region ----------------- Input */
+.input-group {
+  position: relative;
+  margin-bottom: 16px;
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: $textGrey;
+    margin-bottom: 5px;
+  }
+  .input {
+    width: 100%;
+    border: 1px solid $borderColor;
+    border-radius: $radius_Small;
+    font-size: 16px;
+    padding: 0.7rem 3rem 0.7rem 0.7rem;
+    transition: all 0.3s ease-in-out;
+    &:hover,
+    &:focus {
+      border-color: $textSilver;
+      ~ .icon {
+        color: $primary;
+      }
+    }
+    &:disabled {
+      background-color: $background_light2;
+    }
+  }
+  .icon {
+    position: absolute;
+    top: 27px;
+    right: 0;
+    width: 48px;
+    height: 48px;
+    @include displayFlex(flex, center, center);
+    font-size: 20px;
+    color: $textSilver;
+    transition: all 0.3s ease-in-out;
+    .fi {
+      display: flex;
+    }
+  }
+  .pcalBtn {
+    width: 48px;
+    height: 48px;
+  }
+  .text-alert {
+    font-size: 13px;
+    margin-top: 5px;
+    &.error {
+      color: $error;
+    }
+    &.success {
+      color: $error;
+    }
+  }
+  &.no-icon {
+    .input {
+      padding-right: 0.7rem !important;
+    }
+  }
+  &.text-center {
+    .input {
+      text-align: center;
+    }
+  }
+  &.big-font-size {
+    .input {
+      font-size: 18px;
+    }
+  }
+  &.small {
+    label {
+      font-size: 13px;
+    }
+    .input {
+      font-size: 14px;
+      padding: 0.544rem 3rem 0.544rem 0.7rem;
+    }
+    .pcalBtn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+/*#endregion -------------- Input */

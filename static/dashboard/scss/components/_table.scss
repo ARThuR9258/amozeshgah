@@ -1,0 +1,72 @@
+/*#region ----------------- Table */
+.table-custom {
+  width: 100%;
+  border: 1px solid $borderColor;
+  thead {
+    background-color: $background_light1;
+    border-bottom: 1px solid $borderColor;
+    th {
+      padding: 12px;
+      font-size: 14px;
+    }
+  }
+  tbody {
+    td {
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 400;
+      border-bottom: 1px solid $borderColor;
+    }
+    img {
+      width: 60px;
+      // height: 50px;
+    }
+    .table-icon {
+      font-size: 24px;
+    }
+    .link {
+      color: $primary !important;
+      text-decoration: underline dashed 1px $primary;
+      &:hover {
+        color: $secondary !important;
+      }
+    }
+  }
+  .status {
+    white-space: nowrap;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 5rem;
+    &.color-new {
+      background-color: $error;
+    }
+    &.color-success {
+      background-color: $success;
+    }
+    &.color-error {
+      background-color: #ccc;
+      color: $textGrey;
+    }
+    &.color-waiting {
+      background-color: $warning;
+    }
+  }
+  .selected-color {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    border-radius: 8px;
+    border: 2px solid $borderColor;
+  }
+  .btns-action {
+    @include displayFlex(flex, center, flex-start);
+    // flex-wrap: wrap;
+    .btn-circle {
+      margin: 2px;
+    }
+  }
+}
+.table-responsive {
+  overflow-x: auto;
+}
+/*#endregion -------------- Table */

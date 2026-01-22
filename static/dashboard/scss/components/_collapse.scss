@@ -1,0 +1,60 @@
+/*#region ----------------- Collapse */
+.btn-collapse {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  color: $textDark;
+  border: 1px solid $borderColor;
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  .icon {
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    margin-left: 5px;
+    position: relative;
+    @include displayFlex(flex, center, center);
+    &:before {
+      content: "\f4ee";
+      font-family: $iconFont_Regular;
+      color: $textSilver;
+    }
+    &.icon-angel {
+      &::before {
+        content: "\fd5f";
+      }
+    }
+  }
+  .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: $textDark;
+  }
+  &.collapsed {
+    .icon {
+      // transform: rotate(180deg);
+      &::before {
+        content: "\f627";
+      }
+      &.icon-angel {
+        &::before {
+          content: "\fd60";
+        }
+      }
+    }
+  }
+  &.type-simple {
+    border: none;
+  }
+}
+
+.card-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  &.show {
+    max-height: 1000px; /* Adjust based on content */
+  }
+}
+/*#endregion -------------- Collapse */

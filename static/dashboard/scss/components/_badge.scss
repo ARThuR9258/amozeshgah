@@ -1,0 +1,42 @@
+/*#region ----------------- Badge */
+.badge {
+  background-color: $textSilver;
+  color: white;
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 50px;
+  &.badge-primary {
+    background-color: $primary;
+  }
+  &.badge-success {
+    background-color: $success;
+  }
+  &.badge-accent {
+    background-color: $accent;
+  }
+  &.badge-danger {
+    background-color: $error;
+  }
+  &.badge-info {
+    background-color: $info;
+  }
+  &.badge-warning {
+    background-color: $warning;
+    color: black;
+  }
+  &.badge-s {
+    font-size: 13px;
+  }
+  &.badge-m {
+    font-size: 14px;
+  }
+  &.badge-lg {
+    font-size: 16px;
+  }
+  &.dot {
+    padding: 0;
+    width: 10px;
+    height: 10px;
+  }
+}
+/*#endregion -------------- Badge */

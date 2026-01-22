@@ -1,0 +1,222 @@
+{% load render_partial %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="h-100">
+
+<head>
+
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'layout/header_references_master.html' %}
+
+
+
+</head>
+<body>
+
+    <!-- Wrapper -->
+    <div class="wrapper">
+        <!--Sidebar-->
+        <nav id="sidebar">
+            <button class="btn-close-sidebar"><i class="fi fi-rs-cross"></i></button>
+            <div class="logo">
+                <img src="{% static 'dashboard/images/logo.svg' %}" alt="logo">
+            </div>
+            <ul class="list-nav">
+                <li class="nav-item active">
+                    <a class="sub-item" href="{% url 'dashboard' %}">
+                        <i class="fi fi-rs-apps"></i><span class="title">داشبورد</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="sub-item" href="../../../static/dashboard/dashboard/users-list.html">
+                        <i class="fi fi-rs-users"></i><span class="title">کاربران</span>
+                        <div class="badge badge-info badge-s">5</div>
+                    </a>
+                </li>
+
+
+            </ul>
+        </nav>
+        <div class="siderbar-overlay"></div>
+        <!--Page Content-->
+        <div id="content">
+            <nav id="mynavbar">
+                <div class="collapse-sidebar">
+                    <button type="button" id="sidebarCollapse" class="btn btn-side">
+                        <span class="menu-lines">
+                            <span class="line line-1"></span>
+                            <span class="line line-2"></span>
+                            <span class="line line-3"></span>
+                        </span>
+                    </button>
+                </div>
+                <div class="admin">
+                    <div class="item">
+                        <button class="btn-navbar btn-sideNotification" onclick="openNotificationPanel('tab-messages')">
+                            <i class="fi fi-rs-comment"></i>
+                            <div class="badge badge-danger badge-s">13</div>
+                        </button>
+                    </div>
+                    <div class="item">
+                        <button class="btn-navbar btn-sideNotification"
+                            onclick="openNotificationPanel('tab-notification')">
+                            <i class="fi fi-rs-bell"></i>
+                            <div class="badge badge-danger dot"></div>
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary-outline dropdown-toggle icon-right" type="button">
+                            <i class="fi fi-rs-user"></i>
+                            کاربر ادمین
+                        </button>
+{#                        <div class="dropdown-menu">#}
+{#                            <a href="../index.html" class="dropdown-item"><i class="fi fi-rs-eye"></i>#}
+{#                                مشاهده سایت#}
+{#                            </a>#}
+{#                            <a href="../../../static/dashboard/dashboard/messages-list.html" class="dropdown-item"><i class="fi fi-rs-comment"></i>#}
+{#                                پیام‌ها#}
+{#                            </a>#}
+{#                            <a href="../../../static/dashboard/dashboard/notifications-list.html" class="dropdown-item"><i class="fi fi-rs-bell"></i>#}
+{#                                اعلان‌ها#}
+{#                            </a>#}
+{#                            <a href="../../../static/dashboard/dashboard/setting.html" class="dropdown-item"><i class="fi fi-rs-settings"></i>#}
+{#                                تنظیمات#}
+{#                            </a>#}
+{#                            <hr class="my-2">#}
+{#                            <a href="../../../static/dashboard/dashboard/login.html" class="dropdown-item" data-modal-name="modal-exit"><i#}
+{#                                    class="fi fi-rs-exit"></i>خروج از پنل</a>#}
+{#                        </div>#}
+                    </div>
+                </div>
+            </nav>
+            <!--Body Content-->
+            {% block content %}
+
+            {% endblock %}
+        </div>
+        <div class="side-notification">
+            <div class="side-inner">
+                <div class="nav nav-tabs" role="tablist">
+                    <button class="nav-link active" id="tab-messages" role="tab">
+                        <span class="name">پیام‌ها</span>
+                    </button>
+                    <button class="nav-link" id="tab-notification" role="tab">
+                        <span class="name">اعلان‌ها</span>
+                    </button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane">
+                        <div class="card-notif new">
+                            <a href="#" class="card-inner">
+                                <div class="icon">
+                                    <i class="fi fi-rs-comment"></i>
+                                    <div class="badge badge-danger dot"></div>
+                                </div>
+                                <div class="info">
+                                    <h6>یک پیام جدید دریافت شد</h6>
+                                    <div class="date">21/12/1403 - 12:30</div>
+                                    <div class="send">توسط : کاربر علی قمیشی</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card-notif new">
+                            <a href="#" class="card-inner">
+                                <div class="icon">
+                                    <i class="fi fi-rs-comment"></i>
+                                    <div class="badge badge-danger dot"></div>
+                                </div>
+                                <div class="info">
+                                    <h6>یک پیام جدید دریافت شد</h6>
+                                    <div class="date">21/12/1403 - 12:30</div>
+                                    <div class="send">توسط : کاربر علی قمیشی</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card-notif">
+                            <a href="#" class="card-inner">
+                                <div class="icon">
+                                    <i class="fi fi-rs-comment"></i>
+                                </div>
+                                <div class="info">
+                                    <h6>یک پیام جدید دریافت شد</h6>
+                                    <div class="date">21/12/1403 - 12:30</div>
+                                    <div class="send">توسط : کاربر علی قمیشی</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card-notif">
+                            <a href="#" class="card-inner">
+                                <div class="icon">
+                                    <i class="fi fi-rs-comment"></i>
+                                </div>
+                                <div class="info">
+                                    <h6>یک پیام جدید دریافت شد</h6>
+                                    <div class="date">21/12/1403 - 12:30</div>
+                                    <div class="send">توسط : کاربر علی قمیشی</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="tab-pane hidden">
+                        <div class="card-notif new">
+                            <a href="#" class="card-inner">
+                                <div class="icon">
+                                    <i class="fi fi-rs-bell"></i>
+                                    <div class="badge badge-info dot"></div>
+                                </div>
+                                <div class="info">
+                                    <h6>سفارش جدید دریافت شد</h6>
+                                    <div class="date">21/12/1403 - 12:30</div>
+                                    <div class="send">توسط : کاربر علی قمیشی</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card-notif">
+                            <a href="#" class="card-inner">
+                                <div class="icon">
+                                    <i class="fi fi-rs-bell"></i>
+                                </div>
+                                <div class="info">
+                                    <h6>تنظیمات تغییر کرد</h6>
+                                    <div class="date">21/12/1403 - 12:30</div>
+                                    <div class="send">توسط : کاربر علی قمیشی</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notification-overlay"></div>
+    </div>
+
+    <!-- Modal Exit -->
+    <div class="modal" id="modal-exit" tabindex="-1">
+        <div class="modal-backdrop" onclick="hideModalDialog('modal-exit')"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fi fi-rs-exit"></i>خروج</h5>
+                <button type="button" class="btn-close" onclick="hideModalDialog('modal-exit')"><i
+                        class="fi fi-rs-cross"></i></button>
+            </div>
+            <div class="modal-body">
+                <h6 class="mb-3 text-center text-dark">از پنل مدیریت خارج می‌شوید؟</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-outline icon-right"
+                    onclick="hideModalDialog('modal-exit')"><i class="fi fi-rs-cross"></i>بستن</button>
+                <button type="button" class="btn btn-primary color-danger icon-right"><i class="fi fi-rs-check"></i>
+                    بله، خارج می‌شوم
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'dashboard/js/dashboard-scripts.js' %}"></script>
+    <script src="{% static 'dashboard/js/modalScript.js' %}"></script>
+
+</body>
+</html>

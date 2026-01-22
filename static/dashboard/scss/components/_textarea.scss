@@ -1,0 +1,45 @@
+/*#region ----------------- Textarea */
+.textarea-group {
+  position: relative;
+  margin-bottom: 16px;
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: $textGrey;
+    margin-bottom: 5px;
+  }
+  .textarea {
+    width: 100%;
+    border: 1px solid $borderColor;
+    border-radius: $radius_Small;
+    font-size: 16px;
+    padding: 15px;
+    transition: all 0.3s ease-in-out;
+    &:hover,
+    &:focus {
+      border-color: $textSilver;
+    }
+  }
+  .text-alert {
+    font-size: 13px;
+    margin-top: 5px;
+    &.error {
+      color: $error;
+    }
+    &.success {
+      color: $error;
+    }
+  }
+}
+.textarea-plugin-content {
+  margin: 1.2rem 0;
+  label {
+    font-size: 14px;
+    font-weight: 400;
+    color: $textDark;
+    display: block;
+    margin-bottom: 8px;
+  }
+}
+/*#endregion -------------- Textarea */

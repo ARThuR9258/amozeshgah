@@ -1,0 +1,61 @@
+/*#region ----------------- Radio */
+.form-radio {
+  margin: 0.6rem 0;
+  .form-radio-input {
+    display: none;
+    appearance: none;
+    &:checked {
+      ~ .form-radio-label {
+        &::before {
+          background-color: $secondary;
+          border-color: $secondary;
+        }
+        &::after {
+          background-color: white;
+        }
+      }
+    }
+  }
+  .form-radio-label {
+    font-size: 16px;
+    color: $textDark;
+    position: relative;
+    padding-right: 30px;
+    cursor: pointer;
+    &::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: inline-block;
+      width: 1.3em;
+      height: 1.3em;
+      border: 2px solid $borderColor;
+      border-radius: 10rem;
+      z-index: 0;
+    }
+    &::after {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      right: 0.4em;
+      top: 0.4em;
+      width: 0.5em;
+      height: 0.5em;
+      border-radius: 50%;
+      background-color: transparent;
+      z-index: 1;
+      transition: all 0.2s ease-in-out;
+    }
+  }
+}
+.radio-group {
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: $textGrey;
+    margin-bottom: 5px;
+  }
+}
+/*#endregion -------------- Radio */

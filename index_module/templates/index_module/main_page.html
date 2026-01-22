@@ -12,8 +12,8 @@
             <h1>قبولی ۱۰۰٪ تضمینی در آزمون آیین‌نامه ۱۴۰۴</h1>
             <p>با آزمون‌های واقعی پلیس، توضیحات کامل، تحلیل هوشمند و نکات طلایی مربی حرفه‌ای با بیش از ۲۰ سال تجربه</p>
             <div class="mt-5">
-                <a href="#" class="btn btn-success btn-glow mx-4">شروع آزمون رایگان</a>
-                <a style="color: white" href="#" class="btn btn-outline-light btn-lg mx-4">خرید بسته VIP</a>
+                <a href="{% url 'quizbuilder:quiz_list' %}" class="btn btn-success btn-glow mx-4">شروع آزمون رایگان</a>
+                <a style="color: white" href="{% url 'sample_questions:question_list' %}" class="btn btn-outline-light btn-lg mx-4">نمونه سوال ها</a>
             </div>
         </div>
     </section>
@@ -131,7 +131,7 @@
         <div class="container">
             <h2 class="fw-bold display-4 mb-4">همین حالا گواهینامه‌تو بگیر!</h2>
             <p class="lead mb-5">هزاران نفر مثل تو با آیین‌نامه پلاس موفق شدن</p>
-            <a href="#" class="btn btn-light btn-lg px-5 py-4 btn-glow">رایگان شروع کن</a>
+{#            <a href="#" class="btn btn-light btn-lg px-5 py-4 btn-glow">رایگان شروع کن</a>#}
         </div>
     </section>
 

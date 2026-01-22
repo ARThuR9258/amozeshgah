@@ -1,0 +1,90 @@
+/*#region ----------------- Alert */
+.alert {
+  background-color: $background;
+  color: $textGrey;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 15px;
+  position: relative;
+  border-radius: $radius_Regular;
+  margin: 10px 0;
+  &.alert-success {
+    background-color: rgba($color: $success, $alpha: 0.12);
+    color: $success;
+  }
+  &.alert-accent {
+    background-color: rgba($color: $accent, $alpha: 0.12);
+    color: $accent;
+  }
+  &.alert-danger {
+    background-color: rgba($color: $error, $alpha: 0.12);
+    color: $error;
+  }
+  &.alert-info {
+    background-color: rgba($color: $info, $alpha: 0.12);
+    color: $info;
+  }
+  &.alert-warning {
+    background-color: rgba($color: $warning, $alpha: 0.12);
+    color: $warning;
+  }
+  &.alert-sm {
+    font-size: 13px;
+  }
+  &.alert-md {
+    font-size: 14px;
+  }
+  &.alert-lg {
+    font-size: 16px;
+  }
+  &.removeable {
+    padding-left: 40px;
+  }
+  .btn-close-alert {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    @include displayFlex(flex, center, center);
+    padding: 0;
+    border: none;
+    border-radius: $radius_Full;
+    background-color: transparent;
+    color: $textGrey;
+    .fi {
+      display: flex;
+    }
+  }
+}
+
+.msg-content {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  display: none;
+  width: 100%;
+
+  margin-top: 1rem;
+  display: block;
+  &.text-center {
+    text-align: center;
+  }
+  &.text-left {
+    text-align: left;
+  }
+  &.error {
+    color: $error;
+  }
+  &.success {
+    color: $success;
+  }
+  &.info {
+    color: $info;
+  }
+  &.warning {
+    color: $warning;
+  }
+}
+
+/*#endregion -------------- Alert */

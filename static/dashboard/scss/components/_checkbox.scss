@@ -1,0 +1,43 @@
+/*#region ----------------- Checkbox */
+.checkbox-group {
+  margin: 10px 0;
+  .form-check-label {
+    font-size: 16px;
+    font-weight: 400;
+    color: $textDark;
+    cursor: pointer;
+    padding-right: 10px;
+  }
+  .form-check-input {
+    cursor: pointer;
+    appearance: none;
+    width: 1.3em;
+    height: 1.3em;
+    border: 2px solid $borderColor;
+    @include displayFlex(flex, center, center);
+    border-radius: 5px;
+    float: right;
+    background-color: white;
+    &::before {
+      content: "";
+      font-family: $iconFont_Regular;
+      font-size: 12px;
+    }
+    &:checked {
+      border-color: $secondary;
+      background-color: $secondary;
+      &::before {
+        content: "\fb2b";
+        color: white;
+      }
+    }
+    &:hover,
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  &.margin-top {
+    margin-top: 35px;
+  }
+}
+/*#endregion -------------- Checkbox */

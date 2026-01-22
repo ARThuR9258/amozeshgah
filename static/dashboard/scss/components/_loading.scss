@@ -1,0 +1,65 @@
+/*#region ----------------- Loading */
+.loader {
+  @include displayFlex(flex, center, center);
+  flex-direction: column;
+  padding: 40px 0;
+  .load-spin {
+    border: 5px solid rgba($color: #000000, $alpha: 0.08);
+    border-top: 5px solid $secondary;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    animation: spin 1s linear infinite;
+  }
+  .load-title {
+    margin: 10px 0 0 0;
+    color: $textGrey;
+  }
+}
+
+.loading-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  @include displayFlex(flex, center, center);
+  .inner {
+    width: 300px;
+    background-color: white;
+    padding: 30px;
+    border-radius: $radius_Large;
+  }
+  .thumb {
+    width: 80px;
+    margin: 0 auto 1rem auto;
+    img {
+      width: 100%;
+    }
+  }
+  h6 {
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 350px) {
+  .loading-wrapper {
+    .inner {
+      width: 90%;
+    }
+  }
+}
+/*#endregion -------------- Loading */

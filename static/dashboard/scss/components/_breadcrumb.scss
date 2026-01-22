@@ -1,0 +1,24 @@
+/*#region ----------------- BreadCrumb */
+.breadcrumb {
+  .breadcrumb-list {
+    margin: 0 0 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .breadcrumb-item {
+    font-size: 13px;
+    color: $textGrey;
+    + .breadcrumb-item {
+      padding-right: 8px;
+      &::before {
+        content: "/";
+        padding-left: 8px;
+        color: $textSilver;
+      }
+    }
+    &.active {
+      color: $secondary;
+    }
+  }
+}
+/*#endregion -------------- BreadCrumb */

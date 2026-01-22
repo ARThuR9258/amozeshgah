@@ -1,0 +1,479 @@
+/*#region ----------------- Dashboard Cards */
+.card-notif {
+  .card-inner {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 38px auto;
+    border-bottom: 1px solid $borderColor;
+    background-color: $background_light1;
+  }
+  .icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid $textSilver;
+    @include displayFlex(flex, center, center);
+    color: $textSilver;
+    font-size: 20px;
+    position: relative;
+    .fi {
+      display: flex;
+    }
+    .badge {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  .info {
+    padding-right: 10px;
+    h6 {
+      font-size: 13px;
+      font-weight: 400;
+      color: $textGrey;
+      margin-bottom: 5px;
+      @include textTruncate(1);
+    }
+    .date,
+    .send {
+      font-size: 12px;
+      color: $textSilver;
+      @include textTruncate(1);
+    }
+  }
+  &.new {
+    .card-inner {
+      background-color: white;
+    }
+    .info {
+      h6 {
+        font-weight: 800;
+        color: $textDark;
+      }
+      .date,
+      .send {
+        color: $textGrey;
+      }
+    }
+  }
+  &:hover {
+    .info {
+      h6 {
+        color: $primary;
+      }
+    }
+  }
+}
+
+.card-status {
+  margin-bottom: 16px;
+  .card-inner {
+    background-color: white;
+    border: 1px solid $borderColor;
+    display: block;
+    padding: 15px;
+    border-radius: $radius_Regular;
+  }
+  .name {
+    @include displayFlex(flex, center, space-between);
+    h6 {
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 500;
+      .fi {
+        margin-left: 8px;
+        font-size: 18px;
+        position: relative;
+        color: $textGrey;
+        top: 3px;
+      }
+    }
+    .arrow {
+      width: 24px;
+      height: 24px;
+      background-color: $background_light2;
+      color: $textGrey;
+      border-radius: 50%;
+      @include displayFlex(flex, center, center);
+      .fi {
+        display: flex;
+      }
+    }
+  }
+  .desc {
+    margin-top: 30px;
+    @include displayFlex(flex, center, flex-end);
+    h5 {
+      margin-bottom: 0;
+      font-weight: 800;
+    }
+    span {
+      font-size: 14px;
+      color: $textGrey;
+      margin-right: 5px;
+    }
+  }
+  &.type-1 {
+    &.color-red {
+      .card-inner {
+        border-color: $error;
+      }
+      .name {
+        .arrow {
+          background-color: $error;
+          color: white;
+        }
+      }
+    }
+    &.color-orange {
+      .card-inner {
+        border-color: $warning;
+      }
+      .name {
+        .arrow {
+          background-color: $warning;
+          color: white;
+        }
+      }
+    }
+    &.color-blue {
+      .card-inner {
+        border-color: $info;
+      }
+      .name {
+        .arrow {
+          background-color: $info;
+          color: white;
+        }
+      }
+    }
+    &.color-green {
+      .card-inner {
+        border-color: $accent;
+      }
+      .name {
+        .arrow {
+          background-color: $accent;
+          color: white;
+        }
+      }
+    }
+  }
+  &.type-2 {
+    .name {
+      h6 {
+        color: white;
+        .fi {
+          color: white;
+        }
+      }
+      .arrow {
+        background-color: white;
+      }
+    }
+    .desc {
+      h5 {
+        color: white;
+      }
+      span {
+        color: rgba($color: white, $alpha: 0.9);
+      }
+    }
+    &.color-red {
+      .card-inner {
+        border-color: $error;
+        background-color: $error;
+      }
+      .name {
+        .arrow {
+          color: $error;
+        }
+      }
+    }
+    &.color-orange {
+      .card-inner {
+        border-color: $warning;
+        background-color: $warning;
+      }
+      .name {
+        .arrow {
+          color: $warning;
+        }
+      }
+    }
+    &.color-blue {
+      .card-inner {
+        border-color: $info;
+        background-color: $info;
+      }
+      .name {
+        .arrow {
+          color: $info;
+        }
+      }
+    }
+    &.color-green {
+      .card-inner {
+        border-color: $accent;
+        background-color: $accent;
+      }
+      .name {
+        .arrow {
+          color: $accent;
+        }
+      }
+    }
+  }
+  &.type-small {
+    .card-inner {
+      @include displayFlex(flex, center, space-between);
+      padding: 15px;
+    }
+    .desc {
+      margin-top: 0;
+    }
+  }
+}
+
+.card-message {
+  margin-bottom: 10px;
+  .card-inner {
+    border: 1px solid $borderColor;
+    border-radius: $radius_Regular;
+    padding: 10px;
+    position: relative;
+  }
+  .c-header {
+    display: grid;
+    grid-template-columns: 40px auto;
+    align-items: center;
+    padding-left: 45px;
+    span {
+      width: 40px;
+      height: 28px;
+      background-color: rgba($color: $secondary, $alpha: 0.12);
+      border-radius: $radius_Full;
+      color: $secondary;
+      font-size: 14px;
+      font-weight: 800;
+      @include displayFlex(flex, center, center);
+    }
+    h6 {
+      margin-bottom: 0;
+      margin-right: 10px;
+      font-size: 14px;
+    }
+  }
+  ul {
+    margin: 10px 0;
+    @include displayFlex(flex, center, flex-start);
+    flex-wrap: wrap;
+    border-bottom: 1px solid $borderColor;
+    padding-bottom: 10px;
+    li {
+      flex: 0 0 25%;
+      width: 25%;
+      font-size: 13px;
+      font-weight: 500;
+      color: $textGrey;
+      margin: 5px 0;
+      span {
+        color: $textDark;
+        margin-right: 5px;
+        white-space: nowrap;
+        &.color-success {
+          background-color: $success;
+          color: white;
+          border-radius: 5rem;
+          padding: 2px 6px;
+        }
+        &.color-new {
+          background-color: $error;
+          color: white;
+          border-radius: 5rem;
+          padding: 2px 6px;
+        }
+        &.color-waiting {
+          background-color: rgba($color: #000000, $alpha: 0.1);
+          color: $textGrey;
+          border-radius: 5rem;
+          padding: 2px 6px;
+        }
+        &.color-error {
+          background-color: rgba($color: #000000, $alpha: 0.1);
+          color: $textGrey;
+          border-radius: 5rem;
+          padding: 2px 6px;
+        }
+      }
+    }
+  }
+  .text {
+    font-size: 13px;
+    margin-bottom: 0;
+    @include textTruncate(2);
+    span {
+      background-color: rgba($color: #000000, $alpha: 0.1);
+      border-radius: 5rem;
+      padding: 2px 6px;
+      font-weight: 800;
+      margin-left: 10px;
+      color: $textGrey;
+    }
+    &.noTruncate {
+      display: unset;
+      -webkit-line-clamp: unset;
+      -webkit-box-orient: unset;
+      overflow: unset;
+    }
+  }
+  .dropdown {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    .btnMenu {
+      @include displayFlex(flex, center, center);
+      font-size: 18px;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      border: none;
+      background-color: rgba($color: #000000, $alpha: 0.12);
+      color: $textGrey;
+      .fi {
+        display: flex;
+      }
+    }
+  }
+  .answered {
+    background-color: $background_light2;
+    padding: 8px;
+    border-radius: 5px;
+    margin-top: 5px;
+    .text {
+      span {
+        background-color: $primary;
+        color: white;
+      }
+    }
+  }
+}
+
+.card-image-template {
+  a {
+    display: block;
+    border: 1px solid $borderColor;
+    border-radius: $radius_Regular;
+  }
+  .thumb {
+    img {
+      width: 100%;
+      border-radius: 10px 10px 0 0;
+    }
+  }
+  .info {
+    text-align: center;
+    padding: 15px 10px;
+    h6 {
+      font-size: 14px;
+      margin-bottom: 0;
+      @include textTruncate(1);
+    }
+  }
+  &:hover {
+    a {
+      border-color: $primary;
+    }
+    .info {
+      h6 {
+        color: $primary;
+      }
+    }
+  }
+}
+
+.card-upload-image {
+  display: grid;
+  grid-template-columns: 180px auto;
+  border: 1px solid $borderColor;
+  padding: 8px;
+  border-radius: $radius_Regular;
+  margin-top: 10px;
+  .image-group {
+    img {
+      width: 100%;
+      border-radius: $radius_Small;
+    }
+    .img-help {
+      margin-top: 8px;
+    }
+  }
+  .info {
+    padding-right: 10px;
+    ul {
+      margin: 0;
+      li {
+        margin: 8px 0;
+        font-size: 14px;
+        color: $textDark;
+        @include textTruncate(1);
+        span {
+          color: $textGrey;
+          font-weight: 600;
+          // margin-top: 5px;
+        }
+        a {
+          color: $secondary !important;
+          text-decoration: underline dashed 1px $secondary;
+        }
+      }
+    }
+  }
+  .btns-action {
+    margin-top: 15px;
+    text-align: left;
+  }
+}
+
+.tips-upload {
+  h6 {
+    margin-bottom: 15px;
+  }
+  ul {
+    margin: 10px 0 0 0;
+    list-style: disc;
+    padding-right: 20px;
+    li {
+      font-size: 14px;
+      margin: 8px 0;
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+}
+@media (max-width: 768px) {
+  .card-message {
+    ul {
+      flex-wrap: wrap;
+      li {
+        flex: 0 0 50%;
+        width: 50%;
+        margin: 5px 0;
+      }
+    }
+  }
+}
+@media (max-width: 575px) {
+}
+@media (max-width: 450px) {
+  .card-message {
+    ul {
+      li {
+        flex: 0 0 100%;
+        width: 100%;
+      }
+    }
+  }
+}
+/*#endregion -------------- Dashboard Cards */

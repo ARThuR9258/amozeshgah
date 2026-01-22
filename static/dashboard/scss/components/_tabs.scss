@@ -1,0 +1,56 @@
+/*#region ----------------- Tabs */
+.nav-tabs {
+  border-bottom: 1px solid $borderColor;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  .nav-link {
+    vertical-align: middle;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    color: $textGrey;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background-color: transparent;
+    &.active {
+      border-bottom-color: $secondary;
+      color: $secondary;
+      font-weight: 600;
+      .badge {
+        &.badge-primary {
+          background-color: $primary;
+        }
+      }
+    }
+    .icon {
+      font-size: 16px;
+      margin-left: 6px;
+      .fi {
+        position: relative;
+        top: 3px;
+      }
+    }
+    .badge {
+      background-color: $textSilver;
+    }
+  }
+  &.nowrap {
+    overflow-x: auto;
+    .nav-link {
+      white-space: nowrap;
+    }
+  }
+  &.font-lg {
+    .nav-link {
+      font-size: 16px;
+    }
+  }
+}
+.tab-content {
+  margin-top: 15px;
+  .tab-pane {
+    margin-top: 25px;
+  }
+}
+/*#endregion -------------- Tabs */

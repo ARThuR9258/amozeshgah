@@ -1,0 +1,136 @@
+/*#region ----------------- Pagination */
+.mypagination {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0 0 0;
+  background-color: $background_light1;
+  border-radius: $radius_Regular;
+  .pagination-info {
+    display: flex;
+    align-items: center;
+    span {
+      padding: 0 5px;
+      font-size: 14px;
+      font-weight: 500;
+      color: $textDark;
+    }
+    h6 {
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 400;
+      color: $textGrey;
+    }
+    .curent-page-number {
+      font-size: 16px;
+      font-weight: 800;
+      margin-right: 5px;
+      color: $textDark;
+    }
+  }
+  .pagination-input {
+    height: 40px;
+    border: 2px solid $borderColor;
+    border-radius: $radius_Small;
+    width: 60px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: $textGrey;
+    margin: 0 10px;
+    background-color: white;
+    &:hover,
+    &:focus {
+      border-color: $primary;
+    }
+  }
+  .btn-pagination {
+    background-color: $primary;
+    border: none;
+    border-radius: 10rem;
+    font-size: 14px;
+    font-weight: 500;
+    color: $textwhite;
+    position: relative;
+    min-width: 125px;
+    display: inline-block;
+    &.prev {
+      padding: 10px 40px 10px 15px;
+      .fi {
+        right: 12px;
+        top: 11px;
+      }
+    }
+    &.next {
+      padding: 10px 15px 10px 40px;
+      .fi {
+        left: 12px;
+        top: 11px;
+      }
+    }
+    .fi {
+      font-size: 20px;
+      line-height: 0;
+      position: absolute;
+    }
+    &:hover {
+      background-color: darken($color: $primary, $amount: 9);
+      color: #fff;
+    }
+    &.disabled {
+      background-color: rgba($color: #000000, $alpha: 0.1);
+      cursor: not-allowed;
+      user-select: none;
+      color: $textSilver;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .mypagination {
+    .pagination-prev,
+    .pagination-next {
+      text-align: center;
+      display: flex;
+      span {
+        display: none;
+      }
+    }
+    .btn-pagination {
+      width: 40px;
+      height: 40px;
+      min-width: unset !important;
+      padding: 4px !important;
+      .fi {
+        position: unset;
+        right: unset;
+        top: unset;
+        left: unset;
+      }
+      &.prev {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      &.next {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .pagination-info {
+      h6 {
+        font-size: 12px;
+      }
+      .curent-page-number {
+        font-size: 14px;
+      }
+    }
+    .pagination-input {
+      width: 45px;
+    }
+  }
+}
+/*#endregion -------------- Pagination */

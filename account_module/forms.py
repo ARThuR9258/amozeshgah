@@ -1,5 +1,7 @@
 from django import forms
+from django.core.validators import MinLengthValidator
 from account_module.models import User
+import random
 
 
 class SignUpForm(forms.ModelForm):
@@ -174,3 +176,86 @@ class LoginForm(forms.Form):
 
     def get_user(self):
         return self.user_cache if hasattr(self, 'user_cache') else None
+
+
+class ForgotPasswordForm(forms.Form):
+    phone_number = forms.CharField(
+        max_length=11,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'شماره موبایل (09123456789)',
+            'class': 'form-control',
+            'autocomplete': 'tel'
+        }),
+        label='شماره موبایل',
+        error_messages={
+            'required': 'لطفاً شماره موبایل خود را وارد کنید.',
+            'invalid': 'شماره موبایل معتبر نیست.'
+        }
+    )
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if not phone_number.isdigit() or len(phone_number) != 11:
+            raise forms.ValidationError('شماره موبایل معتبر نیست. لطفاً شماره موبایل را به درستی وارد کنید.')
+        if not User.objects.filter(phone_number=phone_number).exists():
+            raise forms.ValidationError('کاربری با این شماره موبایل یافت نشد.')
+        return phone_number
+
+
+class ResetPasswordForm(forms.Form):
+    code = forms.CharField(
+        max_length=5,
+        min_length=5,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'کد تایید',
+            'class': 'form-control',
+            'dir': 'ltr',
+            'maxlength': '5'
+        }),
+        label='کد تایید',
+        error_messages={
+            'required': 'لطفاً کد تایید را وارد کنید.',
+            'min_length': 'کد تایید باید ۵ رقمی باشد.',
+            'max_length': 'کد تایید باید ۵ رقمی باشد.'
+        }
+    )
+    
+    new_password = forms.CharField(
+        min_length=8,
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'رمز عبور جدید',
+            'class': 'form-control',
+            'autocomplete': 'new-password'
+        }),
+        label='رمز عبور جدید',
+        validators=[MinLengthValidator(8)],
+        error_messages={
+            'required': 'لطفاً رمز عبور جدید را وارد کنید.',
+            'min_length': 'رمز عبور باید حداقل ۸ کاراکتر باشد.'
+        }
+    )
+    
+    confirm_password = forms.CharField(
+        min_length=8,
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'تکرار رمز عبور جدید',
+            'class': 'form-control',
+            'autocomplete': 'new-password'
+        }),
+        label='تکرار رمز عبور جدید',
+        error_messages={
+            'required': 'لطفاً تکرار رمز عبور را وارد کنید.',
+            'min_length': 'تکرار رمز عبور باید حداقل ۸ کاراکتر باشد.'
+        }
+    )
+    
+    def clean_confirm_password(self):
+        new_password = self.cleaned_data.get('new_password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if new_password and confirm_password and new_password != confirm_password:
+            raise forms.ValidationError('رمز عبور با تکرار آن مطابقت ندارد.')
+        return confirm_password
