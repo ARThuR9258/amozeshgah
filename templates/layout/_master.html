@@ -30,9 +30,16 @@
 
 
                 <li class="nav-item">
-                    <a class="sub-item" href="../../../static/dashboard/dashboard/users-list.html">
+                    <a class="sub-item" href="{% url 'user_list_dashboard_page' %}">
                         <i class="fi fi-rs-users"></i><span class="title">کاربران</span>
-                        <div class="badge badge-info badge-s">5</div>
+{#                        <div class="badge badge-info badge-s">5</div>#}
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="sub-item" href="{% url 'sample_questions:question_list_dashboard_page' %}">
+                        <i class="fi fi-rs-users"></i><span class="title">نمونه سوال ها</span>
+{#                        <div class="badge badge-info badge-s">5</div>#}
                     </a>
                 </li>
 

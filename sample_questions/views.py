@@ -27,3 +27,19 @@ def download_question_paper(request, pk):
                 response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
                 return response
     raise Http404("فایل درخواستی یافت نشد")
+
+
+class QuestionListDashboard(ListView):
+    model = SampleQuestion
+    template_name = 'sample_questions/question_list_dashboard.html'
+    context_object_name = 'questions'
+
+
+    def get_queryset(self):
+        questions = SampleQuestion.objects.all()
+        return questions
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

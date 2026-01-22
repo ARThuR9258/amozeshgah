@@ -9,7 +9,8 @@ urlpatterns = [
     path('sign-in/', views.LoginView.as_view(), name='sign_in_page' ),
     path('log-out/', views.logout_view, name='log_out_page' ),
     path('panel/', views.user_panel_view, name='user_panel_page'),
-    
+    path('user-list-dashboard/', views.UserListDashboard.as_view(), name='user_list_dashboard_page'),
+
     # Password reset URLs
     path('forgot-password/', views.ForgotPasswordView.as_view(), name='forgot_password'),
     path('forgot-password/done/', views.forgot_password_done, name='forgot_password_done'),

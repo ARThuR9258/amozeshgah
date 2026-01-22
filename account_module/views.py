@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView, FormView, View
+from django.views.generic import CreateView, FormView, View, ListView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth import login, logout
 from django.contrib import messages
@@ -174,3 +174,19 @@ class ResetPasswordView(View):
 def forgot_password_done(request):
     return render(request, 'account_module/forgot_password_done.html')
 
+
+
+
+class UserListDashboard(ListView):
+    model = User
+    template_name = 'account_module/users_list.html'
+    context_object_name = 'users'
+
+
+    def get_queryset(self):
+        users = User.objects.all()
+        return users
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
