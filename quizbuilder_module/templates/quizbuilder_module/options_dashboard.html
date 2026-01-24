@@ -1,7 +1,7 @@
 {% extends 'layout/_master.html' %}
 
 {% block title %}
-	نمونه سوال ها
+	گزینه ها
 {% endblock %}
 
 
@@ -12,20 +12,20 @@
     <div class="main-header">
                     <div class="inner">
                         <div class="title">
-                            <h1><i class="fi fi-rs-users"></i>لیست نمونه سوال ها</span>
+                            <h1><i class="fi fi-rs-users"></i>لیست گزینه ها</span>
                             </h1>
                             <div class="breadcrumb">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb-list mb-0">
                                         <li class="breadcrumb-item"><a href="index.html">داشبورد</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">لیست نمونه سوال ها</li>
+                                        <li class="breadcrumb-item active" aria-current="page">لیست گزینه ها</li>
                                     </ol>
                                 </nav>
                             </div>
                         </div>
                         <div class="btns-action">
                             <a href="user-add.html" class="btn btn-primary btn-small icon-right"><i
-                                    class="fi fi-rs-add"></i><span>نمونه سوال جدید</span></a>
+                                    class="fi fi-rs-add"></i><span>گزینه های جدید</span></a>
                             <button type="button" class="btn btn-primary btn-small icon-right btn-collapse"
                                 data-collapse-target="#collapse-search"><i
                                     class="fi fi-rs-search"></i><span>جستجو</span></button>
@@ -93,18 +93,15 @@
                                         </div>
                                     </th>
                                     <th scope="col">#</th>
-                                    <th scope="col">عنوان</th>
-                                    <th scope="col">توضیحات</th>
-                                    <th scope="col">فعال/غیر فعال</th>
-                                    <th scope="col">فایل pdf</th>
+                                    <th scope="col">متن جواب</th>
+                                    <th scope="col">جواب صحیح است؟</th>
                                     <th scope="col">تاریخ ایجاد</th>
-                                    <th scope="col">تاریخ به‌روزرسانی</th>
                                     <th scope="col">عملیات</th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                {% for question in questions %}
+                                {% for option in options %}
                                 	<tr>
                                     <td scope="row">
                                         <div class="checkbox-group m-0">
@@ -113,12 +110,9 @@
                                         </div>
                                     </td>
                                     <td scope="row">{{ forloop.counter }}</td>
-                                    <td>{{ question.title }}</td>
-                                    <td>{{ question.description }}</td>
-                                    <td>{{ question.is_active }}</td>
-                                    <td>{{ question.pdf_file }}</td>
-                                    <td>{{ question.created_at }}</td>
-                                    <td>{{ question.updated_at }}</td>
+                                    <td>{{ option.text }}</td>
+                                    <td>{{ option.is_answer }}</td>
+                                    <td>{{ option.created_at }}</td>
                                     <td>
                                         <div class="btns-action">
                                             <a href="user-add.html" class="btn-circle"><i

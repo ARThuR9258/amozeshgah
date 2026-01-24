@@ -269,3 +269,82 @@ def process_payment(request, quiz_id):
     except Exception as e:
         messages.error(request, f'خطا در پرداخت: {str(e)}')
         return redirect('quizbuilder:take_quiz', quiz_id=quiz.id)
+
+
+
+class QuizListDashboard(ListView):
+    Model = Quiz
+    template_name = 'quizbuilder_module/quiz_list_dashboard.html'
+    context_object_name = 'quizs'
+
+    def get_queryset(self):
+        quizs = Quiz.objects.all()
+        return quizs
+
+
+    def get_context_data(self , **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+
+class TextOfTheQuestionsDashboard(ListView):
+    model = QuizQuestion
+    template_name = 'quizbuilder_module/text_of_the_questions_dashboard.html'
+    context_object_name = 'quiz_texts'
+
+    def get_queryset(self):
+        quiz_texts = QuizQuestion.objects.all()
+        return quiz_texts
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+
+
+class UserResponsesDashboard(ListView):
+    model = UserQuiz
+    template_name = 'quizbuilder_module/user_responses_dashboard.html'
+    context_object_name = 'user_responses'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user_responses = UserQuiz.objects.all()
+        return user_responses
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+
+class ResponsesDashboard(ListView):
+    model = UserQuizQuestionAnswer
+    template_name = 'quizbuilder_module/responses_dashboard.html'
+    context_object_name = 'responses'
+    paginate_by = 20
+
+    def get_queryset(self):
+        responses = UserQuizQuestionAnswer.objects.all()
+        return responses
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class OptionsDashboard(ListView):
+    model = QuizQuestionChoice
+    template_name = 'quizbuilder_module/options_dashboard.html'
+    context_object_name = 'options'
+    paginate_by = 20
+
+    def get_queryset(self):
+        options = QuizQuestionChoice.objects.all()
+        return options
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
