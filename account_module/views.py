@@ -190,3 +190,7 @@ class UserListDashboard(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+def add_dashboard(request):
+    return render(request,"account_module/user_add_dashboard.html")

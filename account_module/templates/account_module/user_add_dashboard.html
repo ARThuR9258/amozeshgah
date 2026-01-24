@@ -1,0 +1,86 @@
+{% extends 'layout/_master.html' %}
+
+{% block title %}
+	اضافه کردن کاربر
+{% endblock %}
+
+{% block content %}
+	<div class="main-body-content">
+    <div class="main-header">
+                    <div class="inner">
+                        <div class="title">
+                            <h1><i class="fi fi-rs-pencil"></i>ویرایش کاربر</span>
+                            </h1>
+                            <div class="breadcrumb">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb-list mb-0">
+                                        <li class="breadcrumb-item"><a href="index.html">داشبورد</a></li>
+                                        <li class="breadcrumb-item"><a href="users-list.html">لیست کاربران</a></li>
+                                        <li class="breadcrumb-item active">ویرایش کاربر</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="btns-action">
+                            <a href="users-list.html" class="btn btn-primary-outline btn-small icon-left"><i
+                                    class="fi fi-rs-arrow-small-left"></i><span>بازگشت
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+    <div class="main-inner">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group no-icon">
+                                <label>نام</label>
+                                <input type="text" class="input">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group no-icon">
+                                <label>نام خانوادگی</label>
+                                <input type="text" class="input">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group no-icon">
+                                <label>شماره همراه</label>
+                                <input type="text" class="input" value="09198492200" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group no-icon">
+                                <label>ایمیل</label>
+                                <input type="email" class="input">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group no-icon">
+                                <label>پسورد</label>
+                                <input type="text" class="input">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-switch my-2">
+                                <input class="form-switch-input" type="checkbox" id="switch-1" checked>
+                                <label class="form-switch-label" for="switch-1">وضعیت کاربر</label>
+                            </div>
+                            <div class="form-switch my-2">
+                                <input class="form-switch-input" type="checkbox" id="switch-2" checked>
+                                <label class="form-switch-label" for="switch-2">نمیدونم چی
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btns-action mt-4">
+                        <button class="btn btn-primary icon-right"><i class="fi fi-rs-check"></i>ثبت
+                            تغییرات</button>
+                        <button class="btn btn-primary-outline icon-right"><i class="fi fi-rs-cross"></i>
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+    </div>
+{% endblock %}
+
+

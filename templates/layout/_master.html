@@ -30,11 +30,17 @@
 
 
                 <li class="nav-item">
-                    <a class="sub-item" href="{% url 'user_list_dashboard_page' %}">
-                        <i class="fi fi-rs-users"></i><span class="title">کاربران</span>
-{#                        <div class="badge badge-info badge-s">5</div>#}
+                    <a class="sub-item btn-collapse" data-collapse-target="#collapse-users">
+                        <i class="fi fi-rs-user"></i><span class="title">مدیریت کاربران</span>
+                            <div class="icon icon-angel"></div>
                     </a>
-                </li>
+                        <div class="card-collapse" id="collapse-users">
+                <ul>
+                    <li><a href="{% url 'user_list_dashboard_page' %}">لیست کاربران</a></li>
+                    <li><a href="{% url 'add_user_dashboard' %}">افزودن کاربر</a></li>
+                </ul>
+        </div>
+    </li>
 
                 <li class="nav-item">
                     <a class="sub-item" href="{% url 'sample_questions:question_list_dashboard_page' %}">
