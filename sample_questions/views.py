@@ -5,6 +5,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 import os
 from wsgiref.util import FileWrapper
+from account_module.decorators import AdminRequiredMixin
 from .models import SampleQuestion
 
 class SampleQuestionListView(ListView):
@@ -29,7 +30,7 @@ def download_question_paper(request, pk):
     raise Http404("فایل درخواستی یافت نشد")
 
 
-class QuestionListDashboard(ListView):
+class QuestionListDashboard(AdminRequiredMixin, ListView):
     model = SampleQuestion
     template_name = 'sample_questions/question_list_dashboard.html'
     context_object_name = 'questions'

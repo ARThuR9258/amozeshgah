@@ -16,6 +16,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib import messages
 from django.urls import reverse
 from account_module.models import User
+from account_module.decorators import AdminRequiredMixin
 from .models import Quiz, QuizQuestion, UserQuiz, UserQuizQuestionAnswer, QuizQuestionChoice
 from .helpers import UserQuizChoice
 
@@ -272,7 +273,7 @@ def process_payment(request, quiz_id):
 
 
 
-class QuizListDashboard(ListView):
+class QuizListDashboard(AdminRequiredMixin, ListView):
     Model = Quiz
     template_name = 'quizbuilder_module/quiz_list_dashboard.html'
     context_object_name = 'quizs'
@@ -288,7 +289,7 @@ class QuizListDashboard(ListView):
 
 
 
-class TextOfTheQuestionsDashboard(ListView):
+class TextOfTheQuestionsDashboard(AdminRequiredMixin, ListView):
     model = QuizQuestion
     template_name = 'quizbuilder_module/text_of_the_questions_dashboard.html'
     context_object_name = 'quiz_texts'
@@ -304,7 +305,7 @@ class TextOfTheQuestionsDashboard(ListView):
 
 
 
-class UserResponsesDashboard(ListView):
+class UserResponsesDashboard(AdminRequiredMixin, ListView):
     model = UserQuiz
     template_name = 'quizbuilder_module/user_responses_dashboard.html'
     context_object_name = 'user_responses'
@@ -320,7 +321,7 @@ class UserResponsesDashboard(ListView):
 
 
 
-class ResponsesDashboard(ListView):
+class ResponsesDashboard(AdminRequiredMixin, ListView):
     model = UserQuizQuestionAnswer
     template_name = 'quizbuilder_module/responses_dashboard.html'
     context_object_name = 'responses'
@@ -335,7 +336,7 @@ class ResponsesDashboard(ListView):
         return context
 
 
-class OptionsDashboard(ListView):
+class OptionsDashboard(AdminRequiredMixin, ListView):
     model = QuizQuestionChoice
     template_name = 'quizbuilder_module/options_dashboard.html'
     context_object_name = 'options'

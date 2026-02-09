@@ -9,6 +9,7 @@ import random
 from rest_framework import viewsets
 from rest_framework.viewsets import ViewSet
 
+from .decorators import admin_required, AdminRequiredMixin
 from .serializers import UserSerialize
 from account_module.forms import SignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm, UserAddDashboardForm
 from account_module.models import User
@@ -180,7 +181,7 @@ def forgot_password_done(request):
 
 
 
-class UserListDashboard(ListView):
+class UserListDashboard(AdminRequiredMixin, ListView):
     model = User
     template_name = 'account_module/users_list.html'
     context_object_name = 'users'
@@ -197,13 +198,10 @@ class UserListDashboard(ListView):
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from .decorators import admin_required
 
-@login_required
+@admin_required
 def add_dashboard(request):
-    if not request.user.is_staff:
-        messages.error(request, 'شما مجوز دسترسی به این صفحه را ندارید.')
-        return redirect('first_page')
-    
     if request.method == 'POST':
         form = UserAddDashboardForm(request.POST)
         if form.is_valid():
