@@ -6,8 +6,11 @@ from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
 import random
+from rest_framework import viewsets
+from rest_framework.viewsets import ViewSet
 
-from account_module.forms import SignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
+from .serializers import UserSerialize
+from account_module.forms import SignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm, UserAddDashboardForm
 from account_module.models import User
 
 
@@ -192,5 +195,40 @@ class UserListDashboard(ListView):
         return context
 
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+@login_required
 def add_dashboard(request):
-    return render(request,"account_module/user_add_dashboard.html")
+    if not request.user.is_staff:
+        messages.error(request, 'شما مجوز دسترسی به این صفحه را ندارید.')
+        return redirect('first_page')
+    
+    if request.method == 'POST':
+        form = UserAddDashboardForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = form.cleaned_data['is_active']
+            user.is_staff = form.cleaned_data['is_staff']
+            user.is_verified = form.cleaned_data['is_verified']
+            user.save()
+            messages.success(request, 'کاربر جدید با موفقیت ایجاد شد.')
+            return redirect('add_user_dashboard')
+    else:
+        form = UserAddDashboardForm()
+    
+    context = {
+        'form': form,
+        'title': 'افزودن کاربر جدید',
+        'breadcrumbs': [
+            {'title': 'داشبورد', 'url': reverse('dashboard')},
+            {'title': 'مدیریت کاربران', 'url': reverse('user_list_dashboard_page')},
+            {'title': 'افزودن کاربر جدید', 'url': ''},
+        ]
+    }
+    return render(request, 'account_module/user_add_dashboard.html', context)
+
+
+class UserViewSetApi(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerialize

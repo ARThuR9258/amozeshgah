@@ -1,7 +1,12 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
+from django.urls import path , include
 from . import views
+from rest_framework.routers import DefaultRouter
+
+
+router = DefaultRouter()
+router.register('', views.UserViewSetApi)
 
 
 urlpatterns = [
@@ -11,6 +16,7 @@ urlpatterns = [
     path('panel/', views.user_panel_view, name='user_panel_page'),
     path('add-user-dashboard/', views.add_dashboard, name='add_user_dashboard'),
     path('user-list-dashboard/', views.UserListDashboard.as_view(), name='user_list_dashboard_page'),
+    path('user-api/' , include(router.urls)),
 
     # Password reset URLs
     path('forgot-password/', views.ForgotPasswordView.as_view(), name='forgot_password'),

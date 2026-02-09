@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'django_render_partial',
     'account_module',
     'sample_questions',
+    'rest_framework',
     'quizbuilder_module',
+    'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [
@@ -114,6 +117,15 @@ AUTHENTICATION_BACKENDS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 
 LANGUAGE_CODE = 'fa-ir'
 
