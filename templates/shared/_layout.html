@@ -99,6 +99,15 @@
 
     <!-- Main Content -->
     <div class="content-wrapper">
+        <!-- Django Messages (hidden - will be converted to toasts) -->
+        {% if messages %}
+            <div class="messages" style="display: none;">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
         {% block content %}{% endblock %}
     </div>
 

@@ -140,6 +140,13 @@
                 </div>
             </nav>
             <!--Body Content-->
+            {% if messages %}
+                <div class="messages" style="display: none;">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {% block content %}
 
             {% endblock %}

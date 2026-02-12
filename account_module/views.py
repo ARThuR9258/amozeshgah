@@ -22,8 +22,12 @@ from account_module.models import User
 class SignUpView(CreateView):
     form_class = SignUpForm
     template_name = 'account_module/signup_page.html'
-    success_url = reverse_lazy('first_page')
+    success_url = reverse_lazy('sign_in_page')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'ثبت‌نام شما با موفقیت انجام شد! خوش آمدید.')
+        return response
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -49,7 +53,8 @@ class LoginView(FormView):
         if not form.cleaned_data.get('remember_me'):
             # Set session to expire when the browser is closed if 'remember me' is not checked
             self.request.session.set_expiry(0)
-            
+        
+        messages.success(self.request, f'خوش آمدید {user.get_full_name() or user.email}! شما با موفقیت وارد شدید.')
         return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):
@@ -60,6 +65,7 @@ class LoginView(FormView):
 
 def logout_view(request):
     logout(request)
+    messages.info(request, 'شما با موفقیت از سیستم خارج شدید. تا دیدار دوباره!')
     return redirect('first_page')
 
 
@@ -111,6 +117,7 @@ class ForgotPasswordView(View):
             # For testing purposes, we'll just print it to the console
             print(f"Reset code for {phone_number}: {reset_code}")
             
+            messages.success(request, f'کد بازیابی برای شماره {phone_number} ارسال شد. لطفاً کد را وارد کنید.')
             return redirect('reset_password')
             
         return render(request, self.template_name, {'form': form})
@@ -210,7 +217,7 @@ def add_dashboard(request):
             user.is_staff = form.cleaned_data['is_staff']
             user.is_verified = form.cleaned_data['is_verified']
             user.save()
-            messages.success(request, 'کاربر جدید با موفقیت ایجاد شد.')
+            messages.success(request, f'کاربر {user.email} با موفقیت ایجاد شد.')
             return redirect('add_user_dashboard')
     else:
         form = UserAddDashboardForm()
