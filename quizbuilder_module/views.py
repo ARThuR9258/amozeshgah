@@ -203,6 +203,7 @@ class QuizResultView(LoginRequiredMixin, TemplateView):
             question_data = {
                 'id': question.id,
                 'description': question.description,
+                'image': question.image.url if question.image else None,
                 'score': question.score,
                 'choices': [],
                 'user_answer': user_answers.get(str(question.id)),

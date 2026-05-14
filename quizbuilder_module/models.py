@@ -73,6 +73,12 @@ class QuizQuestion(models.Model):
     description = models.TextField(
         verbose_name='متن سوال'
     )
+    image = models.ImageField(
+        verbose_name='تصویر سوال',
+        upload_to='questions/',
+        null=True,
+        blank=True
+    )
     score = models.PositiveIntegerField(
         default=0,
         verbose_name='بارم'

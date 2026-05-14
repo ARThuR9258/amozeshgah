@@ -50,6 +50,11 @@
                 </div>
                 <div class="question-text">
                     <p>{{ question.description|linebreaksbr }}</p>
+                    {% if question.image %}
+                    <div class="question-image">
+                        <img src="{{ question.image.url }}" alt="تصویر سوال" class="img-fluid rounded" style="max-width: 100%; max-height: 400px; object-fit: contain;">
+                    </div>
+                    {% endif %}
                 </div>
                 
                 <div class="question-choices">
