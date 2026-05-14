@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-	 صفحه نخست | آیین پلاس
+    صفحه نخست | آیین‌نامه پلاس
 {% endblock %}
 
 {% block content %}
@@ -11,49 +11,121 @@
         <div class="container">
             <h1>قبولی ۱۰۰٪ تضمینی در آزمون آیین‌نامه ۱۴۰۴</h1>
             <p>با آزمون‌های واقعی پلیس، توضیحات کامل، تحلیل هوشمند و نکات طلایی مربی حرفه‌ای با بیش از ۲۰ سال تجربه</p>
-            <div class="mt-5">
-                <a href="{% url 'quizbuilder:quiz_list' %}" class="btn btn-success btn-glow mx-4">شروع آزمون رایگان</a>
-                <a style="color: white" href="{% url 'sample_questions:question_list' %}" class="btn btn-outline-light btn-lg mx-4">نمونه سوال ها</a>
+            <div class="hero-buttons">
+                <a href="{% url 'quizbuilder:quiz_list' %}" class="btn btn-primary btn-lg animate-fade-in-up">
+                    <i class="fas fa-play me-2"></i>شروع آزمون رایگان
+                </a>
+                <a href="{% url 'sample_questions:question_list' %}" class="btn btn-outline-light btn-lg animate-fade-in-up" style="animation-delay: 0.2s">
+                    <i class="fas fa-list me-2"></i>نمونه سوالات
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Stats -->
-    <section class="py-5 bg-light">
+    <section class="stats-section">
         <div class="container">
-            <div class="row g-4 text-center">
-                <div class="col-md-3" data-aos="zoom-in"><div class="stats-card"><h3>۱۰,۰۰۰+</h3><p>هنرجوی موفق</p></div></div>
-                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="100"><div class="stats-card"><h3>۵۰۰,۰۰۰+</h3><p>آزمون زده‌شده</p></div></div>
-                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="200"><div class="stats-card"><h3>۹۸٪</h3><p>رضایت کاربران</p></div></div>
-                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="300"><div class="stats-card"><h3>۱۴۰۴</h3><p>سوالات به‌روز</p></div></div>
+            <div class="row g-4">
+                <div class="col-md-3" data-aos="zoom-in">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>۱۰,۰۰۰+</h3>
+                        <p>هنرجوی موفق</p>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h3>۵۰۰,۰۰۰+</h3>
+                        <p>آزمون زده‌شده</p>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>۹۸٪</h3>
+                        <p>رضایت کاربران</p>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>۱۴۰۴</h3>
+                        <p>سوالات به‌روز</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Features -->
-    <section class="py-5">
+    <section class="features-section">
         <div class="container">
-            <h2 class="text-center fw-bold mb-5 display-4" data-aos="fade-up">چرا آیین‌نامه پلاس بهترین انتخاب توئه؟</h2>
-            <div class="row g-5">
+            <div class="section-title" data-aos="fade-up">
+                <h2 class="text-black">چرا آیین‌نامه پلاس بهترین انتخاب توئه؟</h2>
+                <p>با امکانات منحصر به فرد و آموزشی حرفه‌ای، مسیر قبولی را برایت هموار می‌کنیم</p>
+            </div>
+            <div class="row g-4">
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-card text-center">
-                        <div class="feature-icon"><i class="fas fa-road"></i></div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-road"></i>
+                        </div>
                         <h4>آزمون ۱۰۰٪ شبیه اصلی</h4>
                         <p>۳۰ سوال، ۲۰ دقیقه، نمره‌دهی خودکار + توضیح کامل هر جواب</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-card text-center">
-                        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
                         <h4>تحلیل هوشمند پیشرفت</h4>
                         <p>داشبورد شخصی، شناسایی نقاط ضعف، پیش‌بینی قبولی</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-card text-center">
-                        <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
                         <h4>نکات اختصاصی مربی واقعی</h4>
                         <p>ترفندهای عملی که هیچ سایت دیگه‌ای نداره</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4>اپلیکیشن موبایل</h4>
+                        <p>تمرین هرجا و هرزمان، حتی بدون اینترنت</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h4>گواهی معتبر</h4>
+                        <p>مدرک قابل استناد با بارکد برای اثبات مهارت</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>پشتیبانی ۲۴/۷</h4>
+                        <p>همراهی تخصصی تا روز آزمون و حتی بعد از اون</p>
                     </div>
                 </div>
             </div>
@@ -61,66 +133,145 @@
     </section>
 
     <!-- Testimonials -->
-    <section class="py-5 bg-light">
+    <section class="testimonials-section">
         <div class="container">
-            <h2 class="text-center fw-bold mb-5 display-4" data-aos="fade-up">نظرات هنرجوهای موفق</h2>
-            <div class="row g-5">
+            <div class="section-title" data-aos="fade-up">
+                <h2 class="text-gradient">نظرات هنرجوهای موفق</h2>
+                <p>کسی بهتر از خود هنرجوها نمیتونه کیفیت ما رو توصیف کنه</p>
+            </div>
+            <div class="row g-4">
                 <div class="col-md-4" data-aos="fade-left">
-                    <div class="testimonial-card text-center">
-                        <p class="fs-5">"بار اول بدون غلط قبول شدم! فقط این سایت رو کار کردم 🔥"</p>
-                        <strong class="fs-4">- امیر، ۱۹ ساله، تهران</strong>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-text">
+                                <p class="mb-0">"بار اول بدون غلط قبول شدم! فقط این سایت رو کار کردم 🔥"</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <strong>امیر محمدی</strong>
+                                    <span>۱۹ ساله، تهران</span>
+                                </div>
+                                <div class="author-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="fade-up">
-                    <div class="testimonial-card text-center">
-                        <p class="fs-5">"نکات مربی فوق‌العاده بود، استرسم کامل ریخت 😍"</p>
-                        <strong class="fs-4">- نگار، اصفهان</strong>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-text">
+                                <p class="mb-0">"نکات مربی فوق‌العاده بود، استرسم کامل ریخت 😍"</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <strong>نگار احمدی</strong>
+                                    <span>اصفهان</span>
+                                </div>
+                                <div class="author-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="fade-right">
-                    <div class="testimonial-card text-center">
-                        <p class="fs-5">"بهترین سایت آیین‌نامه، به همه دوستام پیشنهاد دادم!"</p>
-                        <strong class="fs-4">- رضا، شیراز</strong>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-text">
+                                <p class="mb-0">"بهترین سایت آیین‌نامه، به همه دوستام پیشنهاد دادم!"</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <strong>رضا کریمی</strong>
+                                    <span>شیراز</span>
+                                </div>
+                                <div class="author-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-
     <!-- FAQ -->
-    <section class="py-5">
+    <section class="py-5" style="background: var(--light);">
         <div class="container">
-            <h2 class="text-center fw-bold mb-5 display-4" data-aos="fade-up">سوالات متداول</h2>
-            <div class="accordion" id="faqAccordion" data-aos="fade-up">
-                <div class="faq-item">
-                    <div class="accordion-header" id="faq1">
-                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
-                            سوالات سایت به‌روز هستن؟
-                        </button>
-                    </div>
-                    <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">بله! تمام سوالات بر اساس آخرین تغییرات آیین‌نامه ۱۴۰۴ به‌روزرسانی شدن.</div>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="accordion-header" id="faq2">
-                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
-                            آیا تضمین قبولی داره؟
-                        </button>
-                    </div>
-                    <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">با تمرین منظم و نکات مربی، بیش از ۹۸٪ هنرجوها بار اول قبول شدن!</div>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="accordion-header" id="faq3">
-                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
-                            بسته VIP چه فرقی داره؟
-                        </button>
-                    </div>
-                    <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">دسترسی نامحدود، PDF سوالات، نکات ویدیویی مربی و پشتیبانی اولویت‌دار.</div>
+            <div class="section-title" data-aos="fade-up">
+                <h2 class="text-gradient">سوالات متداول</h2>
+                <p>جواب سوالات متداول رو اینجا پیدا کن</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion" data-aos="fade-up">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                    <i class="fas fa-question-circle me-3 text-primary"></i>
+                                    سوالات سایت به‌روز هستن؟
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    بله! تمام سوالات بر اساس آخرین تغییرات آیین‌نامه ۱۴۰۴ به‌روزرسانی شدن و تیم ما به صورت مداوم اونها رو آپدیت می‌کنه.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                    <i class="fas fa-shield-alt me-3 text-success"></i>
+                                    آیا تضمین قبولی داره؟
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    با تمرین منظم و نکات مربی، بیش از ۹۸٪ هنرجوها بار اول قبول شدن! ما روش‌های اثبات شده رو بهت یاد میدیم.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                    <i class="fas fa-crown me-3 text-warning"></i>
+                                    بسته VIP چه فرقی داره؟
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    دسترسی نامحدود، PDF سوالات، نکات ویدیویی مربی و پشتیبانی اولویت‌دار. بهترین سرمایه‌گذاری برای آینده رانندگی توئه.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq4">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                    <i class="fas fa-mobile-alt me-3 text-info"></i>
+                                    آیا اپلیکیشن موبایل هم دارید؟
+                                </button>
+                            </h2>
+                            <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    بله! اپلیکیشن ما برای اندروید و iOS در دسترسه و میتونی حتی بدون اینترنت هم تمرین کنی.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,14 +279,27 @@
     </section>
 
     <!-- CTA -->
-    <section class="cta-section text-center text-white" data-aos="zoom-in">
-        <div class="container">
-            <h2 class="fw-bold display-4 mb-4">همین حالا گواهینامه‌تو بگیر!</h2>
-            <p style="color: black;" class="lead mb-5">هزاران نفر مثل تو با آیین‌نامه پلاس موفق شدن</p>
-{#            <a href="#" class="btn btn-light btn-lg px-5 py-4 btn-glow">رایگان شروع کن</a>#}
+    <section class="cta-section py-5" style="background: var(--gradient-primary);">
+        <div class="container text-center">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2 class="fw-bold text-white mb-4">همین حالا گواهینامه‌تو بگیر!</h2>
+                <p class="text-white mb-5 lead">هزاران نفر مثل تو با آیین‌نامه پلاس موفق شدن. نوبت توئه!</p>
+                <div class="cta-buttons">
+                    <a href="{% url 'quizbuilder:quiz_list' %}" class="btn btn-light btn-lg px-5 py-3 me-3">
+                        <i class="fas fa-rocket me-2"></i>شروع رایگان
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg px-5 py-3">
+                        <i class="fas fa-phone me-2"></i>تماس با ما
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
-
 {% endblock %}
+
+<!-- Floating Action Button -->
+<button class="btn-float" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <i class="fas fa-arrow-up"></i>
+</button>
 
