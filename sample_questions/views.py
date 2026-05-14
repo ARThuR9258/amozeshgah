@@ -30,6 +30,20 @@ def download_question_paper(request, pk):
     raise Http404("فایل درخواستی یافت نشد")
 
 
+def view_question_paper(request, pk):
+    """View PDF inline instead of downloading"""
+    question_paper = get_object_or_404(SampleQuestion, pk=pk, is_active=True)
+    if question_paper.pdf_file:
+        file_path = question_paper.pdf_file.path
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as pdf_file:
+                response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+                response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
+                response['Content-Type'] = 'application/pdf'
+                return response
+    raise Http404("فایل درخواستی یافت نشد")
+
+
 class QuestionListDashboard(AdminRequiredMixin, ListView):
     model = SampleQuestion
     template_name = 'sample_questions/question_list_dashboard.html'

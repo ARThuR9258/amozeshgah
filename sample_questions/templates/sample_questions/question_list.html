@@ -47,7 +47,7 @@
                                                    download>
                                                     <i class="fas fa-download me-1"></i> دانلود
                                                 </a>
-                                                <a href="{{ paper.pdf_file.url }}" 
+                                                <a href="{% url 'sample_questions:view_question_paper' paper.id %}" 
                                                    class="btn btn-outline-secondary btn-sm"
                                                    title="مشاهده آنلاین"
                                                    target="_blank">
@@ -140,6 +140,72 @@
     }
     .card-header {
         border-radius: 0 !important;
+    }
+    
+    /* Responsive styles for question list */
+    @media (max-width: 767.98px) {
+        .list-group-item {
+            padding: 1rem;
+        }
+        
+        .list-group-item .d-flex {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 1rem;
+        }
+        
+        .list-group-item .d-flex > div:first-child {
+            width: 100%;
+        }
+        
+        .list-group-item .d-flex > div:last-child {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .list-group-item .d-flex .bg-light {
+            margin-right: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .list-group-item h5 {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .list-group-item p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .btn {
+            flex: 1;
+            margin: 0 0.25rem;
+            font-size: 0.85rem;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .list-group-item {
+            padding: 0.75rem;
+        }
+        
+        .list-group-item h5 {
+            font-size: 1rem;
+        }
+        
+        .list-group-item p {
+            font-size: 0.85rem;
+        }
+        
+        .btn {
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+        }
     }
 </style>
 {% endblock %}

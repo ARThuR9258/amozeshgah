@@ -110,21 +110,13 @@
             timerDisplay.textContent = 'نامحدود';
         }
         
-        // Auto-save answers
+        // Clear any previously saved answers to ensure fresh start
         const form = document.getElementById('quiz-form');
         const formInputs = form.querySelectorAll('input[type="radio"]');
         
+        // Clear localStorage for this quiz
         formInputs.forEach(input => {
-            // Load saved answers
-            const savedAnswer = localStorage.getItem(`quiz_${form.quiz_id.value}_${input.name}`);
-            if (savedAnswer === input.value) {
-                input.checked = true;
-            }
-            
-            // Save on change
-            input.addEventListener('change', function() {
-                localStorage.setItem(`quiz_${form.quiz_id.value}_${this.name}`, this.value);
-            });
+            localStorage.removeItem(`quiz_${form.querySelector('input[name="quiz_id"]').value}_${input.name}`);
         });
     });
 </script>
