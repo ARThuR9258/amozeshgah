@@ -1,167 +1,77 @@
 {% extends 'layout/_master.html' %}
+{% load humanize %}
 
-{% block title %}
-	نمونه سوال ها
-{% endblock %}
-
+{% block title %}نمونه سوالات{% endblock %}
 
 {% block content %}
-<body>
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>نمونه سوالات</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-file-pdf"></i> نمونه سوالات PDF</h1>
+            <p class="da-page-subtitle">مدیریت فایل‌های نمونه سوال</p>
+        </div>
+        <div class="da-page-actions">
+            <a href="{% url 'sample_questions:dashboard_sample_add' %}" class="da-btn da-btn-primary"><i class="fas fa-plus"></i> افزودن PDF</a>
+        </div>
+    </div>
 
-<div class="main-body-content">
-    <div class="main-header">
-                    <div class="inner">
-                        <div class="title">
-                            <h1><i class="fi fi-rs-users"></i>لیست نمونه سوال ها</span>
-                            </h1>
-                            <div class="breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb-list mb-0">
-                                        <li class="breadcrumb-item"><a href="index.html">داشبورد</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">لیست نمونه سوال ها</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="btns-action">
-                            <a href="user-add.html" class="btn btn-primary btn-small icon-right"><i
-                                    class="fi fi-rs-add"></i><span>نمونه سوال جدید</span></a>
-                            <button type="button" class="btn btn-primary btn-small icon-right btn-collapse"
-                                data-collapse-target="#collapse-search"><i
-                                    class="fi fi-rs-search"></i><span>جستجو</span></button>
-                        </div>
-                    </div>
-                </div>
-    <div class="main-inner">
-                    <!-- Search Content -->
-                    <div class="card-collapse search-page-content" id="collapse-search">
-                        <div class="search-inner">
-                            <div class="forms-group">
-                                <div class="row align-items-end">
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="input-group no-icon small">
-                                            <label>شماره سفارش، نام کاربر، شماره همراه</label>
-                                            <input type="text" class="input">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="select-group size-small">
-                                            <label>وضعیت</label>
-                                            <select class="select">
-                                                <option value="1">همه</option>
-                                                <option value="2">جدید</option>
-                                                <option value="2">فقط مرد</option>
-                                                <option value="2">فقط مرد</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="filter-inner">
-                                            <div class="pick-date">
-                                                <div class="input-group no-icon small">
-                                                    <label>از تاریخ</label>
-                                                    <input type="text" class="input" id="select-calendar-from"
-                                                        placeholder="از">
-                                                </div>
-                                            </div>
-                                            <div class="pick-date">
-                                                <div class="input-group no-icon small">
-                                                    <label>تا تاریخ</label>
-                                                    <input type="text" class="input" id="select-calendar-until"
-                                                        placeholder="تا">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="button-search">
-                                            <button type="button" class="btn btn-primary">جستجو</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table-custom">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <div class="checkbox-group m-0">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="checbox-select-all">
-                                        </div>
-                                    </th>
-                                    <th scope="col">#</th>
-                                    <th scope="col">عنوان</th>
-                                    <th scope="col">توضیحات</th>
-                                    <th scope="col">فعال/غیر فعال</th>
-                                    <th scope="col">فایل pdf</th>
-                                    <th scope="col">تاریخ ایجاد</th>
-                                    <th scope="col">تاریخ به‌روزرسانی</th>
-                                    <th scope="col">عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+    <div class="da-stats-bar">
+        <div class="da-stat-mini da-stat-mini--primary"><strong>{{ stats.total }}</strong><span>کل فایل‌ها</span></div>
+        <div class="da-stat-mini da-stat-mini--success"><strong>{{ stats.active }}</strong><span>فعال</span></div>
+    </div>
 
-                                {% for question in questions %}
-                                	<tr>
-                                    <td scope="row">
-                                        <div class="checkbox-group m-0">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="checbox-select-1">
-                                        </div>
-                                    </td>
-                                    <td scope="row">{{ forloop.counter }}</td>
-                                    <td>{{ question.title }}</td>
-                                    <td>{{ question.description }}</td>
-                                    <td>{{ question.is_active }}</td>
-                                    <td>{{ question.pdf_file }}</td>
-                                    <td>{{ question.created_at }}</td>
-                                    <td>{{ question.updated_at }}</td>
-                                    <td>
-                                        <div class="btns-action">
-                                            <a href="user-add.html" class="btn-circle"><i
-                                                    class="fi fi-rs-pencil"></i></a>
-                                            <a href="#" class="btn-circle color-red" data-modal-name="modal-delete"><i
-                                                    class="fi fi-rs-trash"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
+    <form method="get" class="da-filter-form">
+        <input type="search" name="q" class="form-control flex-grow-1" placeholder="جستجو عنوان یا توضیحات..." value="{{ search_query }}">
+        <select name="active" class="form-select" style="max-width:140px">
+            <option value="">همه</option>
+            <option value="1" {% if active_filter == '1' %}selected{% endif %}>فعال</option>
+            <option value="0" {% if active_filter == '0' %}selected{% endif %}>غیرفعال</option>
+        </select>
+        <button type="submit" class="da-btn da-btn-primary"><i class="fas fa-search"></i> جستجو</button>
+        {% if search_query or active_filter %}<a href="{% url 'sample_questions:question_list_dashboard_page' %}" class="da-btn da-btn-ghost">پاک کردن</a>{% endif %}
+    </form>
 
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Pagination -->
-                    <div class="mypagination">
-                        <div class="pagination-prev">
-                            <a href="#" class="btn-pagination prev disabled">
-                                <i class="fi fi-rs-arrow-small-right"></i>
-                                <span>صفحه قبلی</span>
-                            </a>
-                        </div>
-                        <div class="pagination-info">
-                            <h6>صفحه</h6>
-                            <div class="pagination-jump">
-                                <input class="pagination-input" type="number" value="1">
+    <div class="da-panel">
+        <div class="da-panel-head"><h2>لیست PDFها</h2><span class="da-count">{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ questions|length }}{% endif %}</span></div>
+        <div class="da-table-wrap">
+            <table class="da-table">
+                <thead>
+                    <tr>
+                        <th>عنوان</th>
+                        <th>توضیحات</th>
+                        <th>حجم</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for q in questions %}
+                    <tr>
+                        <td><strong>{{ q.title }}</strong></td>
+                        <td class="da-desc-cell" title="{{ q.description }}">{{ q.description|default:"—"|truncatechars:50 }}</td>
+                        <td>{{ q.get_file_size }}</td>
+                        <td>{% if q.is_active %}<span class="da-badge da-badge-success">فعال</span>{% else %}<span class="da-badge da-badge-muted">غیرفعال</span>{% endif %}</td>
+                        <td class="small text-muted">{{ q.created_at|date:"Y/m/d" }}</td>
+                        <td>
+                            <div class="da-actions-cell">
+                                {% if q.pdf_file %}<a href="{{ q.pdf_file.url }}" target="_blank" class="da-btn da-btn-sm da-btn-outline" title="دانلود"><i class="fas fa-download"></i></a>{% endif %}
+                                <a href="{% url 'sample_questions:dashboard_sample_edit' q.pk %}" class="da-btn da-btn-sm da-btn-outline" title="ویرایش"><i class="fas fa-pen"></i></a>
                             </div>
-                            <h6>از</h6>
-                            <div class="curent-page-number">16</div>
-                        </div>
-                        <div class="pagination-next">
-                            <a href="#" class="btn-pagination next">
-                                <i class="fi fi-rs-arrow-small-left"></i>
-                                <span>صفحه بعدی</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6"><div class="da-empty"><i class="fas fa-file-pdf"></i><p>نمونه سوالی ثبت نشده</p></div></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'layout/dashboard/pagination.html' %}
+    </div>
 </div>
-
-</body>
 {% endblock %}
-
-
-
-

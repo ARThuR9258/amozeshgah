@@ -1,143 +1,549 @@
 {% extends 'layout/_master.html' %}
+{% load static humanize %}
 
-
-{% block title %}
-	پنل مدیریت
-{% endblock %}
+{% block title %}داشبورد مدیریت{% endblock %}
 
 {% block content %}
-	<div class="main-body-content">
-                <div class="main-header">
-                    <div class="inner">
-                        <div class="title">
-                            <h1><i class="fi fi-rs-apps"></i>داشبورد</h1>
-                            <div class="breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb-list mb-0">
-                                        <li class="breadcrumb-item"><a href="index.html">داشبورد</a></li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="main-inner">
-                    <div class="cards-status-list">
-                        <div class="row">
-{#                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">#}
-{#                                <div class="card-status type-1 color-red">#}
-{#                                    <a href="#" class="card-inner">#}
-{#                                        <div class="name">#}
-{#                                            <h6><span class="fi fi-rs-shopping-bag"></span>سفارش جدید</h6>#}
-{#                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>#}
-{#                                        </div>#}
-{#                                        <div class="desc">#}
-{#                                            <h5 data-price="2"></h5>#}
-{#                                            <span>سفارش جدید</span>#}
-{#                                        </div>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">#}
-{#                                <div class="card-status type-1 color-orange">#}
-{#                                    <a href="#" class="card-inner">#}
-{#                                        <div class="name">#}
-{#                                            <h6><span class="fi fi-rs-shopping-bag"></span>سفارشات امروز</h6>#}
-{#                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>#}
-{#                                        </div>#}
-{#                                        <div class="desc">#}
-{#                                            <h5 data-price="18"></h5>#}
-{#                                            <span>سفارش</span>#}
-{#                                        </div>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">#}
-{#                                <div class="card-status type-1 color-blue">#}
-{#                                    <a href="#" class="card-inner">#}
-{#                                        <div class="name">#}
-{#                                            <h6><span class="fi fi-rs-shopping-bag"></span>سفارشات این هفته</h6>#}
-{#                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>#}
-{#                                        </div>#}
-{#                                        <div class="desc">#}
-{#                                            <h5 data-price="160"></h5>#}
-{#                                            <span>سفارش</span>#}
-{#                                        </div>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">#}
-{#                                <div class="card-status type-1 color-green">#}
-{#                                    <a href="#" class="card-inner">#}
-{#                                        <div class="name">#}
-{#                                            <h6><span class="fi fi-rs-shopping-bag"></span>سفارشات این ماه</h6>#}
-{#                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>#}
-{#                                        </div>#}
-{#                                        <div class="desc">#}
-{#                                            <h5 data-price="451"></h5>#}
-{#                                            <span>سفارش</span>#}
-{#                                        </div>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                            </div>#}
-                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
-                                <div class="card-status type-2 color-green">
-                                    <a href="#" class="card-inner">
-                                        <div class="name">
-                                            <h6><span class="fi fi-rs-users"></span>تعداد کاربران</h6>
-                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>
-                                        </div>
-                                        <div class="desc">
-                                            <h5 data-price="18021"></h5>
-                                            <span>کاربر</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
-                                <div class="card-status type-2 color-blue">
-                                    <a href="#" class="card-inner">
-                                        <div class="name">
-                                            <h6><span class="fi fi-rs-credit-card"></span>فروش امروز</h6>
-                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>
-                                        </div>
-                                        <div class="desc">
-                                            <h5 data-price="4531000"></h5>
-                                            <span>تومان</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
-                                <div class="card-status type-2 color-red">
-                                    <a href="#" class="card-inner">
-                                        <div class="name">
-                                            <h6><span class="fi fi-rs-credit-card"></span>فروش این هفته</h6>
-                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>
-                                        </div>
-                                        <div class="desc">
-                                            <h5 data-price="15360000"></h5>
-                                            <span>تومان</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
-                                <div class="card-status type-2 color-orange">
-                                    <a href="#" class="card-inner">
-                                        <div class="name">
-                                            <h6><span class="fi fi-rs-credit-card"></span>فروش این ماه</h6>
-                                            <div class="arrow"><i class="fi fi-rs-arrow-small-left"></i></div>
-                                        </div>
-                                        <div class="desc">
-                                            <h5 data-price="98000000"></h5>
-                                            <span>تومان</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="dh">
+    <!-- هیرو -->
+    <section class="dh-hero">
+        <div class="dh-hero-inner">
+            <div class="dh-hero-greeting">
+                <span class="dh-hero-badge"><i class="fas fa-circle" style="font-size:0.45rem;color:#86efac;"></i> پنل مدیریت فعال</span>
+                <h1>سلام، {{ request.user.get_full_name|default:request.user.username }} 👋</h1>
+                <p>خلاصه وضعیت آیین‌نامه پلاس — کاربران، فروش، آزمون‌ها و پیام‌ها را یک‌جا ببینید.</p>
+            </div>
+            <div class="dh-hero-actions">
+                <a href="{% url 'add_user_dashboard' %}" class="dh-hero-btn dh-hero-btn--light">
+                    <i class="fas fa-user-plus"></i> کاربر جدید
+                </a>
+                <a href="{% url 'first_page' %}" class="dh-hero-btn dh-hero-btn--ghost" target="_blank" rel="noopener">
+                    <i class="fas fa-external-link-alt"></i> مشاهده سایت
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- KPI -->
+    <div class="dh-kpi-grid">
+        <a href="{% url 'user_list_dashboard_page' %}" class="dh-kpi dh-kpi--indigo">
+            <div class="dh-kpi-icon"><i class="fas fa-users"></i></div>
+            <div class="dh-kpi-body">
+                <strong>{{ stats.users_count|intcomma }}</strong>
+                <span>کاربران ثبت‌شده</span>
+                <small>{{ stats.users_staff_count }} مدیر سیستم</small>
+            </div>
+        </a>
+        <a href="{% url 'dashboard_orders' %}" class="dh-kpi dh-kpi--emerald">
+            <div class="dh-kpi-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="dh-kpi-body">
+                <strong>{{ stats.sales_month|intcomma }}</strong>
+                <span>فروش ۳۰ روز اخیر (تومان)</span>
+                <small>امروز: {{ stats.sales_today|intcomma }} تومان</small>
+                {% if stats.pending_orders_count %}
+                <span class="dh-kpi-trend dh-kpi-trend--alert"><i class="fas fa-clock"></i> {{ stats.pending_orders_count }} سفارش معلق</span>
+                {% endif %}
+            </div>
+        </a>
+        <a href="{% url 'quizbuilder:quiz_list_dashboard' %}" class="dh-kpi dh-kpi--violet">
+            <div class="dh-kpi-icon"><i class="fas fa-clipboard-list"></i></div>
+            <div class="dh-kpi-body">
+                <strong>{{ stats.quizzes_open_count }}</strong>
+                <span>آزمون فعال</span>
+                <small>از {{ stats.quizzes_count }} آزمون کل</small>
+            </div>
+        </a>
+        <a href="{% url 'dashboard_contact_messages' %}" class="dh-kpi dh-kpi--amber">
+            <div class="dh-kpi-icon"><i class="fas fa-envelope"></i></div>
+            <div class="dh-kpi-body">
+                <strong>{{ stats.unread_messages_count }}</strong>
+                <span>پیام خوانده‌نشده</span>
+                <small>{{ stats.messages_count }} پیام کل</small>
+                {% if stats.unread_messages_count %}
+                <span class="dh-kpi-trend dh-kpi-trend--alert"><i class="fas fa-bell"></i> نیاز به بررسی</span>
+                {% endif %}
+            </div>
+        </a>
     </div>
+
+    <!-- خلاصه سریع -->
+    <div class="dh-quick-stats">
+        <span class="dh-quick-pill"><i class="fas fa-file-pdf"></i> <strong>{{ stats.sample_questions_count }}</strong> نمونه سوال</span>
+        <span class="dh-quick-pill"><i class="fas fa-question-circle"></i> <strong>{{ stats.quiz_questions_count }}</strong> سوال آزمون</span>
+        <span class="dh-quick-pill"><i class="fas fa-id-card"></i> <strong>{{ stats.active_subscriptions_count }}</strong> اشتراک فعال</span>
+        <span class="dh-quick-pill"><i class="fas fa-check-circle"></i> <strong>{{ stats.paid_orders_count }}</strong> سفارش پرداخت‌شده</span>
+        <span class="dh-quick-pill"><i class="fas fa-gem"></i> <strong>{{ stats.plans_count }}</strong> پلن فعال</span>
+    </div>
+
+    <!-- نمودارها (داده از دیتابیس) -->
+    {{ chart_data|json_script:"dh-chart-data" }}
+    <section class="dh-charts">
+        <div class="dh-section-head dh-section-head--charts">
+            <h2><i class="fas fa-chart-area"></i> تحلیل و نمودارها</h2>
+            <p>۱۴ روز اخیر — بر اساس داده واقعی سیستم</p>
+        </div>
+
+        <div class="dh-charts-grid">
+            <article class="dh-chart-card dh-chart-card--hero dh-chart-card--sales">
+                <header class="dh-chart-header">
+                    <div>
+                        <h3><i class="fas fa-coins"></i> روند فروش روزانه</h3>
+                        <p>سفارش‌های پرداخت‌شده</p>
+                    </div>
+                    <div class="dh-chart-kpis">
+                        <span class="dh-chart-kpi"><em>امروز</em><strong>{{ stats.sales_today|intcomma }}</strong></span>
+                        <span class="dh-chart-kpi"><em>هفته</em><strong>{{ stats.sales_week|intcomma }}</strong></span>
+                        <span class="dh-chart-kpi dh-chart-kpi--accent"><em>۱۴ روز</em><strong id="dhTotalSales">—</strong></span>
+                    </div>
+                </header>
+                <div class="dh-chart-canvas-wrap dh-chart-canvas-wrap--tall">
+                    <canvas id="chartSales" aria-label="نمودار فروش"></canvas>
+                </div>
+            </article>
+
+            <article class="dh-chart-card dh-chart-card--donut">
+                <header class="dh-chart-header">
+                    <h3><i class="fas fa-receipt"></i> وضعیت سفارش‌ها</h3>
+                </header>
+                <div class="dh-chart-canvas-wrap dh-chart-canvas-wrap--donut">
+                    <canvas id="chartOrders" aria-label="نمودار سفارش‌ها"></canvas>
+                </div>
+            </article>
+
+            <article class="dh-chart-card">
+                <header class="dh-chart-header">
+                    <h3><i class="fas fa-user-plus"></i> ثبت‌نام کاربران</h3>
+                    <span class="dh-chart-badge" id="dhTotalUsers">—</span>
+                </header>
+                <div class="dh-chart-canvas-wrap">
+                    <canvas id="chartUsers" aria-label="نمودار کاربران"></canvas>
+                </div>
+            </article>
+
+            <article class="dh-chart-card">
+                <header class="dh-chart-header">
+                    <h3><i class="fas fa-clipboard-check"></i> شرکت در آزمون</h3>
+                    <span class="dh-chart-badge dh-chart-badge--violet" id="dhTotalQuizzes">—</span>
+                </header>
+                <div class="dh-chart-canvas-wrap">
+                    <canvas id="chartQuizActivity" aria-label="نمودار آزمون"></canvas>
+                </div>
+            </article>
+
+            <article class="dh-chart-card dh-chart-card--donut">
+                <header class="dh-chart-header">
+                    <h3><i class="fas fa-id-card"></i> نوع اشتراک کاربران</h3>
+                </header>
+                <div class="dh-chart-canvas-wrap dh-chart-canvas-wrap--donut">
+                    <canvas id="chartSubscriptions" aria-label="نمودار اشتراک"></canvas>
+                </div>
+            </article>
+
+            <article class="dh-chart-card dh-chart-card--donut">
+                <header class="dh-chart-header">
+                    <h3><i class="fas fa-tasks"></i> وضعیت پاسخنامه‌ها</h3>
+                </header>
+                <div class="dh-chart-canvas-wrap dh-chart-canvas-wrap--donut">
+                    <canvas id="chartQuizStatus" aria-label="نمودار وضعیت آزمون"></canvas>
+                </div>
+            </article>
+
+            <article class="dh-chart-card dh-chart-card--wide" id="dhPlanCard">
+                <header class="dh-chart-header">
+                    <h3><i class="fas fa-gem"></i> درآمد به تفکیک پلن</h3>
+                </header>
+                <div class="dh-chart-canvas-wrap">
+                    <canvas id="chartPlans" aria-label="نمودار پلن‌ها"></canvas>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ماژول‌ها -->
+    <div class="dh-section-head">
+        <h2><i class="fas fa-th-large"></i> بخش‌های مدیریت</h2>
+    </div>
+    <div class="dh-modules">
+        <article class="dh-module dh-module--users">
+            <div class="dh-module-top">
+                <div class="dh-module-icon"><i class="fas fa-users"></i></div>
+                <span class="dh-module-count">{{ stats.users_count }} نفر</span>
+            </div>
+            <h3>کاربران</h3>
+            <p>مدیریت حساب‌ها، نقش‌ها و دسترسی ادمین</p>
+            <div class="dh-module-links">
+                <a href="{% url 'user_list_dashboard_page' %}">لیست کاربران</a>
+                <a href="{% url 'add_user_dashboard' %}">افزودن کاربر</a>
+            </div>
+        </article>
+
+        <article class="dh-module dh-module--pdf">
+            <div class="dh-module-top">
+                <div class="dh-module-icon"><i class="fas fa-file-pdf"></i></div>
+                <span class="dh-module-count">{{ stats.sample_questions_count }} فایل</span>
+            </div>
+            <h3>نمونه سوالات</h3>
+            <p>آپلود و مدیریت فایل‌های PDF نمونه سوال</p>
+            <div class="dh-module-links">
+                <a href="{% url 'sample_questions:question_list_dashboard_page' %}">مدیریت PDFها</a>
+            </div>
+        </article>
+
+        <article class="dh-module dh-module--quiz">
+            <div class="dh-module-top">
+                <div class="dh-module-icon"><i class="fas fa-clipboard-check"></i></div>
+                <span class="dh-module-count">{{ stats.quiz_questions_count }} سوال</span>
+            </div>
+            <h3>آزمون‌ها</h3>
+            <p>ساخت آزمون، سوالات و گزینه‌های پاسخ</p>
+            <div class="dh-module-links">
+                <a href="{% url 'quizbuilder:quiz_list_dashboard' %}">لیست آزمون‌ها</a>
+                <a href="{% url 'quizbuilder:text_quiz_list_dashboard' %}">متن سوالات</a>
+                <a href="{% url 'quizbuilder:options_dashboard' %}">گزینه‌ها</a>
+            </div>
+        </article>
+
+        <article class="dh-module dh-module--results">
+            <div class="dh-module-top">
+                <div class="dh-module-icon"><i class="fas fa-chart-pie"></i></div>
+                <span class="dh-module-count">{{ stats.user_quizzes_count }} شرکت</span>
+            </div>
+            <h3>نتایج آزمون</h3>
+            <p>بررسی پاسخنامه و عملکرد شرکت‌کنندگان</p>
+            <div class="dh-module-links">
+                <a href="{% url 'quizbuilder:user_response_dashboard' %}">پاسخنامه کاربران</a>
+                <a href="{% url 'quizbuilder:response_dashboard' %}">پاسخ‌های تفکیکی</a>
+            </div>
+        </article>
+
+        <article class="dh-module dh-module--pay">
+            <div class="dh-module-top">
+                <div class="dh-module-icon"><i class="fas fa-gem"></i></div>
+                <span class="dh-module-count">{{ stats.paid_orders_count }} پرداخت</span>
+            </div>
+            <h3>اشتراک و پرداخت</h3>
+            <p>پلن‌ها، سفارش‌ها، اشتراک و تراکنش اعتبار</p>
+            <div class="dh-module-links">
+                <a href="{% url 'dashboard_plans' %}">پلن‌ها</a>
+                <a href="{% url 'dashboard_orders' %}">سفارش‌ها</a>
+                <a href="{% url 'dashboard_subscriptions' %}">اشتراک‌ها</a>
+                <a href="{% url 'dashboard_credits' %}">اعتبار</a>
+            </div>
+        </article>
+
+        <article class="dh-module dh-module--msg">
+            <div class="dh-module-top">
+                <div class="dh-module-icon"><i class="fas fa-envelope-open-text"></i></div>
+                <span class="dh-module-count">{% if stats.unread_messages_count %}<span class="da-badge da-badge-danger" style="font-size:inherit;padding:0.2rem 0.5rem;">{{ stats.unread_messages_count }} جدید</span>{% else %}همه خوانده{% endif %}</span>
+            </div>
+            <h3>پیام‌های تماس</h3>
+            <p>{{ stats.messages_count }} پیام از فرم تماس با ما</p>
+            <div class="dh-module-links">
+                <a href="{% url 'dashboard_contact_messages' %}">مشاهده پیام‌ها</a>
+            </div>
+        </article>
+    </div>
+
+    <!-- فعالیت اخیر -->
+    <div class="dh-section-head">
+        <h2><i class="fas fa-bolt"></i> فعالیت اخیر</h2>
+    </div>
+    <div class="dh-activity-grid">
+        <div class="dh-activity">
+            <div class="dh-activity-head">
+                <h3><i class="fas fa-envelope"></i> آخرین پیام‌ها</h3>
+                <a href="{% url 'dashboard_contact_messages' %}">مشاهده همه</a>
+            </div>
+            {% if recent_messages %}
+            <ul class="dh-activity-list">
+                {% for msg in recent_messages %}
+                <li class="dh-activity-item">
+                    <div class="dh-activity-avatar dh-activity-avatar--msg">{{ msg.name|slice:":1" }}</div>
+                    <div class="dh-activity-body">
+                        <strong><a href="{% url 'dashboard_contact_detail' msg.pk %}">{{ msg.name }}</a></strong>
+                        <span>{{ msg.get_subject_display }}</span>
+                    </div>
+                    <div class="dh-activity-meta">
+                        {% if not msg.is_read %}<span class="da-badge da-badge-danger">جدید</span>{% endif %}
+                        <span class="d-block small text-muted mt-1">{{ msg.created_at|date:"Y/m/d" }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="dh-activity-empty"><i class="fas fa-inbox"></i> پیامی ثبت نشده</div>
+            {% endif %}
+        </div>
+
+        <div class="dh-activity">
+            <div class="dh-activity-head">
+                <h3><i class="fas fa-shopping-bag"></i> آخرین سفارش‌ها</h3>
+                <a href="{% url 'dashboard_orders' %}">مشاهده همه</a>
+            </div>
+            {% if recent_orders %}
+            <ul class="dh-activity-list">
+                {% for order in recent_orders %}
+                <li class="dh-activity-item">
+                    <div class="dh-activity-avatar dh-activity-avatar--order">{{ order.user.username|slice:":1"|upper }}</div>
+                    <div class="dh-activity-body">
+                        <strong>{{ order.user.get_full_name|default:order.user.username }}</strong>
+                        <span>{{ order.plan.name }} — {{ order.amount|intcomma }} تومان</span>
+                    </div>
+                    <div class="dh-activity-meta">
+                        {% if order.status == 'paid' %}
+                        <span class="da-badge da-badge-success">{{ order.get_status_display }}</span>
+                        {% elif order.status == 'pending' %}
+                        <span class="da-badge da-badge-warning">{{ order.get_status_display }}</span>
+                        {% else %}
+                        <span class="da-badge da-badge-muted">{{ order.get_status_display }}</span>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="dh-activity-empty"><i class="fas fa-shopping-cart"></i> سفارشی نیست</div>
+            {% endif %}
+        </div>
+
+        <div class="dh-activity">
+            <div class="dh-activity-head">
+                <h3><i class="fas fa-user-clock"></i> کاربران جدید</h3>
+                <a href="{% url 'user_list_dashboard_page' %}">مشاهده همه</a>
+            </div>
+            {% if recent_users %}
+            <ul class="dh-activity-list">
+                {% for u in recent_users %}
+                <li class="dh-activity-item">
+                    <div class="dh-activity-avatar">{{ u.first_name|default:u.username|slice:":1"|upper }}</div>
+                    <div class="dh-activity-body">
+                        <strong>{{ u.get_full_name|default:u.username }}</strong>
+                        <span dir="ltr">{{ u.phone_number|default:u.email|default:"—" }}</span>
+                    </div>
+                    <div class="dh-activity-meta">
+                        <span class="small text-muted">{{ u.date_joined|date:"Y/m/d" }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="dh-activity-empty"><i class="fas fa-users"></i> کاربری نیست</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+    var el = document.getElementById('dh-chart-data');
+    if (!el || typeof Chart === 'undefined') return;
+    var data = JSON.parse(el.textContent);
+
+    function faNum(n) {
+        return Number(n).toLocaleString('fa-IR');
+    }
+
+    function gradient(ctx, c1, c2) {
+        var g = ctx.createLinearGradient(0, 0, 0, 280);
+        g.addColorStop(0, c1);
+        g.addColorStop(1, c2);
+        return g;
+    }
+
+    Chart.defaults.font.family = 'Vazirmatn, Tahoma, sans-serif';
+    Chart.defaults.color = '#64748b';
+    Chart.defaults.plugins.legend.display = false;
+    Chart.defaults.plugins.tooltip.rtl = true;
+    Chart.defaults.plugins.tooltip.titleAlign = 'right';
+    Chart.defaults.plugins.tooltip.bodyAlign = 'right';
+    Chart.defaults.scale.grid.color = 'rgba(148, 163, 184, 0.15)';
+
+    var totals = data.totals || {};
+    var salesEl = document.getElementById('dhTotalSales');
+    if (salesEl) salesEl.textContent = faNum(totals.sales_period || 0);
+    var usersEl = document.getElementById('dhTotalUsers');
+    if (usersEl) usersEl.textContent = faNum(totals.users_period || 0) + ' نفر';
+    var quizEl = document.getElementById('dhTotalQuizzes');
+    if (quizEl) quizEl.textContent = faNum(totals.quizzes_period || 0) + ' بار';
+
+    var sharedLineOpts = {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function (ctx) {
+                        var v = ctx.parsed.y;
+                        return ctx.dataset.label + ': ' + faNum(v) + (ctx.dataset.label.indexOf('تومان') >= 0 ? ' تومان' : '');
+                    }
+                }
+            }
+        },
+        scales: {
+            x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkipPadding: 12 } },
+            y: { beginAtZero: true, ticks: { callback: function (v) { return faNum(v); } } }
+        }
+    };
+
+    var salesCtx = document.getElementById('chartSales');
+    if (salesCtx) {
+        var sctx = salesCtx.getContext('2d');
+        new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'فروش (تومان)',
+                    data: data.sales_daily,
+                    borderColor: '#10b981',
+                    backgroundColor: gradient(sctx, 'rgba(16, 185, 129, 0.35)', 'rgba(16, 185, 129, 0.02)'),
+                    fill: true,
+                    tension: 0.42,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#10b981',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: sharedLineOpts
+        });
+    }
+
+    var usersCtx = document.getElementById('chartUsers');
+    if (usersCtx) {
+        var uctx = usersCtx.getContext('2d');
+        new Chart(usersCtx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'کاربر جدید',
+                    data: data.users_daily,
+                    borderColor: '#6366f1',
+                    backgroundColor: gradient(uctx, 'rgba(99, 102, 241, 0.3)', 'rgba(99, 102, 241, 0.02)'),
+                    fill: true,
+                    tension: 0.42,
+                    borderWidth: 2.5,
+                    pointRadius: 3
+                }]
+            },
+            options: sharedLineOpts
+        });
+    }
+
+    var quizActCtx = document.getElementById('chartQuizActivity');
+    if (quizActCtx) {
+        new Chart(quizActCtx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'شرکت در آزمون',
+                    data: data.quizzes_daily,
+                    backgroundColor: 'rgba(139, 92, 246, 0.75)',
+                    hoverBackgroundColor: '#8b5cf6',
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: sharedLineOpts
+        });
+    }
+
+    function doughnut(id, block, emptyText) {
+        var canvas = document.getElementById(id);
+        if (!canvas || !block) return;
+        var sum = (block.values || []).reduce(function (a, b) { return a + b; }, 0);
+        if (!sum) {
+            canvas.parentElement.classList.add('dh-chart-empty');
+            canvas.parentElement.innerHTML = '<div class="dh-chart-empty-msg"><i class="fas fa-chart-pie"></i><span>' + emptyText + '</span></div>';
+            return;
+        }
+        new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: block.labels,
+                datasets: [{
+                    data: block.values,
+                    backgroundColor: block.colors,
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '68%',
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        rtl: true,
+                        labels: { padding: 14, usePointStyle: true, pointStyle: 'circle', font: { size: 11 } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                var pct = Math.round((ctx.parsed / sum) * 100);
+                                return ctx.label + ': ' + faNum(ctx.parsed) + ' (' + faNum(pct) + '٪)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    doughnut('chartOrders', data.orders, 'سفارشی ثبت نشده');
+    doughnut('chartSubscriptions', data.subscriptions, 'کاربری نیست');
+    doughnut('chartQuizStatus', data.quizzes, 'پاسخنامه\u200cای نیست');
+
+    var plans = data.top_plans || {};
+    var planCard = document.getElementById('dhPlanCard');
+    var planCtx = document.getElementById('chartPlans');
+    if (planCtx && (!plans.labels || !plans.labels.length)) {
+        if (planCard) planCard.style.display = 'none';
+    } else if (planCtx && plans.labels && plans.labels.length) {
+        new Chart(planCtx, {
+            type: 'bar',
+            data: {
+                labels: plans.labels,
+                datasets: [{
+                    label: 'درآمد (تومان)',
+                    data: plans.values,
+                    backgroundColor: ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ec4899'],
+                    borderRadius: 10,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) { return faNum(ctx.parsed.x) + ' تومان'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { callback: function (v) { return faNum(v); } }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    }
+})();
+</script>
 {% endblock %}

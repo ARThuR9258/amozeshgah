@@ -1,0 +1,11 @@
+{% if is_paginated %}
+<nav class="da-pagination" aria-label="صفحه‌بندی">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% if pagination_query %}&{{ pagination_query }}{% endif %}" title="صفحه قبل"><i class="fas fa-chevron-right"></i></a>
+    {% else %}<span class="disabled"><i class="fas fa-chevron-right"></i></span>{% endif %}
+    <span class="active">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if pagination_query %}&{{ pagination_query }}{% endif %}" title="صفحه بعد"><i class="fas fa-chevron-left"></i></a>
+    {% else %}<span class="disabled"><i class="fas fa-chevron-left"></i></span>{% endif %}
+</nav>
+{% endif %}

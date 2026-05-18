@@ -1,0 +1,141 @@
+{% extends 'shared/_layout.html' %}
+{% load static humanize %}
+
+{% block title %}پلن‌ها و قیمت‌گذاری — آیین‌نامه پلاس{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pricing.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="pricing-page">
+    <div class="pricing-hero" data-aos="fade-up">
+        <h1>با <span class="highlight">آیین‌نامه پلاس</span> قبولی را تضمین کنید</h1>
+        <p>
+            هزاران داوطلب با آزمون‌های واقعی و پاسخنامه تشریحی ما قبول شدند.
+            پلن مناسب خود را انتخاب کنید و همین امروز شروع کنید.
+        </p>
+        {% if user.is_authenticated and user_access %}
+        <div class="pricing-status-bar">
+            <i class="fas fa-check-circle"></i>
+            {% if user_access.access_type == 'unlimited' %}
+                اشتراک فعال — آزمون نامحدود
+            {% elif user_access.access_type == 'credit' %}
+                {{ user_access.credits_remaining }} اعتبار باقی‌مانده
+            {% elif user_access.access_type == 'free_daily' %}
+                {{ user_access.free_attempts_remaining }} آزمون رایگان امروز
+            {% else %}
+                برای شرکت در آزمون یک پلن انتخاب کنید
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="pricing-grid">
+        {% for plan in subscription_plans %}
+        <article class="pricing-card {% if plan.is_popular %}popular{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+            {% if plan.is_popular %}
+            <span class="pricing-badge"><i class="fas fa-star me-1"></i>محبوب‌ترین</span>
+            {% endif %}
+            <h3>{{ plan.name }}</h3>
+            <p class="plan-desc">{{ plan.description|default:"دسترسی کامل به تمام آزمون‌ها" }}</p>
+            <div class="pricing-price">
+                <span class="currency">تومان</span>
+                <span class="amount">{{ plan.price|intcomma }}</span>
+                {% if plan.duration_days %}
+                <span class="period">/{{ plan.duration_days }} روز</span>
+                {% endif %}
+            </div>
+            <ul class="pricing-features">
+                {% for feature in plan.features %}
+                <li><i class="fas fa-check"></i> {{ feature }}</li>
+                {% empty %}
+                <li><i class="fas fa-check"></i> آزمون نامحدود</li>
+                <li><i class="fas fa-check"></i> پاسخنامه کامل</li>
+                {% endfor %}
+            </ul>
+            {% if user.is_authenticated %}
+            <a href="{% url 'subscriptions:checkout' plan.slug %}{% if request.GET.quiz_id %}?quiz_id={{ request.GET.quiz_id }}{% endif %}" class="btn-pricing-cta {% if plan.is_popular %}primary{% else %}outline{% endif %}">
+                {% if plan.is_popular %}همین الان شروع کن{% else %}خرید اشتراک{% endif %}
+            </a>
+            {% else %}
+            <a href="{% url 'sign_in_page' %}?next={% url 'subscriptions:checkout' plan.slug %}" class="btn-pricing-cta primary">
+                ورود و خرید
+            </a>
+            {% endif %}
+        </article>
+        {% endfor %}
+
+        {% if free_plan %}
+        <article class="pricing-card" data-aos="fade-up">
+            <h3>{{ free_plan.name }}</h3>
+            <p class="plan-desc">شروع رایگان برای آشنایی با پلتفرم</p>
+            <div class="pricing-price">
+                <span class="amount">۰</span>
+                <span class="currency">تومان</span>
+            </div>
+            <ul class="pricing-features">
+                {% for feature in free_plan.features %}
+                <li><i class="fas fa-check"></i> {{ feature }}</li>
+                {% endfor %}
+            </ul>
+            <span class="btn-pricing-cta muted">پلن فعلی شما</span>
+        </article>
+        {% endif %}
+    </div>
+
+    <h2 class="pricing-section-title" data-aos="fade-up">بسته‌های اعتباری</h2>
+    <p class="text-center mb-4" style="color: #94a3b8; max-width: 560px; margin: 0 auto 1.5rem;">
+        فقط به تعداد مشخصی آزمون نیاز دارید؟ بسته اعتبار بخرید و هر وقت خواستید استفاده کنید.
+    </p>
+    <div class="credit-grid">
+        {% for plan in credit_plans %}
+        <article class="pricing-card" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:50 }}">
+            <h3>{{ plan.name }}</h3>
+            <p class="plan-desc">{{ plan.credits_amount }} آزمون کامل</p>
+            <div class="pricing-price">
+                <span class="currency">تومان</span>
+                <span class="amount">{{ plan.price|intcomma }}</span>
+            </div>
+            <ul class="pricing-features">
+                {% for feature in plan.features %}
+                <li><i class="fas fa-check"></i> {{ feature }}</li>
+                {% endfor %}
+            </ul>
+            {% if user.is_authenticated %}
+            <a href="{% url 'subscriptions:checkout' plan.slug %}{% if request.GET.quiz_id %}?quiz_id={{ request.GET.quiz_id }}{% endif %}" class="btn-pricing-cta outline">خرید بسته</a>
+            {% else %}
+            <a href="{% url 'sign_in_page' %}" class="btn-pricing-cta outline">ورود و خرید</a>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+
+    <h2 class="pricing-section-title" data-aos="fade-up">مقایسه امکانات</h2>
+    <div class="comparison-wrap" data-aos="fade-up">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>امکانات</th>
+                    <th>رایگان</th>
+                    <th>اعتباری</th>
+                    <th class="popular-col">ماهانه</th>
+                    <th>سالانه</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in comparison_features %}
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{% if row.free == True %}<i class="fas fa-check check"></i>{% elif row.free == False %}<i class="fas fa-times cross"></i>{% else %}{{ row.free }}{% endif %}</td>
+                    <td>{% if row.credit == True %}<i class="fas fa-check check"></i>{% elif row.credit == False %}<i class="fas fa-times cross"></i>{% else %}{{ row.credit }}{% endif %}</td>
+                    <td>{% if row.monthly == True %}<i class="fas fa-check check"></i>{% elif row.monthly == False %}<i class="fas fa-times cross"></i>{% else %}{{ row.monthly }}{% endif %}</td>
+                    <td>{% if row.yearly == True %}<i class="fas fa-check check"></i>{% elif row.yearly == False %}<i class="fas fa-times cross"></i>{% else %}{{ row.yearly }}{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+{% endblock %}

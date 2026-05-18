@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'sample_questions',
     'rest_framework',
     'quizbuilder_module',
+    'subscriptions_module',
     'widget_tweaks',
 
 ]
@@ -71,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'index_module.context_processors.dashboard_sidebar',
             ],
         },
     },

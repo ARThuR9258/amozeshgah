@@ -1,0 +1,545 @@
+/* تم یکپارچه تیره — کل سایت عمومی */
+:root {
+    --site-bg: #0f1219;
+    --site-surface: #1a2030;
+    --site-card: #222a3d;
+    --site-card-hover: #2a344c;
+    --site-border: rgba(255, 255, 255, 0.08);
+    --site-text: #f0f2f5;
+    --site-muted: #94a3b8;
+    --site-accent: #4dabf7;
+    --site-purple: #8b5cf6;
+    --site-gradient: linear-gradient(135deg, #4dabf7, #8b5cf6);
+    --site-radius: 16px;
+    --site-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+body.site-theme {
+    background: var(--site-bg) !important;
+    color: var(--site-text);
+}
+
+body.site-theme .content-wrapper {
+    background: var(--site-bg);
+    flex: 1;
+}
+
+/* Navbar */
+body.site-theme .navbar {
+    background: rgba(15, 18, 25, 0.92) !important;
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--site-border);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+body.site-theme .navbar-brand {
+    color: var(--site-text) !important;
+}
+
+body.site-theme .nav-link {
+    color: var(--site-muted) !important;
+}
+
+body.site-theme .nav-link:hover,
+body.site-theme .nav-link.active {
+    color: var(--site-accent) !important;
+    background: rgba(77, 171, 247, 0.1) !important;
+}
+
+body.site-theme .navbar .btn-outline-light {
+    color: var(--site-text) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    background: transparent !important;
+}
+
+body.site-theme .navbar .btn-outline-light i {
+    color: inherit !important;
+}
+
+body.site-theme .navbar .btn-outline-light:hover {
+    background: var(--site-gradient) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+
+body.site-theme .dropdown-menu {
+    background: var(--site-card);
+    border: 1px solid var(--site-border);
+    box-shadow: var(--site-shadow);
+}
+
+body.site-theme .dropdown-item {
+    color: var(--site-text);
+}
+
+body.site-theme .dropdown-item:hover {
+    background: rgba(77, 171, 247, 0.12);
+    color: var(--site-accent);
+}
+
+body.site-theme .dropdown-divider {
+    border-color: var(--site-border);
+}
+
+/* صفحات داخلی */
+.site-page {
+    padding: 2rem 0 4rem;
+    min-height: 60vh;
+}
+
+.site-page-header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    padding: 0 1rem;
+}
+
+.site-page-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 800;
+    color: var(--site-text);
+    margin-bottom: 0.5rem;
+}
+
+.site-page-header p {
+    color: var(--site-muted);
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+.site-page-header .highlight {
+    background: var(--site-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* کارت‌های عمومی */
+body.site-theme .card,
+body.site-theme .site-card {
+    background: var(--site-card) !important;
+    border: 1px solid var(--site-border) !important;
+    border-radius: var(--site-radius) !important;
+    color: var(--site-text);
+    box-shadow: var(--site-shadow);
+}
+
+body.site-theme .card-header {
+    background: rgba(77, 171, 247, 0.12) !important;
+    border-bottom: 1px solid var(--site-border) !important;
+    color: var(--site-text) !important;
+}
+
+body.site-theme .card-header h4,
+body.site-theme .card-header h3 {
+    color: var(--site-text) !important;
+}
+
+body.site-theme .card-footer {
+    background: var(--site-surface) !important;
+    border-top: 1px solid var(--site-border) !important;
+}
+
+body.site-theme .card-body {
+    color: var(--site-text);
+}
+
+body.site-theme .text-muted {
+    color: var(--site-muted) !important;
+}
+
+body.site-theme .text-black,
+body.site-theme h2.text-black {
+    color: var(--site-text) !important;
+}
+
+body.site-theme .bg-light {
+    background: var(--site-surface) !important;
+}
+
+body.site-theme .bg-white {
+    background: var(--site-card) !important;
+}
+
+body.site-theme .list-group-item {
+    background: var(--site-card);
+    border-color: var(--site-border);
+    color: var(--site-text);
+}
+
+body.site-theme .list-group-item:hover {
+    background: var(--site-card-hover);
+}
+
+body.site-theme .badge.bg-light {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--site-muted) !important;
+    border: 1px solid var(--site-border);
+}
+
+body.site-theme .page-link {
+    background: var(--site-card);
+    border-color: var(--site-border);
+    color: var(--site-text);
+}
+
+body.site-theme .page-item.active .page-link {
+    background: var(--site-gradient);
+    border-color: transparent;
+}
+
+body.site-theme .form-control,
+body.site-theme .form-select {
+    background: var(--site-surface);
+    border-color: var(--site-border);
+    color: var(--site-text);
+}
+
+body.site-theme .form-control:focus {
+    background: var(--site-surface);
+    border-color: var(--site-accent);
+    color: var(--site-text);
+    box-shadow: 0 0 0 0.2rem rgba(77, 171, 247, 0.2);
+}
+
+body.site-theme .input-group-text {
+    background: var(--site-surface);
+    border-color: var(--site-border);
+    color: var(--site-muted);
+}
+
+body.site-theme .form-label {
+    color: var(--site-text);
+}
+
+body.site-theme .alert-danger {
+    background: rgba(248, 113, 113, 0.15);
+    border-color: rgba(248, 113, 113, 0.3);
+    color: #fca5a5;
+}
+
+/* خانه — سکشن‌ها */
+body.site-theme .stats-section {
+    background: var(--site-surface);
+}
+
+body.site-theme .stat-card {
+    background: var(--site-card);
+    border-color: var(--site-border);
+}
+
+body.site-theme .stat-card h3 {
+    color: var(--site-accent);
+}
+
+body.site-theme .stat-card p {
+    color: var(--site-muted);
+}
+
+body.site-theme .features-section {
+    background: var(--site-bg);
+}
+
+body.site-theme .feature-card {
+    background: var(--site-card);
+    border-color: var(--site-border);
+}
+
+body.site-theme .feature-card h4 {
+    color: var(--site-text);
+}
+
+body.site-theme .feature-card p {
+    color: var(--site-muted);
+}
+
+body.site-theme .section-title h2 {
+    color: var(--site-text);
+}
+
+body.site-theme .section-title p {
+    color: var(--site-muted);
+}
+
+body.site-theme .testimonials-section {
+    background: var(--site-surface);
+}
+
+body.site-theme .testimonial-card {
+    background: var(--site-card);
+    border: 1px solid var(--site-border);
+}
+
+body.site-theme .testimonial-text p {
+    color: var(--site-text);
+}
+
+body.site-theme .author-info strong {
+    color: var(--site-text);
+}
+
+body.site-theme .author-info span {
+    color: var(--site-muted);
+}
+
+body.site-theme .cta-section {
+    background: var(--site-card);
+}
+
+/* نمونه سوالات */
+.paper-list-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem !important;
+    transition: background 0.25s ease;
+}
+
+.paper-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: rgba(248, 113, 113, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f87171;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.paper-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+body.site-theme .btn-outline-primary {
+    color: var(--site-accent);
+    border-color: rgba(77, 171, 247, 0.5);
+}
+
+body.site-theme .btn-outline-primary:hover {
+    background: rgba(77, 171, 247, 0.15);
+    color: var(--site-text);
+}
+
+body.site-theme .btn-outline-secondary {
+    color: var(--site-muted);
+    border-color: var(--site-border);
+}
+
+body.site-theme .btn-outline-secondary:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--site-text);
+}
+
+/* FAQ — تم تیره یکپارچه */
+body.site-theme .faq-section {
+    background: var(--site-surface);
+    padding: 5rem 0 !important;
+}
+
+body.site-theme .faq-section .accordion-item {
+    background: var(--site-card);
+    border: 1px solid var(--site-border) !important;
+    margin-bottom: 0.75rem;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+body.site-theme .faq-section .accordion-button {
+    background: var(--site-card);
+    color: var(--site-text);
+    box-shadow: none;
+}
+
+body.site-theme .faq-section .accordion-button:not(.collapsed) {
+    background: rgba(77, 171, 247, 0.1);
+    color: var(--site-accent);
+}
+
+body.site-theme .faq-section .accordion-button::after {
+    filter: invert(1);
+}
+
+body.site-theme .faq-section .accordion-body {
+    background: var(--site-card);
+    color: var(--site-muted);
+    border-top: 1px solid var(--site-border);
+}
+
+/* CTA */
+body.site-theme .cta-section {
+    background: var(--site-gradient) !important;
+    padding: 5rem 0 !important;
+}
+
+body.site-theme .cta-section .btn-light {
+    color: var(--site-bg);
+    font-weight: 700;
+}
+
+/* فوتر */
+body.site-theme .site-footer {
+    background: #0a0d14;
+    border-top: 1px solid var(--site-border);
+    color: var(--site-text);
+    padding: 3rem 0 1.5rem;
+}
+
+body.site-theme .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 2rem 3rem;
+    align-items: start;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--site-border);
+}
+
+body.site-theme .site-footer h5,
+body.site-theme .site-footer h6 {
+    color: var(--site-text);
+    font-weight: 700;
+}
+
+body.site-theme .site-footer-brand p {
+    color: var(--site-muted);
+    line-height: 1.8;
+    max-width: 320px;
+}
+
+body.site-theme .site-footer .footer-links a {
+    color: var(--site-muted);
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.35rem 0;
+    transition: color 0.2s ease;
+}
+
+body.site-theme .site-footer .footer-links a:hover {
+    color: var(--site-accent);
+}
+
+body.site-theme .site-footer-contact a {
+    color: var(--site-muted);
+    text-decoration: none;
+}
+
+body.site-theme .site-footer-contact a:hover {
+    color: var(--site-accent);
+}
+
+body.site-theme .site-footer .social-links {
+    display: flex;
+    gap: 0.75rem;
+}
+
+body.site-theme .site-footer .social-links a {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--site-text);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+body.site-theme .site-footer .social-links a:hover {
+    background: var(--site-accent);
+    transform: translateY(-3px);
+    color: #fff;
+}
+
+body.site-theme .site-footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    color: var(--site-muted);
+    font-size: 0.9rem;
+}
+
+body.site-theme footer.bg-dark {
+    background: #0a0d14 !important;
+    border-top: 1px solid var(--site-border);
+}
+
+/* ورود / ثبت‌نام */
+body.site-theme .login-page .card-header,
+body.site-theme .signup-page .card-header {
+    background: rgba(77, 171, 247, 0.12) !important;
+}
+
+body.site-theme .login-page .card-header h3,
+body.site-theme .login-page .card-header p,
+body.site-theme .signup-page .card-header h3 {
+    color: var(--site-text) !important;
+}
+
+body.site-theme .bg-gradient-primary {
+    background: var(--site-gradient) !important;
+}
+
+/* نتیجه آزمون */
+body.site-theme .quiz-result-container {
+    background: var(--site-card);
+    border: 1px solid var(--site-border);
+    color: var(--site-text);
+    box-shadow: var(--site-shadow);
+}
+
+body.site-theme .result-title,
+body.site-theme .section-title {
+    color: var(--site-text);
+}
+
+body.site-theme .result-subtitle {
+    color: var(--site-muted);
+}
+
+body.site-theme .quiz-result-container .question-card {
+    background: var(--site-surface);
+    border-color: var(--site-border);
+}
+
+@media (max-width: 768px) {
+    body.site-theme .site-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    body.site-theme .site-footer-brand p {
+        max-width: none;
+        margin: 0 auto;
+    }
+
+    body.site-theme .site-footer .social-links {
+        justify-content: center;
+    }
+
+    .paper-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .paper-actions {
+        width: 100%;
+    }
+
+    .paper-actions .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    body.site-theme .hero h1 {
+        font-size: 2rem;
+    }
+
+    body.site-theme .hero p {
+        font-size: 1.1rem;
+    }
+}

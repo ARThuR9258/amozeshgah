@@ -1,0 +1,119 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}درباره ما — {{ site.brand }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/static-pages.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="static-page">
+    <div class="sp-hero" data-aos="fade-up">
+        <div class="container">
+            <span class="sp-badge"><i class="fas fa-heart"></i> داستان ما</span>
+            <h1>درباره <span class="gradient-text">{{ site.brand }}</span></h1>
+            <p class="lead">ما با هدف ساده‌سازی مسیر قبولی در آزمون آیین‌نامه رانندگی، پلتفرمی ساختیم که واقعاً به درد تمرین روزانه بخورد.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sp-stats" data-aos="fade-up">
+            <div class="sp-stat"><strong>۱۰K+</strong><span>کاربر فعال</span></div>
+            <div class="sp-stat"><strong>۵۰۰K+</strong><span>آزمون انجام‌شده</span></div>
+            <div class="sp-stat"><strong>۹۸٪</strong><span>رضایت کاربران</span></div>
+            <div class="sp-stat"><strong>۱۴۰۴</strong><span>سوالات به‌روز</span></div>
+        </div>
+
+        <div class="sp-section sp-story-grid" data-aos="fade-up">
+            <div class="sp-story-visual">
+                <div class="sp-story-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h3>ماموریت ما</h3>
+                <p>دسترسی عادلانه و باکیفیت به آموزش آیین‌نامه برای همه داوطلبان، بدون پیچیدگی و با تجربه‌ای لذت‌بخش.</p>
+            </div>
+            <div class="sp-story-content">
+                <p>
+                    {{ site.brand }} در سال ۱۴۰۲ با تیمی کوچک از مدرسان و برنامه‌نویسان آغاز شد؛ افرادی که خودشان مسیر آزمون رانندگی را طی کرده بودند و می‌دانستند چه چیزی واقعاً کم است.
+                </p>
+                <p>
+                    امروز هزاران کاربر هر روز روی پلتفرم ما آزمون می‌دهند، نمونه سوالات دانلود می‌کنند و با پاسخنامه تشریحی نقاط ضعف خود را پیدا می‌کنند. ما هر هفته بانک سوالات را به‌روز نگه می‌داریم تا همیشه با استاندارد آزمون رسمی هم‌سو باشید.
+                </p>
+                <p>
+                    باور ما این است که تمرین منظم و بازخورد فوری، موفقیت در اولین بار را بسیار محتمل‌تر می‌کند — و این دقیقاً همان چیزی است که محصول ما ارائه می‌دهد.
+                </p>
+            </div>
+        </div>
+
+        <div class="sp-section" data-aos="fade-up">
+            <div class="sp-section-head">
+                <h2>ارزش‌های ما</h2>
+                <p>سه اصل که هر تصمیم محصولی و پشتیبانی ما بر آن استوار است.</p>
+            </div>
+            <div class="sp-values-grid">
+                <div class="sp-value-card">
+                    <div class="sp-value-icon sp-value-icon--blue"><i class="fas fa-bullseye"></i></div>
+                    <h3>تمرکز بر نتیجه</h3>
+                    <p>هر قابلیت باید مستقیماً به قبولی شما در آزمون نزدیک‌تر کند؛ نه شلوغ‌کاری و نه حاشیه.</p>
+                </div>
+                <div class="sp-value-card">
+                    <div class="sp-value-icon sp-value-icon--purple"><i class="fas fa-shield-halved"></i></div>
+                    <h3>اعتماد و شفافیت</h3>
+                    <p>قیمت‌گذاری روشن، پرداخت امن و پشتیبانی پاسخ‌گو — بدون تعهد پنهان.</p>
+                </div>
+                <div class="sp-value-card">
+                    <div class="sp-value-icon sp-value-icon--green"><i class="fas fa-seedling"></i></div>
+                    <h3>به‌روز ماندن</h3>
+                    <p>سوالات و آزمون‌ها مطابق آخرین تغییرات آیین‌نامه و استاندارد سازمان‌های رسمی.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sp-section" data-aos="fade-up">
+            <div class="sp-section-head">
+                <h2>مسیر رشد ما</h2>
+                <p>نگاهی کوتاه به نقاط عطف {{ site.brand }}.</p>
+            </div>
+            <div class="sp-timeline">
+                <div class="sp-timeline-item">
+                    <div class="sp-timeline-dot">۱</div>
+                    <div class="sp-timeline-body">
+                        <h4>شروع — ۱۴۰۲</h4>
+                        <p>راه‌اندازی نسخه اول با آزمون آنلاین و چند مجموعه نمونه سوال رایگان.</p>
+                    </div>
+                </div>
+                <div class="sp-timeline-item">
+                    <div class="sp-timeline-dot">۲</div>
+                    <div class="sp-timeline-body">
+                        <h4>رشد کاربران — ۱۴۰۳</h4>
+                        <p>افزودن پاسخنامه تشریحی، پنل کاربری و سیستم اشتراک و اعتبار.</p>
+                    </div>
+                </div>
+                <div class="sp-timeline-item">
+                    <div class="sp-timeline-dot">۳</div>
+                    <div class="sp-timeline-body">
+                        <h4>امروز — ۱۴۰۴</h4>
+                        <p>هزاران کاربر فعال، آزمون‌های روزانه و تجربه کاربری مدرن و یکپارچه.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sp-cta" data-aos="fade-up">
+            <div class="container-inner">
+                <h2>آماده‌اید شروع کنید؟</h2>
+                <p>همین حالا ۲ آزمون رایگان روزانه داشته باشید یا پلن مناسب خود را انتخاب کنید.</p>
+                <div class="sp-cta-actions">
+                    <a href="{% url 'quizbuilder:quiz_list' %}" class="sp-btn sp-btn-primary">
+                        <i class="fas fa-play"></i>
+                        شروع آزمون
+                    </a>
+                    <a href="{% url 'contact_page' %}" class="sp-btn sp-btn-ghost">
+                        <i class="fas fa-envelope"></i>
+                        تماس با ما
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

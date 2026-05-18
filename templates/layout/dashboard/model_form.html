@@ -1,0 +1,80 @@
+{% extends 'layout/_master.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                {% for crumb in breadcrumbs %}
+                    {% if not forloop.first %}<span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>{% endif %}
+                    {% if crumb.url %}
+                    <a href="{{ crumb.url }}">{% if crumb.icon %}<i class="fas fa-{{ crumb.icon }}"></i>{% else %}{{ crumb.label }}{% endif %}</a>
+                    {% else %}
+                    <span>{% if crumb.icon %}<i class="fas fa-{{ crumb.icon }}"></i>{% else %}{{ crumb.label }}{% endif %}</span>
+                    {% endif %}
+                {% endfor %}
+            </nav>
+            <h1 class="da-page-title">
+                {% if page_icon %}<i class="fas fa-{{ page_icon }}"></i>{% endif %}
+                {{ page_heading }}
+            </h1>
+            {% if page_subtitle %}<p class="da-page-subtitle">{{ page_subtitle }}</p>{% endif %}
+        </div>
+        <div class="da-page-actions">
+            <a href="{{ cancel_url }}" class="da-btn da-btn-outline">
+                <i class="fas fa-arrow-right"></i> بازگشت
+            </a>
+        </div>
+    </div>
+
+    {% if form_readonly_info %}
+    <div class="da-form-panel mb-3" style="padding:1rem 1.25rem;">
+        {{ form_readonly_info }}
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="{{ form_enctype }}" class="da-form-panel" novalidate>
+        {% csrf_token %}
+        <div class="da-form-section">
+            {% if form_section_title %}
+            <h3 class="da-form-section-title">
+                {% if form_section_icon %}<i class="fas fa-{{ form_section_icon }}"></i>{% endif %}
+                {{ form_section_title }}
+            </h3>
+            {% endif %}
+            <div class="row g-3">
+                {% for field in form %}
+                <div class="col-md-{% if field.field.widget.input_type == 'checkbox' %}12{% elif field.name == 'description' or field.name == 'desc' or field.name == 'features_text' or field.name == 'message' or field.name == 'choices' %}12{% else %}6{% endif %}">
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                    <div class="form-check mt-2">
+                        {{ field|add_class:"form-check-input" }}
+                        <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    </div>
+                    {% elif field.field.widget.input_type == 'select' and field.name == 'choices' %}
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:"form-select" }}
+                    {% elif field.field.widget.input_type == 'select' %}
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:"form-select" }}
+                    {% else %}
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:"form-control" }}
+                    {% endif %}
+                    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                    {% if field.errors %}<div class="da-field-error">{{ field.errors.0 }}</div>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="da-form-footer">
+            <button type="submit" class="da-btn da-btn-primary">
+                <i class="fas fa-check"></i> {{ submit_label|default:"ذخیره" }}
+            </button>
+            <a href="{{ cancel_url }}" class="da-btn da-btn-ghost">انصراف</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

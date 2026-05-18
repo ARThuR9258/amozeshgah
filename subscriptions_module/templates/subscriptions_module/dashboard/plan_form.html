@@ -1,0 +1,52 @@
+{% extends 'layout/_master.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{% if object %}ویرایش پلن{% else %}پلن جدید{% endif %}{% endblock %}
+
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <a href="{% url 'dashboard_plans' %}">پلن‌ها</a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>{% if object %}ویرایش{% else %}افزودن{% endif %}</span>
+            </nav>
+            <h1 class="da-page-title">
+                <i class="fas fa-gem"></i>
+                {% if object %}ویرایش پلن «{{ object.name }}»{% else %}افزودن پلن جدید{% endif %}
+            </h1>
+        </div>
+        <div class="da-page-actions">
+            <a href="{% url 'dashboard_plans' %}" class="da-btn da-btn-outline">
+                <i class="fas fa-arrow-right"></i> بازگشت
+            </a>
+        </div>
+    </div>
+
+    <form method="post" class="da-form-panel">
+        {% csrf_token %}
+        <div class="da-form-section">
+            <h3 class="da-form-section-title"><i class="fas fa-edit"></i> مشخصات پلن</h3>
+            <div class="row g-3">
+                {% for field in form %}
+                <div class="col-md-{% if field.name == 'description' or field.name == 'features_text' %}12{% else %}6{% endif %}">
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:"form-control" }}
+                    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                    {% if field.errors %}<div class="text-danger small">{{ field.errors.0 }}</div>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="da-form-footer">
+            <button type="submit" class="da-btn da-btn-primary">
+                <i class="fas fa-check"></i> ذخیره پلن
+            </button>
+            <a href="{% url 'dashboard_plans' %}" class="da-btn da-btn-ghost">انصراف</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

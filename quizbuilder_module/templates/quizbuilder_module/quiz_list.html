@@ -1,75 +1,131 @@
 {% extends 'shared/_layout.html' %}
 {% load static %}
 
-{% block title %}آزمون‌ها - آیین‌نامه پلاس{% endblock %}
+{% block title %}آزمون‌ها — آیین‌نامه پلاس{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/quiz_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/browse.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="page-header mb-5">
-                <h1 class="page-title">آزمون‌های در دسترس</h1>
-                <p class="page-subtitle">آزمون‌های فعال را مشاهده و شروع کنید</p>
+<section class="browse-page">
+    <div class="browse-hero" data-aos="fade-up">
+        <div class="container">
+            <span class="browse-badge"><i class="fas fa-clipboard-check"></i> آزمون آنلاین</span>
+            <h1><span class="gradient-text">آزمون‌های</span> در دسترس</h1>
+            <p class="lead">آزمون فعال را انتخاب کنید، زمان را مدیریت کنید و با سوالات واقعی تمرین کنید.</p>
+            <div class="browse-hero-actions">
+                <a href="{% url 'sample_questions:question_list' %}" class="browse-hero-btn browse-hero-btn--ghost">
+                    <i class="fas fa-file-pdf"></i>
+                    نمونه سوالات
+                </a>
+                <a href="{% url 'subscriptions:pricing' %}" class="browse-hero-btn browse-hero-btn--primary">
+                    <i class="fas fa-crown"></i>
+                    خرید اشتراک
+                </a>
             </div>
-
-            {% if quizzes %}
-                <div class="quiz-cards">
-                    {% for quiz in quizzes %}
-                    <div class="quiz-card">
-                        <div class="quiz-card-body">
-                            <div class="quiz-card-header">
-                                <h3 class="quiz-title">{{ quiz.title }}</h3>
-                                <span class="quiz-status badge bg-{{ quiz.get_status_class }}">
-                                    {{ quiz.get_status }}
-                                </span>
-                            </div>
-                            
-                            <p class="quiz-desc">{{ quiz.desc|truncatewords:30 }}</p>
-                            
-                            <div class="quiz-meta">
-                                {% if quiz.time %}
-                                <div class="meta-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>{{ quiz.time }} دقیقه</span>
-                                </div>
-                                {% endif %}
-                                
-                                <div class="meta-item">
-                                    <i class="fas fa-question-circle"></i>
-                                    <span>{{ quiz.questions.count }} سوال</span>
-                                </div>
-                                
-                                {% if quiz.expire_time %}
-                                <div class="meta-item">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>تا {{ quiz.expire_time|date:"Y/m/d H:i" }}</span>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="quiz-card-footer">
-                            <a href="{% url 'quizbuilder:take_quiz' quiz.id %}" class="btn btn-primary btn-start-quiz">
-                                شروع آزمون
-                                <i class="fas fa-arrow-left me-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <div class="empty-state-icon">
-                        <i class="fas fa-clipboard-question"></i>
-                    </div>
-                    <h3>آزمونی برای نمایش وجود ندارد</h3>
-                    <p>در حال حاضر هیچ آزمون فعالی وجود ندارد. لطفاً بعداً مراجعه کنید.</p>
-                </div>
-            {% endif %}
         </div>
     </div>
-</div>
+
+    <div class="container">
+        {% include 'shared/browse_toolbar.html' %}
+
+        {% if has_active_filters or search_query %}
+        <p class="browse-results-hint" data-aos="fade-up">
+            <i class="fas fa-filter"></i>
+            <strong>{{ result_count }}</strong> نتیجه یافت شد
+        </p>
+        {% endif %}
+
+        {% if quizzes %}
+        <div class="browse-stats" data-aos="fade-up">
+            <div class="browse-stat">
+                <div class="browse-stat-icon browse-stat-icon--purple"><i class="fas fa-list-check"></i></div>
+                <div>
+                    <strong>{{ result_count }}</strong>
+                    <span>{% if has_active_filters %}نتیجه{% else %}آزمون فعال{% endif %}</span>
+                </div>
+            </div>
+            <div class="browse-stat">
+                <div class="browse-stat-icon browse-stat-icon--green"><i class="fas fa-circle-check"></i></div>
+                <div>
+                    <strong>آماده</strong>
+                    <span>شروع فوری</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="browse-grid">
+            {% for quiz in quizzes %}
+            <article class="browse-card quiz-browse-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:50 }}">
+                <div class="browse-card-top">
+                    <div class="browse-card-icon browse-card-icon--quiz">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="browse-card-head">
+                        <div>
+                            <h3>{{ quiz.title }}</h3>
+                            {% if quiz.desc %}
+                            <p class="browse-card-desc">{{ quiz.desc|truncatewords:22 }}</p>
+                            {% endif %}
+                        </div>
+                        <span class="browse-status browse-status--{{ quiz.get_status_class }}">
+                            {{ quiz.get_status }}
+                        </span>
+                    </div>
+                </div>
+                <div class="browse-card-body">
+                    <div class="quiz-browse-meta">
+                        <div class="quiz-browse-meta-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>{{ quiz.question_count }} سوال</span>
+                        </div>
+                        {% if quiz.time %}
+                        <div class="quiz-browse-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ quiz.time }} دقیقه</span>
+                        </div>
+                        {% endif %}
+                        {% if quiz.expire_time %}
+                        <div class="quiz-browse-meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>تا {{ quiz.expire_time|date:"Y/m/d" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="browse-card-footer">
+                    <a href="{% url 'quizbuilder:take_quiz' quiz.id %}" class="browse-btn browse-btn--primary browse-btn--full">
+                        شروع آزمون
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        {% elif has_active_filters %}
+        <div class="browse-empty" data-aos="fade-up">
+            <div class="browse-empty-icon"><i class="fas fa-search"></i></div>
+            <h3>آزمونی با این مشخصات یافت نشد</h3>
+            <p>جستجو، فیلتر یا مرتب‌سازی را تغییر دهید.</p>
+            <a href="{% url 'quizbuilder:quiz_list' %}" class="browse-btn browse-btn--primary browse-btn--full">
+                <i class="fas fa-times"></i>
+                پاک کردن فیلترها
+            </a>
+        </div>
+
+        {% else %}
+        <div class="browse-empty" data-aos="fade-up">
+            <div class="browse-empty-icon"><i class="fas fa-clipboard-question"></i></div>
+            <h3>آزمون فعالی وجود ندارد</h3>
+            <p>در حال حاضر آزمون باز برای شرکت نیست. بعداً سر بزنید یا با اشتراک از نمونه سوالات استفاده کنید.</p>
+            <a href="{% url 'subscriptions:pricing' %}" class="browse-btn browse-btn--primary browse-btn--full">
+                <i class="fas fa-crown"></i>
+                مشاهده پلن‌ها
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

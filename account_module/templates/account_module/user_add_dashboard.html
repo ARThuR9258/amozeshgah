@@ -1,328 +1,420 @@
-{% extends 'layout/_master.html' %}
+﻿{% extends 'layout/_master.html' %}
 {% load widget_tweaks %}
 
-{% block title %}
-	اضافه کردن کاربر
-{% endblock %}
+{% block title %}افزودن کاربر{% endblock %}
 
 {% block content %}
-<div class="main-body-content">
-    <div class="main-header">
-        <div class="inner">
-            <div class="title">
-                <h1><i class="fi fi-rs-user-plus"></i>افزودن کاربر جدید</h1>
-                <div class="breadcrumb">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb-list mb-0">
-                            {% for item in breadcrumbs %}
-                                {% if item.url %}
-                                    <li class="breadcrumb-item"><a href="{{ item.url }}">{{ item.title }}</a></li>
-                                {% else %}
-                                    <li class="breadcrumb-item active">{{ item.title }}</li>
-                                {% endif %}
-                            {% endfor %}
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <div class="btns-action">
-                <a href="{% url 'user_list_dashboard_page' %}" class="btn btn-primary-outline btn-small icon-left">
-                    <i class="fi fi-rs-arrow-small-left"></i>
-                    <span>بازگشت به لیست کاربران</span>
-                </a>
-            </div>
+<div class="da-page da-user-form-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <a href="{% url 'user_list_dashboard_page' %}">مدیریت کاربران</a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>افزودن کاربر</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-user-plus"></i> افزودن کاربر جدید</h1>
+            <p class="da-page-subtitle">ثبت حساب کاربری با اطلاعات کامل، اعتبار و سطح دسترسی</p>
+        </div>
+        <div class="da-page-actions">
+            <a href="{% url 'user_list_dashboard_page' %}" class="da-btn da-btn-outline">
+                <i class="fas fa-arrow-right"></i> بازگشت به لیست
+            </a>
         </div>
     </div>
 
-    <div class="main-inner">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="da-alert alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
 
-        <form method="post" class="needs-validation" novalidate>
+    <div class="da-user-form-layout">
+        <form method="post" id="userAddForm" class="da-user-form-main needs-validation" novalidate>
             {% csrf_token %}
-            
+
             {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <i class="fi fi-rs-exclamation-triangle me-2"></i>
-                    {% for error in form.non_field_errors %}
-                        <p class="mb-0">{{ error }}</p>
-                    {% endfor %}
-                </div>
+            <div class="da-alert alert alert-danger">
+                {% for error in form.non_field_errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+            </div>
             {% endif %}
 
-            <div class="card mb-4">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">
-                        <i class="fi fi-rs-user me-2"></i>
-                        اطلاعات شخصی
-                    </h5>
-                </div>
-                <div class="card-body">
+            <!-- اطلاعات شخصی -->
+            <div class="da-form-panel da-form-card">
+                <div class="da-form-section">
+                    <h3 class="da-form-section-title"><i class="fas fa-user"></i> اطلاعات شخصی</h3>
                     <div class="row g-3">
-                        <!-- First Name -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="{{ form.first_name.id_for_label }}" class="form-label">
-                                    <i class="fi fi-rs-user me-1"></i>
-                                    {{ form.first_name.label }}
-                                    {% if form.first_name.field.required %}<span class="text-danger">*</span>{% endif %}
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fi fi-rs-user"></i></span>
-                                    {{ form.first_name|add_class:"form-control"|attr:"placeholder:مثال: علی" }}
-                                </div>
-                                <div class="invalid-feedback">
-                                    لطفاً نام را وارد کنید.
-                                </div>
-                                {% if form.first_name.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.first_name.errors }}
-                                    </div>
-                                {% endif %}
+                            <label class="form-label" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                            <div class="da-input-wrap">
+                                <i class="fas fa-user da-input-icon"></i>
+                                {{ form.first_name|add_class:"form-control"|attr:"placeholder:مثال: علی"|attr:"id:first_name"|attr:"data-preview:first_name" }}
                             </div>
+                            {% if form.first_name.errors %}<div class="da-field-error">{{ form.first_name.errors.0 }}</div>{% endif %}
                         </div>
-
-                        <!-- Last Name -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="{{ form.last_name.id_for_label }}" class="form-label">
-                                    <i class="fi fi-rs-users me-1"></i>
-                                    {{ form.last_name.label }}
-                                    {% if form.last_name.field.required %}<span class="text-danger">*</span>{% endif %}
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fi fi-rs-users"></i></span>
-                                    {{ form.last_name|add_class:"form-control"|attr:"placeholder:مثال: محمدی" }}
-                                </div>
-                                <div class="invalid-feedback">
-                                    لطفاً نام خانوادگی را وارد کنید.
-                                </div>
-                                {% if form.last_name.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.last_name.errors }}
-                                    </div>
-                                {% endif %}
+                            <label class="form-label" for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                            <div class="da-input-wrap">
+                                <i class="fas fa-user-tag da-input-icon"></i>
+                                {{ form.last_name|add_class:"form-control"|attr:"placeholder:مثال: محمدی"|attr:"data-preview:last_name" }}
                             </div>
+                            {% if form.last_name.errors %}<div class="da-field-error">{{ form.last_name.errors.0 }}</div>{% endif %}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">
-                        <i class="fi fi-rs-shield-user me-2"></i>
-                        اطلاعات ورود
-                    </h5>
-                </div>
-                <div class="card-body">
+            <!-- ورود -->
+            <div class="da-form-panel da-form-card">
+                <div class="da-form-section">
+                    <h3 class="da-form-section-title"><i class="fas fa-key"></i> اطلاعات ورود</h3>
                     <div class="row g-3">
-                        <!-- Username -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="{{ form.username.id_for_label }}" class="form-label">
-                                    <i class="fi fi-rs-id-badge me-1"></i>
-                                    {{ form.username.label }}
-                                    {% if form.username.field.required %}<span class="text-danger">*</span>{% endif %}
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text">@</span>
-                                    {{ form.username|add_class:"form-control"|attr:"placeholder:مثال: alimohammadi" }}
-                                </div>
-                                <div class="form-text">فقط شامل حروف انگلیسی، اعداد و _ می‌باشد</div>
-                                <div class="invalid-feedback">
-                                    لطفاً نام کاربری را وارد کنید.
-                                </div>
-                                {% if form.username.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.username.errors }}
-                                    </div>
-                                {% endif %}
+                            <label class="form-label" for="{{ form.username.id_for_label }}">{{ form.username.label }} <span class="text-danger">*</span></label>
+                            <div class="da-input-wrap">
+                                <i class="fas fa-at da-input-icon"></i>
+                                {{ form.username|add_class:"form-control text-start"|attr:"placeholder:alimohammadi"|attr:"dir:ltr"|attr:"data-preview:username" }}
                             </div>
+                            <div class="da-field-hint">
+                                <button type="button" class="da-link-btn" id="btnSuggestUsername"><i class="fas fa-magic"></i> پیشنهاد از موبایل</button>
+                            </div>
+                            {% if form.username.errors %}<div class="da-field-error">{{ form.username.errors.0 }}</div>{% endif %}
                         </div>
-
-                        <!-- Phone Number -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">
-                                    <i class="fi fi-rs-phone-call me-1"></i>
-                                    {{ form.phone_number.label }}
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text" dir="ltr">
-                                        <i class="fi fi-rs-phone"></i>
-                                        <span class="me-1">+98</span>
-                                    </span>
-                                    {{ form.phone_number|add_class:"form-control text-start"|attr:"placeholder:9123456789" }}
-                                </div>
-                                <div class="form-text">مثال: 9123456789</div>
-                                {% if form.phone_number.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.phone_number.errors }}
-                                    </div>
-                                {% endif %}
+                            <label class="form-label" for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }} <span class="text-danger">*</span></label>
+                            <div class="da-input-wrap">
+                                <i class="fas fa-mobile-alt da-input-icon"></i>
+                                {{ form.phone_number|add_class:"form-control text-start"|attr:"placeholder:09123456789"|attr:"dir:ltr"|attr:"maxlength:11"|attr:"inputmode:numeric"|attr:"data-preview:phone" }}
                             </div>
+                            <div class="da-field-hint">۱۱ رقم، شروع با 09</div>
+                            {% if form.phone_number.errors %}<div class="da-field-error">{{ form.phone_number.errors.0 }}</div>{% endif %}
                         </div>
-
-                        <!-- Email -->
+                        <div class="col-12">
+                            <label class="form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                            <div class="da-input-wrap">
+                                <i class="fas fa-envelope da-input-icon"></i>
+                                {{ form.email|add_class:"form-control text-start"|attr:"placeholder:example@domain.com"|attr:"dir:ltr"|attr:"data-preview:email" }}
+                            </div>
+                            {% if form.email.errors %}<div class="da-field-error">{{ form.email.errors.0 }}</div>{% endif %}
+                        </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="{{ form.email.id_for_label }}" class="form-label">
-                                    <i class="fi fi-rs-envelope me-1"></i>
-                                    {{ form.email.label }}
-                                    {% if form.email.field.required %}<span class="text-danger">*</span>{% endif %}
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text">@</span>
-                                    {{ form.email|add_class:"form-control text-start"|attr:"placeholder:example@domain.com" }}
-                                </div>
-                                {% if form.email.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {{ form.email.errors }}
-                                    </div>
-                                {% endif %}
+                            <label class="form-label" for="id_password">{{ form.password.label }} <span class="text-danger">*</span></label>
+                            <div class="da-input-wrap da-input-wrap--btn">
+                                {{ form.password|add_class:"form-control text-start"|attr:"dir:ltr" }}
+                                <button type="button" class="da-input-action toggle-password" title="نمایش رمز"><i class="fas fa-eye"></i></button>
                             </div>
+                            <div class="da-password-strength" id="passwordStrength">
+                                <div class="da-password-strength-bar"><span></span></div>
+                                <small class="da-password-strength-text">قدرت رمز</small>
+                            </div>
+                            <div class="da-field-hint">
+                                <button type="button" class="da-link-btn" id="btnGenPassword"><i class="fas fa-dice"></i> تولید رمز امن</button>
+                            </div>
+                            {% if form.password.errors %}<div class="da-field-error">{{ form.password.errors.0 }}</div>{% endif %}
                         </div>
-
-                <!-- Password -->
-                <div class="col-md-6 mb-3">
-                    <div class="form-group">
-                        <label for="{{ form.password.id_for_label }}" class="form-label">
-                            {{ form.password.label }}
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group">
-                            {{ form.password|add_class:"form-control" }}
-                            <button class="btn btn-outline-secondary toggle-password" type="button">
-                                <i class="fi fi-rs-eye"></i>
-                            </button>
-                        </div>
-                        <div class="form-text">حداقل ۸ کاراکتر باشد</div>
-                        {% if form.password.errors %}
-                            <div class="text-danger small mt-1">
-                                {{ form.password.errors }}
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_confirm_password">{{ form.confirm_password.label }} <span class="text-danger">*</span></label>
+                            <div class="da-input-wrap da-input-wrap--btn">
+                                {{ form.confirm_password|add_class:"form-control text-start"|attr:"dir:ltr" }}
+                                <button type="button" class="da-input-action toggle-password" title="نمایش رمز"><i class="fas fa-eye"></i></button>
                             </div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Confirm Password -->
-                <div class="col-md-6 mb-3">
-                    <div class="form-group">
-                        <label for="{{ form.confirm_password.id_for_label }}" class="form-label">
-                            {{ form.confirm_password.label }}
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group">
-                            {{ form.confirm_password|add_class:"form-control" }}
-                            <button class="btn btn-outline-secondary toggle-password" type="button">
-                                <i class="fi fi-rs-eye"></i>
-                            </button>
-                        </div>
-                        {% if form.confirm_password.errors %}
-                            <div class="text-danger small mt-1">
-                                {{ form.confirm_password.errors }}
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Status Switches -->
-                <div class="col-12 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-4">تنظیمات کاربری</h5>
-                            
-                            <div class="form-check form-switch mb-3">
-                                {{ form.is_active|add_class:"form-check-input" }}
-                                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
-                                    {{ form.is_active.label }}
-                                </label>
-                            </div>
-                            
-                            <div class="form-check form-switch mb-3">
-                                {{ form.is_staff|add_class:"form-check-input" }}
-                                <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">
-                                    {{ form.is_staff.label }}
-                                </label>
-                                <div class="form-text">کاربران دارای دسترسی ادمین می‌توانند به پنل مدیریت دسترسی داشته باشند.</div>
-                            </div>
-                            
-                            <div class="form-check form-switch">
-                                {{ form.is_verified|add_class:"form-check-input" }}
-                                <label class="form-check-label" for="{{ form.is_verified.id_for_label }}">
-                                    {{ form.is_verified.label }}
-                                </label>
-                                <div class="form-text">کاربران تأیید شده می‌توانند وارد سیستم شوند.</div>
-                            </div>
+                            <div class="da-match-hint" id="passwordMatchHint"></div>
+                            {% if form.confirm_password.errors %}<div class="da-field-error">{{ form.confirm_password.errors.0 }}</div>{% endif %}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="btns-action mt-4">
-                <button type="submit" class="btn btn-primary icon-right">
-                    <i class="fi fi-rs-check"></i>
-                    ذخیره کاربر
-                </button>
-                <a href="{% url 'user_list_dashboard_page' %}" class="btn btn-outline-secondary">
-                    <i class="fi fi-rs-cross"></i>
-                    انصراف
-                </a>
+            <!-- اشتراک -->
+            <div class="da-form-panel da-form-card">
+                <div class="da-form-section">
+                    <h3 class="da-form-section-title"><i class="fas fa-gem"></i> اعتبار و اشتراک</h3>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.credits.id_for_label }}">{{ form.credits.label }}</label>
+                            <div class="da-input-wrap">
+                                <i class="fas fa-coins da-input-icon"></i>
+                                {{ form.credits|add_class:"form-control"|attr:"data-preview:credits" }}
+                            </div>
+                            {% if form.credits.help_text %}<div class="da-field-hint">{{ form.credits.help_text }}</div>{% endif %}
+                            {% if form.credits.errors %}<div class="da-field-error">{{ form.credits.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.subscription_status.id_for_label }}">{{ form.subscription_status.label }}</label>
+                            {{ form.subscription_status|add_class:"form-select"|attr:"data-preview:subscription" }}
+                            {% if form.subscription_status.errors %}<div class="da-field-error">{{ form.subscription_status.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                    <div class="da-credit-presets">
+                        <span class="da-credit-presets-label">میانبر اعتبار:</span>
+                        <button type="button" class="da-chip-btn" data-credits="0">۰</button>
+                        <button type="button" class="da-chip-btn" data-credits="5">۵</button>
+                        <button type="button" class="da-chip-btn" data-credits="10">۱۰</button>
+                        <button type="button" class="da-chip-btn" data-credits="20">۲۰</button>
+                        <button type="button" class="da-chip-btn" data-credits="50">۵۰</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- دسترسی -->
+            <div class="da-form-panel da-form-card">
+                <div class="da-form-section">
+                    <h3 class="da-form-section-title"><i class="fas fa-shield-alt"></i> دسترسی و وضعیت</h3>
+                    <div class="da-switch-grid">
+                        <label class="da-switch-tile">
+                            {{ form.is_active|add_class:"form-check-input" }}
+                            <span class="da-switch-tile-body">
+                                <i class="fas fa-toggle-on"></i>
+                                <strong>{{ form.is_active.label }}</strong>
+                                <small>کاربر می‌تواند وارد سیستم شود</small>
+                            </span>
+                        </label>
+                        <label class="da-switch-tile">
+                            {{ form.is_verified|add_class:"form-check-input" }}
+                            <span class="da-switch-tile-body">
+                                <i class="fas fa-check-circle"></i>
+                                <strong>{{ form.is_verified.label }}</strong>
+                                <small>بدون نیاز به تأیید موبایل</small>
+                            </span>
+                        </label>
+                        <label class="da-switch-tile da-switch-tile--warn">
+                            {{ form.is_staff|add_class:"form-check-input" }}
+                            <span class="da-switch-tile-body">
+                                <i class="fas fa-user-shield"></i>
+                                <strong>{{ form.is_staff.label }}</strong>
+                                <small>دسترسی کامل به پنل ادمین</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="da-form-footer da-form-footer--stacked">
+                    <input type="hidden" name="submit_action" id="submitAction" value="list">
+                    <div class="da-form-footer-actions">
+                        <button type="submit" class="da-btn da-btn-primary" onclick="document.getElementById('submitAction').value='list'">
+                            <i class="fas fa-check"></i> ذخیره و بازگشت به لیست
+                        </button>
+                        <button type="submit" class="da-btn da-btn-outline" onclick="document.getElementById('submitAction').value='another'">
+                            <i class="fas fa-plus"></i> ذخیره و کاربر بعدی
+                        </button>
+                        <button type="reset" class="da-btn da-btn-ghost" id="btnResetForm">
+                            <i class="fas fa-undo"></i> پاک کردن فرم
+                        </button>
+                    </div>
+                    <a href="{% url 'user_list_dashboard_page' %}" class="da-btn da-btn-ghost">انصراف</a>
+                </div>
             </div>
         </form>
+
+        <!-- پیش‌نمایش -->
+        <aside class="da-user-preview" aria-live="polite">
+            <div class="da-user-preview-card">
+                <div class="da-user-preview-head">
+                    <div class="da-user-preview-avatar" id="previewAvatar">?</div>
+                    <div>
+                        <h3 id="previewName">کاربر جدید</h3>
+                        <p id="previewUsername" dir="ltr">@username</p>
+                    </div>
+                </div>
+                <ul class="da-user-preview-meta">
+                    <li><i class="fas fa-mobile-alt"></i> <span id="previewPhone" dir="ltr">—</span></li>
+                    <li><i class="fas fa-envelope"></i> <span id="previewEmail" dir="ltr">—</span></li>
+                    <li><i class="fas fa-coins"></i> <span id="previewCredits">۰ اعتبار</span></li>
+                </ul>
+                <div class="da-user-preview-badges" id="previewBadges">
+                    <span class="da-badge da-badge-muted">رایگان</span>
+                </div>
+                <div class="da-user-preview-flags" id="previewFlags">
+                    <span class="da-preview-flag da-preview-flag--on"><i class="fas fa-check"></i> فعال</span>
+                    <span class="da-preview-flag da-preview-flag--on"><i class="fas fa-check"></i> تأیید شده</span>
+                </div>
+            </div>
+
+            <div class="da-user-preview-tips">
+                <h4><i class="fas fa-lightbulb"></i> نکات</h4>
+                <ul>
+                    <li>شماره موبایل باید یکتا باشد.</li>
+                    <li>رمز عبور حداقل ۸ کاراکتر.</li>
+                    <li>دسترسی ادمین را فقط به افراد مورد اعتماد بدهید.</li>
+                </ul>
+            </div>
+        </aside>
     </div>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// Enable form validation
 (function () {
-    'use strict'
-    
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation')
-    
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            
-            form.classList.add('was-validated')
-        }, false)
-    })
-    
-    // Toggle password visibility
-    document.querySelectorAll('.toggle-password').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const input = this.previousElementSibling;
-            const icon = this.querySelector('i');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fi-rs-eye');
-                icon.classList.add('fi-rs-eye-crossed');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fi-rs-eye-crossed');
-                icon.classList.add('fi-rs-eye');
-            }
+    var form = document.getElementById('userAddForm');
+    if (!form) return;
+
+    var phone = form.querySelector('[name="phone_number"]');
+    var username = form.querySelector('[name="username"]');
+    var password = document.getElementById('id_password');
+    var confirm = document.getElementById('id_confirm_password');
+    var credits = form.querySelector('[name="credits"]');
+    var subscription = form.querySelector('[name="subscription_status"]');
+    var firstName = form.querySelector('[name="first_name"]');
+    var lastName = form.querySelector('[name="last_name"]');
+    var email = form.querySelector('[name="email"]');
+    var isActive = form.querySelector('[name="is_active"]');
+    var isVerified = form.querySelector('[name="is_verified"]');
+    var isStaff = form.querySelector('[name="is_staff"]');
+
+    var subLabels = {
+        {% for val, label in subscription_choices %}'{{ val }}': '{{ label }}',{% endfor %}
+    };
+
+    function updatePreview() {
+        var fn = (firstName && firstName.value.trim()) || '';
+        var ln = (lastName && lastName.value.trim()) || '';
+        var full = (fn + ' ' + ln).trim() || 'کاربر جدید';
+        var un = (username && username.value.trim()) || 'username';
+        var ph = (phone && phone.value.trim()) || '—';
+        var em = (email && email.value.trim()) || '—';
+        var cr = credits ? (parseInt(credits.value, 10) || 0) : 0;
+        var sub = subscription ? subscription.value : 'free';
+
+        document.getElementById('previewName').textContent = full;
+        document.getElementById('previewUsername').textContent = '@' + un;
+        document.getElementById('previewPhone').textContent = ph;
+        document.getElementById('previewEmail').textContent = em;
+        document.getElementById('previewCredits').textContent = cr + ' اعتبار';
+        document.getElementById('previewAvatar').textContent = (fn || un).charAt(0).toUpperCase();
+
+        var badges = document.getElementById('previewBadges');
+        badges.innerHTML = '';
+        var b = document.createElement('span');
+        b.className = 'da-badge ' + (sub === 'premium' ? 'da-badge-success' : sub === 'credit' ? 'da-badge-info' : 'da-badge-muted');
+        b.textContent = subLabels[sub] || sub;
+        badges.appendChild(b);
+        if (cr > 0) {
+            var bc = document.createElement('span');
+            bc.className = 'da-badge da-badge-info';
+            bc.textContent = cr + ' اعتبار';
+            badges.appendChild(bc);
+        }
+
+        var flags = document.getElementById('previewFlags');
+        flags.innerHTML = '';
+        [
+            { on: isActive && isActive.checked, label: 'فعال', icon: 'fa-toggle-on' },
+            { on: isVerified && isVerified.checked, label: 'تأیید شده', icon: 'fa-check-circle' },
+            { on: isStaff && isStaff.checked, label: 'ادمین', icon: 'fa-user-shield', warn: true },
+        ].forEach(function (f) {
+            var s = document.createElement('span');
+            s.className = 'da-preview-flag ' + (f.on ? 'da-preview-flag--on' : '') + (f.warn && f.on ? ' da-preview-flag--warn' : '');
+            s.innerHTML = '<i class="fas ' + f.icon + '"></i> ' + f.label;
+            flags.appendChild(s);
+        });
+    }
+
+    function scorePassword(pw) {
+        if (!pw) return 0;
+        var s = 0;
+        if (pw.length >= 8) s++;
+        if (pw.length >= 12) s++;
+        if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) s++;
+        if (/\d/.test(pw)) s++;
+        if (/[^a-zA-Z0-9]/.test(pw)) s++;
+        return Math.min(s, 4);
+    }
+
+    function updatePasswordStrength() {
+        var bar = document.querySelector('#passwordStrength .da-password-strength-bar span');
+        var text = document.querySelector('.da-password-strength-text');
+        if (!bar || !password) return;
+        var sc = scorePassword(password.value);
+        var labels = ['خیلی ضعیف', 'ضعیف', 'متوسط', 'قوی', 'عالی'];
+        var widths = ['20%', '40%', '60%', '80%', '100%'];
+        var colors = ['#ef4444', '#f59e0b', '#eab308', '#10b981', '#059669'];
+        bar.style.width = widths[sc] || '0';
+        bar.style.background = colors[sc] || '#e2e8f0';
+        if (text) text.textContent = password.value ? labels[sc] : 'قدرت رمز';
+    }
+
+    function updateMatchHint() {
+        var el = document.getElementById('passwordMatchHint');
+        if (!el || !password || !confirm) return;
+        if (!confirm.value) { el.textContent = ''; el.className = 'da-match-hint'; return; }
+        if (password.value === confirm.value) {
+            el.textContent = '✓ رمزها یکسان هستند';
+            el.className = 'da-match-hint da-match-hint--ok';
+        } else {
+            el.textContent = '✗ رمزها یکسان نیستند';
+            el.className = 'da-match-hint da-match-hint--bad';
+        }
+    }
+
+  document.getElementById('btnSuggestUsername')?.addEventListener('click', function () {
+        if (!phone || !username) return;
+        var p = phone.value.replace(/\D/g, '');
+        if (p.length >= 4) username.value = 'user_' + p.slice(-8);
+        updatePreview();
+    });
+
+    document.getElementById('btnGenPassword')?.addEventListener('click', function () {
+        var chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789!@#$%';
+        var pw = '';
+        for (var i = 0; i < 12; i++) pw += chars.charAt(Math.floor(Math.random() * chars.length));
+        if (password) password.value = pw;
+        if (confirm) confirm.value = pw;
+        updatePasswordStrength();
+        updateMatchHint();
+    });
+
+    document.querySelectorAll('.da-chip-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (credits) credits.value = btn.getAttribute('data-credits');
+            document.querySelectorAll('.da-chip-btn').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            updatePreview();
         });
     });
-})()
+
+    document.querySelectorAll('.toggle-password').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var input = btn.closest('.da-input-wrap').querySelector('input');
+            var icon = btn.querySelector('i');
+            if (!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    });
+
+    phone?.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '').slice(0, 11);
+        updatePreview();
+    });
+
+    form.querySelectorAll('input, select').forEach(function (el) {
+        el.addEventListener('input', updatePreview);
+        el.addEventListener('change', updatePreview);
+    });
+
+    password?.addEventListener('input', function () { updatePasswordStrength(); updateMatchHint(); });
+    confirm?.addEventListener('input', updateMatchHint);
+
+    form.addEventListener('submit', function (e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+
+    document.getElementById('btnResetForm')?.addEventListener('click', function () {
+        setTimeout(updatePreview, 0);
+    });
+
+    updatePreview();
+    updatePasswordStrength();
+})();
 </script>
 {% endblock %}
-
-

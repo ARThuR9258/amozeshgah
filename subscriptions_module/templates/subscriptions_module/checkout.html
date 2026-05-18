@@ -1,0 +1,66 @@
+{% extends 'shared/_layout.html' %}
+{% load static humanize %}
+
+{% block title %}تسویه حساب — {{ plan.name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pricing.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="pricing-page checkout-page">
+    <div class="checkout-card" data-aos="fade-up">
+        <h1 class="h4 mb-4" style="color: #f0f2f5;">
+            <i class="fas fa-lock text-primary me-2"></i>
+            تکمیل خرید
+        </h1>
+
+        <div class="checkout-summary-row">
+            <span>پلن انتخاب‌شده</span>
+            <strong style="color: #f0f2f5;">{{ plan.name }}</strong>
+        </div>
+        {% if plan.credits_amount %}
+        <div class="checkout-summary-row">
+            <span>تعداد اعتبار</span>
+            <span>{{ plan.credits_amount }} آزمون</span>
+        </div>
+        {% endif %}
+        {% if plan.duration_days %}
+        <div class="checkout-summary-row">
+            <span>مدت اشتراک</span>
+            <span>{{ plan.duration_days }} روز</span>
+        </div>
+        {% endif %}
+        <div class="checkout-summary-row total">
+            <span>مبلغ قابل پرداخت</span>
+            <span>{{ final_price|intcomma }} تومان</span>
+        </div>
+
+        <ul class="pricing-features mt-4 mb-4">
+            {% for feature in plan.features %}
+            <li><i class="fas fa-check"></i> {{ feature }}</li>
+            {% endfor %}
+        </ul>
+
+        <form method="post" action="">
+            {% csrf_token %}
+            {% if request.GET.quiz_id %}
+            <input type="hidden" name="quiz_id" value="{{ request.GET.quiz_id }}">
+            {% endif %}
+            <button type="submit" class="btn-pricing-cta primary w-100">
+                <i class="fas fa-credit-card me-2"></i>
+                پرداخت امن — {{ final_price|intcomma }} تومان
+            </button>
+        </form>
+
+        <p class="text-center mt-3 mb-0 small" style="color: #64748b;">
+            <i class="fas fa-shield-alt me-1"></i>
+            آماده اتصال به درگاه زرین‌پال — در حالت توسعه پرداخت شبیه‌سازی می‌شود.
+        </p>
+
+        <a href="{% url 'subscriptions:pricing' %}" class="d-block text-center mt-3" style="color: #4dabf7;">
+            <i class="fas fa-arrow-right me-1"></i> بازگشت به پلن‌ها
+        </a>
+    </div>
+</section>
+{% endblock %}

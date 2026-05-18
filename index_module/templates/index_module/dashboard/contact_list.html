@@ -1,0 +1,81 @@
+{% extends 'layout/_master.html' %}
+
+{% block title %}پیام‌های تماس{% endblock %}
+
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>پیام‌های تماس</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-envelope-open-text"></i> پیام‌های تماس</h1>
+            <p class="da-page-subtitle">پیام‌های ارسالی از فرم تماس با ما</p>
+        </div>
+    </div>
+
+    <div class="da-stats-bar">
+        <div class="da-stat-mini da-stat-mini--primary"><strong>{{ stats.total }}</strong><span>کل پیام‌ها</span></div>
+        <div class="da-stat-mini da-stat-mini--danger"><strong>{{ stats.unread }}</strong><span>خوانده‌نشده</span></div>
+    </div>
+
+    <form method="get" class="da-filter-form">
+        <input type="search" name="q" class="form-control flex-grow-1" placeholder="جستجو نام، ایمیل، متن..." value="{{ search_query }}">
+        <select name="subject" class="form-select" style="max-width:180px">
+            <option value="">همه موضوعات</option>
+            {% for val, label in subject_choices %}
+            <option value="{{ val }}" {% if subject_filter == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="da-btn da-btn-primary"><i class="fas fa-search"></i> جستجو</button>
+        {% if search_query or subject_filter or filter_unread %}<a href="{% url 'dashboard_contact_messages' %}" class="da-btn da-btn-ghost">پاک کردن</a>{% endif %}
+    </form>
+
+    <div class="da-filter-bar">
+        <a href="{% url 'dashboard_contact_messages' %}" class="da-chip {% if not filter_unread %}active{% endif %}">همه</a>
+        <a href="?unread=1{% if search_query %}&q={{ search_query }}{% endif %}" class="da-chip da-chip-warning {% if filter_unread %}active{% endif %}">خوانده‌نشده</a>
+    </div>
+
+    <div class="da-panel">
+        <div class="da-panel-head"><h2>پیام‌ها</h2><span class="da-count">{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ messages_list|length }}{% endif %}</span></div>
+        <div class="da-table-wrap">
+            <table class="da-table">
+                <thead>
+                    <tr><th>#</th><th>فرستنده</th><th>موضوع</th><th>پیش‌نمایش</th><th>تاریخ</th><th>وضعیت</th><th></th></tr>
+                </thead>
+                <tbody>
+                {% for msg in messages_list %}
+                    <tr class="{% if not msg.is_read %}da-row-unread{% endif %}">
+                        <td>{{ msg.pk }}</td>
+                        <td>
+                            <div class="da-user-cell">
+                                <div class="da-avatar">{{ msg.name|slice:":1" }}</div>
+                                <div>
+                                    <strong>{{ msg.name }}</strong>
+                                    <small dir="ltr">{{ msg.email }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="da-badge da-badge-info">{{ msg.get_subject_display }}</span></td>
+                        <td class="da-desc-cell">{{ msg.message|truncatechars:50 }}</td>
+                        <td class="small text-muted">{{ msg.created_at|date:"Y/m/d H:i" }}</td>
+                        <td>{% if msg.is_read %}<span class="da-badge da-badge-muted">خوانده</span>{% else %}<span class="da-badge da-badge-danger">جدید</span>{% endif %}</td>
+                        <td>
+                            <div class="da-actions-cell">
+                                <a href="{% url 'dashboard_contact_detail' msg.pk %}" class="da-btn da-btn-sm da-btn-primary">مشاهده</a>
+                                <a href="{% url 'dashboard_contact_toggle_read' msg.pk %}" class="da-btn da-btn-sm da-btn-outline" title="تغییر وضعیت"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="7"><div class="da-empty"><i class="fas fa-inbox"></i><p>پیامی یافت نشد</p></div></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'layout/dashboard/pagination.html' %}
+    </div>
+</div>
+{% endblock %}

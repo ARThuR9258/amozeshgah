@@ -1,0 +1,68 @@
+{% extends 'layout/_master.html' %}
+{% load widget_tweaks %}
+
+{% block title %}پاسخنامه #{{ user_quiz.pk }}{% endblock %}
+
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <a href="{% url 'quizbuilder:user_response_dashboard' %}">پاسخنامه‌ها</a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>#{{ user_quiz.pk }}</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-user-check"></i> پاسخنامه کاربر</h1>
+            <p class="da-page-subtitle">{{ user_quiz.user.get_full_name|default:user_quiz.user.username }} — {{ user_quiz.quiz.title }}</p>
+        </div>
+        <div class="da-page-actions">
+            <a href="{% url 'quizbuilder:user_response_dashboard' %}" class="da-btn da-btn-outline"><i class="fas fa-arrow-right"></i> بازگشت</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <div class="da-form-panel" style="padding:1.25rem;">
+                <h3 class="da-form-section-title"><i class="fas fa-sliders-h"></i> ویرایش وضعیت</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in edit_form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:"form-control" }}
+                        {% if field.errors %}<div class="da-field-error">{{ field.errors.0 }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="da-btn da-btn-primary w-100"><i class="fas fa-check"></i> ذخیره</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="da-panel">
+                <div class="da-panel-head"><h2>پاسخ‌های ثبت‌شده</h2><span class="da-count">{{ answers|length }}</span></div>
+                <div class="da-table-wrap">
+                    <table class="da-table">
+                        <thead><tr><th>سوال</th><th>پاسخ کاربر</th><th>صحیح؟</th></tr></thead>
+                        <tbody>
+                        {% for a in answers %}
+                        <tr>
+                            <td>{{ a.question.description|truncatechars:80 }}</td>
+                            <td>{{ a.answer.text|truncatechars:60 }}</td>
+                            <td>
+                                {% if a.answer.is_answer %}<span class="da-badge da-badge-success">بله</span>
+                                {% else %}<span class="da-badge da-badge-danger">خیر</span>{% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3"><div class="da-empty"><p>پاسخی ثبت نشده</p></div></td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

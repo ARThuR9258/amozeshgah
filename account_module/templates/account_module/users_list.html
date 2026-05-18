@@ -1,180 +1,111 @@
 {% extends 'layout/_master.html' %}
+{% load humanize %}
 
-{% block title %}
-	کاربران
-{% endblock %}
-
+{% block title %}لیست کاربران{% endblock %}
 
 {% block content %}
-<body>
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>مدیریت کاربران</span>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>لیست کاربران</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-users"></i> لیست کاربران</h1>
+            <p class="da-page-subtitle">{{ total_users|intcomma }} کاربر در سیستم</p>
+        </div>
+        <div class="da-page-actions">
+            <a href="{% url 'add_user_dashboard' %}" class="da-btn da-btn-primary"><i class="fas fa-user-plus"></i> کاربر جدید</a>
+        </div>
+    </div>
 
-<div class="main-body-content">
-    <div class="main-header">
-                    <div class="inner">
-                        <div class="title">
-                            <h1><i class="fi fi-rs-users"></i>لیست کاربران</span>
-                            </h1>
-                            <div class="breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb-list mb-0">
-                                        <li class="breadcrumb-item"><a href="index.html">داشبورد</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">لیست کاربران</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="btns-action">
-                            <a href="{% url 'add_user_dashboard' %}" class="btn btn-primary btn-small icon-right"><i
-                                    class="fi fi-rs-add"></i><span>کاربر
-                                    جدید</span></a>
-                            <button type="button" class="btn btn-primary btn-small icon-right btn-collapse"
-                                data-collapse-target="#collapse-search"><i
-                                    class="fi fi-rs-search"></i><span>جستجو</span></button>
-                        </div>
-                    </div>
-                </div>
-    <div class="main-inner">
-                    <!-- Search Content -->
-                    <div class="card-collapse search-page-content" id="collapse-search">
-                        <div class="search-inner">
-                            <div class="forms-group">
-                                <div class="row align-items-end">
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="input-group no-icon small">
-                                            <label>شماره سفارش، نام کاربر، شماره همراه</label>
-                                            <input type="text" class="input">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="select-group size-small">
-                                            <label>وضعیت</label>
-                                            <select class="select">
-                                                <option value="1">همه</option>
-                                                <option value="2">جدید</option>
-                                                <option value="2">فقط مرد</option>
-                                                <option value="2">فقط مرد</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="filter-inner">
-                                            <div class="pick-date">
-                                                <div class="input-group no-icon small">
-                                                    <label>از تاریخ</label>
-                                                    <input type="text" class="input" id="select-calendar-from"
-                                                        placeholder="از">
-                                                </div>
-                                            </div>
-                                            <div class="pick-date">
-                                                <div class="input-group no-icon small">
-                                                    <label>تا تاریخ</label>
-                                                    <input type="text" class="input" id="select-calendar-until"
-                                                        placeholder="تا">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="button-search">
-                                            <button type="button" class="btn btn-primary">جستجو</button>
-                                        </div>
-                                    </div>
+    <div class="da-stats-bar">
+        <div class="da-stat-mini da-stat-mini--primary"><strong>{{ total_users|intcomma }}</strong><span>کل کاربران</span></div>
+        <div class="da-stat-mini da-stat-mini--success"><strong>{{ stats.active|intcomma }}</strong><span>فعال</span></div>
+        <div class="da-stat-mini"><strong>{{ stats.verified|intcomma }}</strong><span>تأیید شده</span></div>
+        <div class="da-stat-mini da-stat-mini--warning"><strong>{{ stats.premium|intcomma }}</strong><span>پرمیوم</span></div>
+        <div class="da-stat-mini"><strong>{{ stats.staff|intcomma }}</strong><span>ادمین</span></div>
+    </div>
+
+    <form method="get" class="da-filter-form">
+        <input type="search" name="q" class="form-control flex-grow-1" placeholder="جستجو نام، موبایل، ایمیل..." value="{{ search_query }}">
+        <select name="role" class="form-select" style="max-width:160px">
+            <option value="">همه نقش‌ها</option>
+            <option value="staff" {% if role_filter == 'staff' %}selected{% endif %}>ادمین</option>
+            <option value="verified" {% if role_filter == 'verified' %}selected{% endif %}>تأیید‌شده</option>
+        </select>
+        <select name="sub" class="form-select" style="max-width:160px">
+            <option value="">همه اشتراک‌ها</option>
+            <option value="premium" {% if sub_filter == 'premium' %}selected{% endif %}>پرمیوم</option>
+            <option value="credit" {% if sub_filter == 'credit' %}selected{% endif %}>اعتباری</option>
+        </select>
+        <select name="active" class="form-select" style="max-width:140px">
+            <option value="">همه وضعیت‌ها</option>
+            <option value="1" {% if active_filter == '1' %}selected{% endif %}>فعال</option>
+            <option value="0" {% if active_filter == '0' %}selected{% endif %}>غیرفعال</option>
+        </select>
+        <button type="submit" class="da-btn da-btn-primary"><i class="fas fa-search"></i> اعمال</button>
+        {% if search_query or role_filter or sub_filter or active_filter %}<a href="{% url 'user_list_dashboard_page' %}" class="da-btn da-btn-ghost">پاک کردن</a>{% endif %}
+    </form>
+
+    <div class="da-panel">
+        <div class="da-panel-head">
+            <h2>کاربران</h2>
+            <span class="da-count">{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ users|length }}{% endif %} نفر</span>
+        </div>
+        <div class="da-table-wrap">
+            <table class="da-table">
+                <thead>
+                    <tr>
+                        <th>کاربر</th>
+                        <th>موبایل</th>
+                        <th>اعتبار</th>
+                        <th>اشتراک</th>
+                        <th>وضعیت</th>
+                        <th>عضویت</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            <div class="da-user-cell">
+                                <div class="da-avatar">{{ user.first_name|default:user.username|slice:":1"|upper }}</div>
+                                <div>
+                                    <strong>{{ user.get_full_name|default:user.username }}</strong>
+                                    <small dir="ltr">@{{ user.username }}</small>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table-custom">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <div class="checkbox-group m-0">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="checbox-select-all">
-                                        </div>
-                                    </th>
-                                    <th scope="col">#</th>
-                                    <th scope="col">نام و نام خانوادگی</th>
-                                    <th scope="col">شماره همراه</th>
-                                    <th scope="col">جنسیت</th>
-                                    <th scope="col">تعداد آزمون‌ها</th>
-                                    <th scope="col">تاریخ آخرین آزمون</th>
-                                    <th scope="col">پرداخت برای آزمون</th>
-                                    <th scope="col">کد ملی</th>
-                                    <th scope="col">وضعیت</th>
-                                    <th scope="col">عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                {% for user in users %}
-                                	<tr>
-                                    <td scope="row">
-                                        <div class="checkbox-group m-0">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="checbox-select-1">
-                                        </div>
-                                    </td>
-                                    <td scope="row">{{ forloop.counter }}</td>
-                                    <td>{{ user.username }}</td>
-                                    <td>{{ user.phone_number }}</td>
-                                    <td>مرد</td>
-                                    <td>{{ user.exam_attempts }}</td>
-                                    <td>{{ user.last_attempt_date }}</td>
-                                    <td>{% if user.has_paid_for_exam %}
-                                    	پرداخت شده
-                                        {% else %}
-                                        پرداخت نشده!
-                                    {% endif %} </td>
-                                    <td>400135488</td>
-                                    <td><span class="status color-success">{% if user.is_verified %}
-                                    	تایید شده
-                                        {% else %}
-                                        تایید نشده!
-                                    {% endif %} </span></td>
-                                    <td>
-                                        <div class="btns-action">
-                                            <a href="user-add.html" class="btn-circle"><i
-                                                    class="fi fi-rs-pencil"></i></a>
-                                            <a href="#" class="btn-circle color-red" data-modal-name="modal-delete"><i
-                                                    class="fi fi-rs-trash"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Pagination -->
-                    <div class="mypagination">
-                        <div class="pagination-prev">
-                            <a href="#" class="btn-pagination prev disabled">
-                                <i class="fi fi-rs-arrow-small-right"></i>
-                                <span>صفحه قبلی</span>
-                            </a>
-                        </div>
-                        <div class="pagination-info">
-                            <h6>صفحه</h6>
-                            <div class="pagination-jump">
-                                <input class="pagination-input" type="number" value="1">
+                        </td>
+                        <td dir="ltr">{{ user.phone_number|default:"—" }}</td>
+                        <td><span class="da-badge da-badge-info">{{ user.credits }}</span></td>
+                        <td>
+                            {% if user.is_premium %}<span class="da-badge da-badge-success">پرمیوم</span>
+                            {% else %}<span class="da-badge da-badge-muted">{{ user.get_subscription_status_display }}</span>{% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_active %}<span class="da-badge da-badge-success">فعال</span>{% else %}<span class="da-badge da-badge-danger">غیرفعال</span>{% endif %}
+                            {% if user.is_verified %}<span class="da-badge da-badge-info">تأیید</span>{% endif %}
+                            {% if user.is_staff %}<span class="da-badge da-badge-warning">ادمین</span>{% endif %}
+                        </td>
+                        <td class="small text-muted">{{ user.date_joined|date:"Y/m/d" }}</td>
+                        <td>
+                            <div class="da-actions-cell">
+                                <a href="{% url 'edit_user_dashboard' user.pk %}" class="da-btn da-btn-sm da-btn-outline" title="ویرایش"><i class="fas fa-pen"></i></a>
                             </div>
-                            <h6>از</h6>
-                            <div class="curent-page-number">16</div>
-                        </div>
-                        <div class="pagination-next">
-                            <a href="#" class="btn-pagination next">
-                                <i class="fi fi-rs-arrow-small-left"></i>
-                                <span>صفحه بعدی</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="7"><div class="da-empty"><i class="fas fa-users"></i><p>کاربری یافت نشد</p></div></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'layout/dashboard/pagination.html' %}
+    </div>
 </div>
-
-</body>
 {% endblock %}
-
-
-
-

@@ -16,6 +16,7 @@ urlpatterns = [
     path('panel/', views.user_panel_view, name='user_panel_page'),
     path('add-user-dashboard/', views.add_dashboard, name='add_user_dashboard'),
     path('user-list-dashboard/', views.UserListDashboard.as_view(), name='user_list_dashboard_page'),
+    path('user-edit-dashboard/<int:pk>/', views.edit_user_dashboard, name='edit_user_dashboard'),
     path('user-api/' , include(router.urls)),
 
     # Password reset URLs

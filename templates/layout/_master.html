@@ -21,6 +21,11 @@
     
     <!-- Dashboard CSS -->
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard-pages.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard-home.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/scss/dashboard/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard-shell.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/flaticon-regular-straight.css' %}">
     
     <!-- Favicon -->
     <link rel="icon" href="{% static 'dashboard/images/small-icon.png' %}" />
@@ -34,12 +39,13 @@
     <!-- Wrapper -->
     <div class="wrapper">
         <!-- Sidebar -->
-        <nav id="sidebar">
-            <button class="btn-close-sidebar" onclick="toggleSidebar()">
+        <nav id="sidebar" class="ds-sidebar">
+            <button class="btn-close-sidebar" onclick="toggleSidebar()" aria-label="بستن منو">
                 <i class="fas fa-times"></i>
             </button>
             <div class="logo">
                 <img src="{% static 'dashboard/images/logo.svg' %}" alt="آیین‌نامه پلاس">
+                <span class="sidebar-brand-text">پنل مدیریت</span>
             </div>
             <ul class="list-nav">
                 <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
@@ -49,21 +55,24 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="sub-item btn-collapse" data-collapse-target="#collapse-users">
+                <li class="nav-item nav-has-submenu{% if 'user-list-dashboard' in request.path or 'add-user-dashboard' in request.path %} is-open{% endif %}">
+                    <a href="#" class="sub-item btn-collapse" data-collapse-target="collapse-users" role="button">
                         <i class="fas fa-users"></i>
                         <span class="title">مدیریت کاربران</span>
                         <div class="icon icon-angel">
                             <i class="fas fa-chevron-down"></i>
                         </div>
                     </a>
-                    <div class="card-collapse" id="collapse-users">
+                    <div class="card-collapse{% if 'user-list-dashboard' in request.path or 'add-user-dashboard' in request.path %} show{% endif %}" id="collapse-users">
                         <ul>
-                            <li><a href="{% url 'user_list_dashboard_page' %}">لیست کاربران</a></li>
-                            <li><a href="{% url 'add_user_dashboard' %}">افزودن کاربر</a></li>
+                            <li class="{% if request.resolver_match.url_name == 'user_list_dashboard_page' %}active{% endif %}"><a href="{% url 'user_list_dashboard_page' %}">لیست کاربران</a></li>
+                            <li class="{% if request.resolver_match.url_name == 'add_user_dashboard' %}active{% endif %}"><a href="{% url 'add_user_dashboard' %}">افزودن کاربر</a></li>
                         </ul>
                     </div>
                 </li>
+
+                <li class="sidebar-divider" aria-hidden="true"></li>
+                <li class="sidebar-nav-label">محتوا و آزمون</li>
 
                 <li class="nav-item {% if 'questions' in request.path %}active{% endif %}">
                     <a class="sub-item" href="{% url 'sample_questions:question_list_dashboard_page' %}">
@@ -106,6 +115,34 @@
                         <span class="title">گزینه ها</span>
                     </a>
                 </li>
+
+                <li class="sidebar-divider" aria-hidden="true"></li>
+                <li class="sidebar-nav-label">مالی و ارتباط</li>
+
+                <li class="nav-item nav-has-submenu{% if '/dashboard/plans' in request.path or '/dashboard/orders' in request.path or '/dashboard/subscriptions' in request.path or '/dashboard/credits' in request.path %} is-open{% endif %}">
+                    <a href="#" class="sub-item btn-collapse" data-collapse-target="collapse-subs" role="button">
+                        <i class="fas fa-gem"></i>
+                        <span class="title">اشتراک و پرداخت</span>
+                        {% if sidebar_pending_orders %}<span class="nav-badge">{{ sidebar_pending_orders }}</span>{% endif %}
+                        <div class="icon icon-angel"><i class="fas fa-chevron-down"></i></div>
+                    </a>
+                    <div class="card-collapse{% if '/dashboard/plans' in request.path or '/dashboard/orders' in request.path or '/dashboard/subscriptions' in request.path or '/dashboard/credits' in request.path %} show{% endif %}" id="collapse-subs">
+                        <ul>
+                            <li class="{% if '/dashboard/plans' in request.path %}active{% endif %}"><a href="{% url 'dashboard_plans' %}">پلن‌ها</a></li>
+                            <li class="{% if '/dashboard/orders' in request.path %}active{% endif %}"><a href="{% url 'dashboard_orders' %}">سفارش‌ها</a></li>
+                            <li class="{% if '/dashboard/subscriptions' in request.path %}active{% endif %}"><a href="{% url 'dashboard_subscriptions' %}">اشتراک کاربران</a></li>
+                            <li class="{% if '/dashboard/credits' in request.path %}active{% endif %}"><a href="{% url 'dashboard_credits' %}">تراکنش اعتبار</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item {% if 'contact-messages' in request.path %}active{% endif %}">
+                    <a class="sub-item" href="{% url 'dashboard_contact_messages' %}">
+                        <i class="fas fa-envelope"></i>
+                        <span class="title">پیام‌های تماس</span>
+                        {% if sidebar_unread_messages %}<span class="nav-badge">{{ sidebar_unread_messages }}</span>{% endif %}
+                    </a>
+                </li>
             </ul>
         </nav>
         
@@ -113,9 +150,9 @@
         
         <!-- Page Content -->
         <div id="content">
-            <nav id="mynavbar">
+            <nav id="mynavbar" class="ds-topbar">
                 <div class="collapse-sidebar">
-                    <button type="button" id="sidebarCollapse" class="btn-side" onclick="toggleSidebar()">
+                    <button type="button" id="sidebarCollapse" class="btn-side" onclick="toggleSidebar()" aria-label="منوی کناری">
                         <span class="menu-lines">
                             <span class="line line-1"></span>
                             <span class="line line-2"></span>
@@ -123,37 +160,41 @@
                         </span>
                     </button>
                 </div>
-                <div class="admin">
+                <div class="ds-topbar-end admin">
                     <div class="item">
-                        <button class="btn-navbar btn-sideNotification" onclick="openNotificationPanel('tab-messages')">
-                            <i class="fas fa-comment"></i>
-                            <div class="badge badge-danger badge-s">13</div>
-                        </button>
+                        <a href="{% url 'dashboard_contact_messages' %}" class="btn-navbar" title="پیام‌های تماس">
+                            <i class="fas fa-envelope"></i>
+                            {% if sidebar_unread_messages %}<span class="badge badge-danger badge-s">{{ sidebar_unread_messages }}</span>{% endif %}
+                        </a>
                     </div>
                     <div class="item">
-                        <button class="btn-navbar btn-sideNotification" onclick="openNotificationPanel('tab-notification')">
-                            <i class="fas fa-bell"></i>
-                            <div class="badge badge-danger dot"></div>
-                        </button>
+                        <a href="{% url 'dashboard_orders' %}?status=pending" class="btn-navbar" title="سفارش‌های معلق">
+                            <i class="fas fa-shopping-cart"></i>
+                            {% if sidebar_pending_orders %}<span class="badge badge-danger dot"></span>{% endif %}
+                        </a>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-primary-outline dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i>
-                            کاربر ادمین
+                    <span class="ds-topbar-divider" aria-hidden="true"></span>
+                    <div class="dropdown ds-user-dropdown">
+                        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="ds-user-avatar">{{ request.user.first_name|default:request.user.username|slice:":1"|upper }}</span>
+                            <span class="ds-user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-start">
-                            <li><a class="dropdown-item" href="#">
-                                <i class="fas fa-eye me-2"></i>مشاهده سایت
+                            <li><a class="dropdown-item" href="{% url 'first_page' %}" target="_blank" rel="noopener">
+                                <i class="fas fa-external-link-alt"></i> مشاهده سایت
                             </a></li>
-                            <li><a class="dropdown-item" href="#">
-                                <i class="fas fa-cog me-2"></i>تنظیمات
+                            <li><a class="dropdown-item" href="{% url 'dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i> داشبورد
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#">
-                                <i class="fas fa-sign-out-alt me-2"></i>خروج از پنل
+                            <li><a class="dropdown-item text-danger" href="{% url 'log_out_page' %}">
+                                <i class="fas fa-sign-out-alt"></i> خروج از پنل
                             </a></li>
                         </ul>
                     </div>
+                    <a href="{% url 'log_out_page' %}" class="ds-logout-btn" title="خروج سریع">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
                 </div>
             </nav>
             
@@ -334,17 +375,37 @@
             modal.classList.remove('show');
         }
         
-        // Collapse functionality
-        document.querySelectorAll('.btn-collapse').forEach(button => {
-            button.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-collapse-target');
-                const target = document.getElementById(targetId);
-                const parent = this.closest('.nav-item');
-                
-                target.classList.toggle('show');
-                parent.classList.toggle('collapsed');
+        // زیرمنوی سایدبار
+        function initSidebarCollapse() {
+            document.querySelectorAll('.btn-collapse').forEach(function (button) {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var selector = button.getAttribute('data-collapse-target');
+                    var target = selector ? document.querySelector('#' + selector.replace(/^#/, '')) : null;
+                    var parent = button.closest('.nav-item');
+
+                    if (!target || !parent) {
+                        return;
+                    }
+
+                    var isOpen = target.classList.toggle('show');
+                    parent.classList.toggle('is-open', isOpen);
+                    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                });
             });
-        });
+
+            document.querySelectorAll('.nav-item.is-open .card-collapse').forEach(function (panel) {
+                panel.classList.add('show');
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSidebarCollapse);
+        } else {
+            initSidebarCollapse();
+        }
         
         // Responsive sidebar
         if (window.innerWidth <= 992) {
@@ -352,5 +413,6 @@
             document.getElementById('content').classList.add('expanded');
         }
     </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

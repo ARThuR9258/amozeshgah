@@ -1,0 +1,78 @@
+{% extends 'layout/_master.html' %}
+{% load humanize %}
+
+{% block title %}سفارش‌های پرداخت{% endblock %}
+
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>اشتراک و پرداخت</span>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>سفارش‌ها</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-shopping-cart"></i> سفارش‌های پرداخت</h1>
+            <p class="da-page-subtitle">پیگیری وضعیت پرداخت کاربران</p>
+        </div>
+    </div>
+
+    <div class="da-stats-bar">
+        <div class="da-stat-mini da-stat-mini--primary"><strong>{{ stats.total }}</strong><span>کل سفارش‌ها</span></div>
+        <div class="da-stat-mini da-stat-mini--warning"><strong>{{ stats.pending }}</strong><span>معلق</span></div>
+        <div class="da-stat-mini da-stat-mini--success"><strong>{{ stats.paid }}</strong><span>پرداخت‌شده</span></div>
+    </div>
+
+    <form method="get" class="da-filter-form">
+        <input type="search" name="q" class="form-control flex-grow-1" placeholder="جستجو کاربر یا پلن..." value="{{ search_query }}">
+        <button type="submit" class="da-btn da-btn-primary"><i class="fas fa-search"></i> جستجو</button>
+        {% if search_query %}<a href="{% url 'dashboard_orders' %}{% if status_filter %}?status={{ status_filter }}{% endif %}" class="da-btn da-btn-ghost">پاک کردن</a>{% endif %}
+    </form>
+
+    <div class="da-filter-bar">
+        <a href="{% url 'dashboard_orders' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="da-chip {% if not status_filter %}active{% endif %}">همه</a>
+        <a href="?status=pending{% if search_query %}&q={{ search_query }}{% endif %}" class="da-chip da-chip-warning {% if status_filter == 'pending' %}active{% endif %}">معلق</a>
+        <a href="?status=paid{% if search_query %}&q={{ search_query }}{% endif %}" class="da-chip da-chip-success {% if status_filter == 'paid' %}active{% endif %}">پرداخت‌شده</a>
+        <a href="?status=failed{% if search_query %}&q={{ search_query }}{% endif %}" class="da-chip {% if status_filter == 'failed' %}active{% endif %}">ناموفق</a>
+    </div>
+
+    <div class="da-panel">
+        <div class="da-panel-head"><h2>سفارش‌ها</h2><span class="da-count">{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ orders|length }}{% endif %}</span></div>
+        <div class="da-table-wrap">
+            <table class="da-table">
+                <thead><tr><th>#</th><th>کاربر</th><th>پلن</th><th>مبلغ</th><th>وضعیت</th><th>تاریخ</th><th></th></tr></thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td><strong>#{{ order.pk }}</strong></td>
+                        <td>
+                            <div class="da-user-cell">
+                                <div class="da-avatar">{{ order.user.username|slice:":1"|upper }}</div>
+                                <div>
+                                    <strong>{{ order.user.get_full_name|default:order.user.username }}</strong>
+                                    <small dir="ltr">{{ order.user.phone_number|default:"—" }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ order.plan.name }}</td>
+                        <td><span class="da-price">{{ order.amount|intcomma }} تومان</span></td>
+                        <td>
+                            {% if order.status == 'paid' %}<span class="da-badge da-badge-success">{{ order.get_status_display }}</span>
+                            {% elif order.status == 'pending' %}<span class="da-badge da-badge-warning">{{ order.get_status_display }}</span>
+                            {% else %}<span class="da-badge da-badge-muted">{{ order.get_status_display }}</span>{% endif %}
+                        </td>
+                        <td class="small text-muted">{{ order.created_at|date:"Y/m/d H:i" }}</td>
+                        <td><a href="{% url 'dashboard_order_edit' order.pk %}" class="da-btn da-btn-sm da-btn-outline" title="ویرایش"><i class="fas fa-pen"></i></a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="7"><div class="da-empty"><i class="fas fa-shopping-cart"></i><p>سفارشی نیست</p></div></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'layout/dashboard/pagination.html' %}
+    </div>
+</div>
+{% endblock %}

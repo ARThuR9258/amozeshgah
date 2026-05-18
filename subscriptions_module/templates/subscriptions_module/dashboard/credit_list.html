@@ -1,0 +1,67 @@
+{% extends 'layout/_master.html' %}
+
+{% block title %}تراکنش‌های اعتبار{% endblock %}
+
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>اشتراک و پرداخت</span>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>تراکنش اعتبار</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-coins"></i> تراکنش‌های اعتبار</h1>
+            <p class="da-page-subtitle">تاریخچه افزایش و کسر اعتبار</p>
+        </div>
+    </div>
+
+    <div class="da-stats-bar">
+        <div class="da-stat-mini da-stat-mini--primary"><strong>{{ stats.total }}</strong><span>کل تراکنش‌ها</span></div>
+        <div class="da-stat-mini da-stat-mini--success"><strong>{{ stats.added }}</strong><span>افزایش اعتبار</span></div>
+    </div>
+
+    <form method="get" class="da-filter-form">
+        <input type="search" name="q" class="form-control flex-grow-1" placeholder="جستجو کاربر یا توضیح..." value="{{ search_query }}">
+        <select name="type" class="form-select" style="max-width:180px">
+            <option value="">همه انواع</option>
+            {% for val, label in type_choices %}
+            <option value="{{ val }}" {% if type_filter == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="da-btn da-btn-primary"><i class="fas fa-search"></i> جستجو</button>
+        {% if search_query or type_filter %}<a href="{% url 'dashboard_credits' %}" class="da-btn da-btn-ghost">پاک کردن</a>{% endif %}
+    </form>
+
+    <div class="da-panel">
+        <div class="da-panel-head"><h2>تراکنش‌ها</h2><span class="da-count">{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ transactions|length }}{% endif %}</span></div>
+        <div class="da-table-wrap">
+            <table class="da-table">
+                <thead><tr><th>کاربر</th><th>نوع</th><th>مقدار</th><th>موجودی بعد</th><th>توضیح</th><th>تاریخ</th></tr></thead>
+                <tbody>
+                {% for tx in transactions %}
+                    <tr>
+                        <td>
+                            <div class="da-user-cell">
+                                <div class="da-avatar">{{ tx.user.username|slice:":1"|upper }}</div>
+                                <div><strong>{{ tx.user.get_full_name|default:tx.user.username }}</strong></div>
+                            </div>
+                        </td>
+                        <td><span class="da-badge da-badge-info">{{ tx.get_transaction_type_display }}</span></td>
+                        <td>{% if tx.amount > 0 %}<span class="da-badge da-badge-success">+{{ tx.amount }}</span>{% else %}<span class="da-badge da-badge-danger">{{ tx.amount }}</span>{% endif %}</td>
+                        <td><strong>{{ tx.balance_after }}</strong></td>
+                        <td class="da-desc-cell">{{ tx.description|default:"—" }}</td>
+                        <td class="small text-muted">{{ tx.created_at|date:"Y/m/d H:i" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6"><div class="da-empty"><i class="fas fa-coins"></i><p>تراکنشی نیست</p></div></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'layout/dashboard/pagination.html' %}
+    </div>
+</div>
+{% endblock %}

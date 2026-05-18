@@ -1,0 +1,174 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}تماس با ما — {{ site.brand }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/static-pages.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="static-page">
+    <div class="sp-hero" data-aos="fade-up">
+        <div class="container">
+            <span class="sp-badge"><i class="fas fa-headset"></i> پشتیبانی</span>
+            <h1>تماس با <span class="gradient-text">{{ site.brand }}</span></h1>
+            <p class="lead">سوال، پیشنهاد یا مشکل فنی دارید؟ تیم ما در اسرع وقت پاسخ می‌دهد.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sp-contact-layout">
+            <div class="sp-contact-cards" data-aos="fade-up">
+                <div class="sp-contact-card">
+                    <div class="sp-contact-card-icon sp-contact-card-icon--email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h4>ایمیل</h4>
+                        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+                    </div>
+                </div>
+                <div class="sp-contact-card">
+                    <div class="sp-contact-card-icon sp-contact-card-icon--phone">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <h4>تلفن پشتیبانی</h4>
+                        <a href="tel:{{ site.phone }}">{{ site.phone_display }}</a>
+                    </div>
+                </div>
+                <div class="sp-contact-card">
+                    <div class="sp-contact-card-icon sp-contact-card-icon--phone">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div>
+                        <h4>موبایل</h4>
+                        <a href="tel:{{ site.mobile }}">{{ site.mobile_display }}</a>
+                    </div>
+                </div>
+                <div class="sp-contact-card">
+                    <div class="sp-contact-card-icon sp-contact-card-icon--clock">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <h4>ساعات پاسخ‌گویی</h4>
+                        <p>{{ site.support_hours }}</p>
+                    </div>
+                </div>
+                <div class="sp-contact-card">
+                    <div class="sp-contact-card-icon sp-contact-card-icon--map">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div>
+                        <h4>آدرس</h4>
+                        <p>{{ site.address }}</p>
+                    </div>
+                </div>
+                <div class="sp-contact-card">
+                    <div class="sp-contact-card-icon sp-contact-card-icon--email">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <div>
+                        <h4>شبکه‌های اجتماعی</h4>
+                        <div class="sp-social-row">
+                            <a href="{{ site.telegram }}" class="sp-social-link" target="_blank" rel="noopener" aria-label="تلگرام">
+                                <i class="fab fa-telegram-plane"></i>
+                            </a>
+                            <a href="{{ site.instagram }}" class="sp-social-link" target="_blank" rel="noopener" aria-label="اینستاگرام">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="mailto:{{ site.email }}" class="sp-social-link" aria-label="ایمیل">
+                                <i class="far fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sp-form-card" data-aos="fade-up" data-aos-delay="100">
+                <h2>ارسال پیام</h2>
+                <p class="form-intro">فرم زیر را پر کنید؛ معمولاً ظرف ۲۴ ساعت کاری پاسخ می‌دهیم.</p>
+
+                {% if form.non_field_errors %}
+                <div class="sp-form-alert sp-form-alert--error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {% for error in form.non_field_errors %}<span>{{ error }}</span>{% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="sp-form-row">
+                        <div class="sp-field">
+                            <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <div class="sp-field-error">{{ form.name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="sp-field">
+                            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                            <div class="sp-field-error">{{ form.phone.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="sp-field">
+                        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="sp-field-error">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="sp-field">
+                        <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }}</label>
+                        {{ form.subject }}
+                        {% if form.subject.errors %}
+                        <div class="sp-field-error">{{ form.subject.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="sp-field">
+                        <label for="{{ form.message.id_for_label }}">{{ form.message.label }}</label>
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                        <div class="sp-field-error">{{ form.message.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="sp-btn sp-btn-primary w-100 justify-content-center">
+                        <i class="fas fa-paper-plane"></i>
+                        ارسال پیام
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="sp-faq-quick sp-section" data-aos="fade-up">
+            <div class="sp-section-head">
+                <h2>شاید این‌ها کمکتان کند</h2>
+                <p>پاسخ سوالات پرتکرار را در صفحه اصلی ببینید یا مستقیم شروع کنید.</p>
+            </div>
+            <div class="sp-faq-quick-grid">
+                <a href="{% url 'first_page' %}#faq" class="sp-faq-quick-item">
+                    <i class="fas fa-circle-question"></i>
+                    <span>پرسش‌های متداول</span>
+                </a>
+                <a href="{% url 'subscriptions:pricing' %}" class="sp-faq-quick-item">
+                    <i class="fas fa-crown"></i>
+                    <span>پلن‌ها و قیمت</span>
+                </a>
+                <a href="{% url 'quizbuilder:quiz_list' %}" class="sp-faq-quick-item">
+                    <i class="fas fa-play"></i>
+                    <span>شروع آزمون</span>
+                </a>
+                <a href="{% url 'about_page' %}" class="sp-faq-quick-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>درباره ما</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

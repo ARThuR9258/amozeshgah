@@ -1,0 +1,42 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-page-bg" aria-hidden="true"></div>
+    <div class="container">
+        <div class="auth-wrap {% block auth_wrap_class %}{% endblock %}">
+            <a href="{% url 'first_page' %}" class="auth-back">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به خانه
+            </a>
+            <div class="auth-card">
+                <div class="auth-card-head">
+                    <div class="auth-icon {% block auth_icon_class %}{% endblock %}">
+                        {% block auth_icon %}<i class="fas fa-user"></i>{% endblock %}
+                    </div>
+                    <h1>{% block auth_title %}{% endblock %}</h1>
+                    <p>{% block auth_subtitle %}{% endblock %}</p>
+                </div>
+                <div class="auth-card-body">
+                    {% block auth_body %}{% endblock %}
+                </div>
+                {% block auth_footer %}
+                <div class="auth-card-foot">
+                    {% block auth_footer_content %}{% endblock %}
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth.js' %}"></script>
+{% block auth_extra_js %}{% endblock %}
+{% endblock %}

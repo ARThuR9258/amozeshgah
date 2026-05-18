@@ -40,12 +40,38 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    class SubscriptionStatus(models.TextChoices):
+        FREE = 'free', 'رایگان'
+        CREDIT = 'credit', 'اعتباری'
+        PREMIUM = 'premium', 'پرمیوم'
+        EXPIRED = 'expired', 'منقضی'
+
     email = models.EmailField(null=True, blank=True, verbose_name='ایمیل')
     phone_number = models.CharField(max_length=11, unique=True, verbose_name='شماره موبایل')
     is_verified = models.BooleanField(default=False, verbose_name='تایید شده')
+
+    # اعتبار و اشتراک
+    credits = models.PositiveIntegerField(default=0, verbose_name='اعتبار آزمون')
+    is_premium = models.BooleanField(
+        default=False,
+        verbose_name='کاربر پرمیوم',
+        help_text='اشتراک ماهانه/سالانه فعال.',
+    )
+    subscription_status = models.CharField(
+        max_length=20,
+        choices=SubscriptionStatus.choices,
+        default=SubscriptionStatus.FREE,
+        verbose_name='وضعیت اشتراک',
+    )
+
+    # سهمیه رایگان روزانه (پلن رایگان)
     exam_attempts = models.PositiveIntegerField(default=0, verbose_name='تعداد آزمون‌های رایگان امروز')
     last_attempt_date = models.DateField(null=True, blank=True, verbose_name='تاریخ آخرین آزمون')
-    has_paid_for_exam = models.BooleanField(default=False, verbose_name='آیا برای آزمون پرداخت کرده است؟')
+    has_paid_for_exam = models.BooleanField(
+        default=False,
+        verbose_name='پرداخت قدیمی آزمون',
+        help_text='فیلد legacy — ترجیحاً از اشتراک/اعتبار استفاده شود.',
+    )
     
     # Make username non-required and email not used for authentication
     username = models.CharField(max_length=150, unique=True, null=True, blank=True, verbose_name='نام کاربری')
@@ -59,4 +85,31 @@ class User(AbstractUser):
         verbose_name_plural = 'کاربران'
 
     def __str__(self):
-        return self.phone_number and self.email or self.username
+        return (
+            self.phone_number
+            or self.email
+            or self.username
+            or f'کاربر #{self.pk}'
+        )
+
+    def refresh_subscription_status(self):
+        """همگام‌سازی وضعیت پرمیوم با اشتراک فعال در دیتابیس."""
+        from subscriptions_module.services import get_active_subscription
+
+        sub = get_active_subscription(self)
+        if sub and sub.plan.is_unlimited:
+            self.is_premium = True
+            self.subscription_status = self.SubscriptionStatus.PREMIUM
+        elif self.credits > 0:
+            self.is_premium = False
+            self.subscription_status = self.SubscriptionStatus.CREDIT
+        else:
+            self.is_premium = False
+            if self.subscription_status == self.SubscriptionStatus.PREMIUM:
+                self.subscription_status = self.SubscriptionStatus.EXPIRED
+            elif self.subscription_status not in (
+                self.SubscriptionStatus.EXPIRED,
+                self.SubscriptionStatus.FREE,
+            ):
+                self.subscription_status = self.SubscriptionStatus.FREE
+        self.save(update_fields=['is_premium', 'subscription_status'])

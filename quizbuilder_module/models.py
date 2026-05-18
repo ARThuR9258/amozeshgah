@@ -44,6 +44,12 @@ class QuizQuestionChoice(models.Model):
         max_length=256,
         verbose_name='متن جواب'
     )
+    image = models.ImageField(
+        verbose_name='تصویر گزینه',
+        upload_to='question_options/',
+        null=True,
+        blank=True
+    )
     is_answer = models.BooleanField(
         default=False,
         verbose_name='جواب صحیح است؟'
@@ -129,6 +135,23 @@ class UserQuiz(models.Model):
     score = models.PositiveIntegerField(
         default=0,
         verbose_name='نمره(بارم)'
+    )
+    finished_at = models.DateTimeField(
+        verbose_name='زمان پایان',
+        null=True,
+        blank=True,
+    )
+    time_spent_seconds = models.PositiveIntegerField(
+        verbose_name='مدت شرکت (ثانیه)',
+        default=0,
+    )
+    share_token = models.CharField(
+        max_length=32,
+        unique=True,
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name='توکن اشتراک نتیجه',
     )
 
     class Meta:

@@ -1,0 +1,53 @@
+<form class="browse-toolbar" method="get" action="{{ toolbar_action|default:'' }}" role="search">
+    <div class="browse-search">
+        <i class="fas fa-search browse-search-icon" aria-hidden="true"></i>
+        <input type="search"
+               name="q"
+               class="browse-search-input"
+               placeholder="{{ search_placeholder|default:'جستجو...' }}"
+               value="{{ search_query|default:'' }}"
+               autocomplete="off"
+               aria-label="جستجو">
+        {% if search_query %}
+        <a href="?{% if sort %}sort={{ sort }}{% endif %}{% if filter and filter != 'all' %}&filter={{ filter }}{% endif %}"
+           class="browse-search-clear"
+           aria-label="پاک کردن جستجو"
+           title="پاک کردن">
+            <i class="fas fa-times"></i>
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="browse-toolbar-row">
+        <div class="browse-sort-wrap">
+            <label for="browse-sort-{{ toolbar_id|default:'main' }}" class="browse-sort-label">
+                <i class="fas fa-sort"></i>
+                مرتب‌سازی
+            </label>
+            <select name="sort" id="browse-sort-{{ toolbar_id|default:'main' }}" class="browse-sort-select" onchange="this.form.submit()">
+                {% for value, label in sort_options %}
+                <option value="{{ value }}" {% if sort == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if filter_options %}
+        <div class="browse-filters" role="group" aria-label="فیلتر">
+            {% for opt in filter_options %}
+            <label class="browse-filter-chip {% if filter == opt.value or not filter and opt.value == 'all' %}active{% endif %}">
+                <input type="radio" name="filter" value="{{ opt.value }}"
+                       {% if filter == opt.value or not filter and opt.value == 'all' %}checked{% endif %}
+                       onchange="this.form.submit()">
+                {% if opt.icon %}<i class="fas {{ opt.icon }}"></i>{% endif %}
+                {{ opt.label }}
+            </label>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="browse-toolbar-submit">
+            <i class="fas fa-filter"></i>
+            اعمال
+        </button>
+    </div>
+</form>

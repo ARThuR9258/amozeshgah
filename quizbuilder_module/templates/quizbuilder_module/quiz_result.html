@@ -1,138 +1,191 @@
 {% extends 'shared/_layout.html' %}
 {% load static %}
 
-{% block title %}نتیجه آزمون {{ quiz.title }} - آیین‌نامه پلاس{% endblock %}
+{% block title %}نتیجه {{ quiz.title }} — آیین‌نامه پلاس{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/quiz.css' %}">
-<link rel="stylesheet" href="{% static 'css/quiz_result.css' %}">
+<link rel="stylesheet" href="{% static 'css/quiz_result_extras.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="quiz-result-container">
-    <div class="result-header text-center mb-5">
-        <div class="result-icon">
-            {% if user_quiz.status == 'pass' %}
-                <i class="fas fa-check-circle success"></i>
-            {% else %}
-                <i class="fas fa-times-circle danger"></i>
-            {% endif %}
+<div class="quiz-result-page">
+    <header class="result-hero {% if analysis.passed %}result-hero--pass{% else %}result-hero--fail{% endif %}" data-aos="zoom-in">
+        <div class="result-hero-icon">
+            {% if analysis.passed %}<i class="fas fa-trophy"></i>{% else %}<i class="fas fa-chart-line"></i>{% endif %}
         </div>
-        <h1 class="result-title">
-            {% if user_quiz.status == 'pass' %}
-                تبریک می‌گوییم!
-            {% else %}
-                با تشکر از شرکت در آزمون
-            {% endif %}
-        </h1>
-        <p class="result-subtitle">نتیجه آزمون {{ quiz.title }}</p>
+        <h1>{% if analysis.passed %}تبریک! قبول شدید{% else %}نتیجه آزمون شما{% endif %}</h1>
+        <p>{{ quiz.title }}</p>
+        <div class="result-score-ring">
+            <svg viewBox="0 0 120 120" class="score-ring-svg">
+                <circle cx="60" cy="60" r="52" class="ring-bg"/>
+                <circle cx="60" cy="60" r="52" class="ring-fill" style="stroke-dasharray: {{ analysis.percent|floatformat:0 }} 100"/>
+            </svg>
+            <div class="score-ring-text">
+                <strong>{{ analysis.percent }}٪</strong>
+                <span>{{ user_quiz.score }} / {{ max_score }}</span>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="result-stats-grid" data-aos="fade-up">
+        <div class="result-stat result-stat--ok">
+            <i class="fas fa-check"></i>
+            <strong>{{ analysis.correct_count }}</strong>
+            <span>پاسخ صحیح</span>
+        </div>
+        <div class="result-stat result-stat--bad">
+            <i class="fas fa-times"></i>
+            <strong>{{ analysis.wrong_count }}</strong>
+            <span>پاسخ غلط</span>
+        </div>
+        <div class="result-stat result-stat--skip">
+            <i class="fas fa-minus-circle"></i>
+            <strong>{{ analysis.skipped_count }}</strong>
+            <span>بدون پاسخ</span>
+        </div>
+        <div class="result-stat">
+            <i class="fas fa-clock"></i>
+            <strong>{% widthratio user_quiz.time_spent_seconds 60 1 %}</strong>
+            <span>دقیقه شرکت</span>
+        </div>
     </div>
 
-    <div class="result-summary">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="result-card">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="score-display">
-                                <div class="score-circle">
-                                    <span class="score">{{ user_quiz.score }}</span>
-                                    <span class="divider">/</span>
-                                    <span class="total">{{ max_score }}</span>
-                                </div>
-                                <div class="score-label">امتیاز شما</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="result-details">
-                                <div class="detail-item">
-                                    <span class="label">تاریخ شرکت:</span>
-                                    <span class="value">{{ user_quiz.start_time|date:"Y/m/d - H:i" }}</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="label">وضعیت:</span>
-                                    <span class="badge bg-{{ user_quiz.get_status_class }}">
-                                        {{ user_quiz.get_status }}
-                                    </span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="label">تعداد سوالات:</span>
-                                    <span class="value">{{ questions_data|length }} سوال</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="label">مدت زمان آزمون:</span>
-                                    <span class="value">{{ quiz.time }} دقیقه</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="result-charts-row" data-aos="fade-up">
+        <div class="result-chart-card">
+            <h3><i class="fas fa-chart-pie"></i> تحلیل پاسخ‌ها</h3>
+            <canvas id="resultAnalysisChart" height="200"></canvas>
+        </div>
+        <div class="result-share-card" id="share-card">
+            <h3><i class="fas fa-share-alt"></i> اشتراک نتیجه</h3>
+            <p class="share-hint">لینک عمومی بدون نام و شماره — مناسب اشتراک در شبکه‌ها</p>
+            <div class="share-preview">
+                <div class="share-preview-badge {% if analysis.passed %}pass{% else %}fail{% endif %}">
+                    {% if analysis.passed %}قبول{% else %}نیاز به تمرین بیشتر{% endif %}
                 </div>
+                <strong>{{ analysis.percent }}٪</strong>
+                <span>{{ quiz.title }}</span>
+            </div>
+            <div class="share-url-row">
+                <input type="text" class="share-url-input" id="share-url" value="{{ share_url }}" readonly dir="ltr">
+                <button type="button" class="btn-share-copy" id="btn-copy-share"><i class="fas fa-copy"></i></button>
+            </div>
+            <div class="share-actions">
+                <button type="button" class="btn-share" id="btn-native-share"><i class="fas fa-share-nodes"></i> اشتراک</button>
+                <a href="https://wa.me/?text={{ share_url|urlencode }}" target="_blank" rel="noopener" class="btn-share btn-share--wa"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://t.me/share/url?url={{ share_url|urlencode }}" target="_blank" rel="noopener" class="btn-share btn-share--tg"><i class="fab fa-telegram"></i></a>
             </div>
         </div>
     </div>
 
-    <div class="result-actions text-center mt-5">
-        <a href="{% url 'quizbuilder:quiz_list' %}" class="btn btn-outline-primary me-3">
-            <i class="fas fa-list me-2"></i>
-            بازگشت به لیست آزمون‌ها
-        </a>
-        <a href="{% url 'quizbuilder:take_quiz' quiz.id %}" class="btn btn-primary">
-            <i class="fas fa-redo me-2"></i>
-            شرکت مجدد در آزمون
-        </a>
+    <div class="result-actions-bar" data-aos="fade-up">
+        <a href="{% url 'user_panel_page' %}" class="btn-result-outline"><i class="fas fa-user"></i> پنل من</a>
+        <a href="{% url 'quizbuilder:quiz_list' %}" class="btn-result-outline"><i class="fas fa-list"></i> لیست آزمون‌ها</a>
+        <a href="{% url 'quizbuilder:take_quiz' quiz.id %}" class="btn-result-primary"><i class="fas fa-redo"></i> شرکت مجدد</a>
     </div>
 
     {% if show_answers %}
-    <div class="quiz-answers mt-5">
-        <h3 class="section-title">پاسخ‌های شما</h3>
+    <section class="result-review" data-aos="fade-up">
+        <h2><i class="fas fa-list-check"></i> مرور پاسخ‌ها</h2>
         <div class="quiz-questions">
             {% for question in questions_data %}
-            <div class="question-card">
-                <div class="question-header">
-                    <h4 class="question-number">سوال {{ forloop.counter }}</h4>
-                    <span class="question-score">
-                        {% if question.is_correct %}
-                            <i class="fas fa-check text-success me-1"></i>
-                        {% else %}
-                            <i class="fas fa-times text-danger me-1"></i>
-                        {% endif %}
-                        {{ question.score }} نمره
+            <article class="question-card {% if question.is_skipped %}skipped{% elif question.is_correct %}correct{% else %}wrong{% endif %}">
+                <header class="question-header">
+                    <span class="question-number">سوال {{ forloop.counter }}</span>
+                    <span class="question-badge">
+                        {% if question.is_skipped %}<i class="fas fa-minus-circle"></i> بی‌پاسخ
+                        {% elif question.is_correct %}<i class="fas fa-check"></i> صحیح
+                        {% else %}<i class="fas fa-times"></i> غلط{% endif %}
+                        · {{ question.score }} نمره
                     </span>
+                </header>
+                {% if question.image %}
+                <div class="question-image-wrap">
+                    <img src="{{ question.image }}" alt="" class="question-image-review" loading="lazy">
                 </div>
-                <div class="question-text">
-                    <p>{{ question.description|linebreaksbr }}</p>
-                </div>
-                
-                <div class="question-choices">
+                {% endif %}
+                <p class="question-text-review">{{ question.description|linebreaksbr }}</p>
+                <div class="question-choices-review">
                     {% for choice in question.choices %}
-                        <div class="form-check {% if choice.is_answer %}correct-answer{% endif %} {% if choice.is_user_choice and not choice.is_answer %}wrong-answer{% endif %}">
-                            <input class="form-check-input" 
-                                   type="radio" 
-                                   name="q{{ question.id }}" 
-                                   id="q{{ question.id }}_c{{ choice.id }}" 
-                                   value="{{ choice.id }}"
-                                   {% if choice.is_user_choice %}checked{% endif %}
-                                   disabled>
-                            <label class="form-check-label" for="q{{ question.id }}_c{{ choice.id }}">
-                                {{ choice.text }}
-                                {% if choice.is_answer %}
-                                    <span class="correct-answer-badge">
-                                        <i class="fas fa-check-circle"></i> پاسخ صحیح
-                                    </span>
+                    <div class="choice-review {% if choice.is_answer %}is-correct{% endif %} {% if choice.is_user_choice %}is-selected{% endif %}">
+                        <div class="choice-review-inner">
+                            <span class="choice-review-icon" aria-hidden="true">
+                                {% if choice.is_user_choice and not choice.is_answer %}<i class="fas fa-times text-danger"></i>
+                                {% elif choice.is_answer %}<i class="fas fa-check text-success"></i>
+                                {% else %}<i class="fas fa-circle choice-review-icon--empty"></i>{% endif %}
+                            </span>
+                            <div class="choice-review-body">
+                                {% if choice.image %}
+                                <img src="{{ choice.image }}" alt="" class="choice-review-img" loading="lazy">
                                 {% endif %}
-                                {% if choice.is_user_choice and not choice.is_answer %}
-                                    <span class="wrong-answer-badge">
-                                        <i class="fas fa-times-circle"></i> پاسخ شما
-                                    </span>
-                                {% endif %}
-                            </label>
+                                {% if choice.text %}<span class="choice-review-text">{{ choice.text }}</span>{% endif %}
+                            </div>
                         </div>
+                    </div>
                     {% endfor %}
                 </div>
-            </div>
+            </article>
             {% endfor %}
         </div>
-    </div>
+    </section>
     {% endif %}
 </div>
+
+{{ analysis.correct_count|json_script:"chart-correct" }}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+    var correct = parseInt(document.getElementById('chart-correct').textContent, 10);
+    var wrong = {{ analysis.wrong_count }};
+    var skipped = {{ analysis.skipped_count }};
+    var ctx = document.getElementById('resultAnalysisChart');
+    if (ctx && typeof Chart !== 'undefined') {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['صحیح', 'غلط', 'بی‌پاسخ'],
+                datasets: [{
+                    data: [correct, wrong, skipped],
+                    backgroundColor: ['#34d399', '#f87171', '#64748b'],
+                    borderWidth: 0,
+                }],
+            },
+            options: {
+                responsive: true,
+                cutout: '65%',
+                plugins: {
+                    legend: { position: 'bottom', rtl: true, labels: { font: { family: 'Vazirmatn' } } },
+                },
+            },
+        });
+    }
+
+    var ring = document.querySelector('.ring-fill');
+    if (ring) {
+        var pct = {{ analysis.percent }} / 100;
+        var c = 2 * Math.PI * 52;
+        ring.style.strokeDasharray = (c * pct) + ' ' + c;
+    }
+
+    var shareInput = document.getElementById('share-url');
+    document.getElementById('btn-copy-share')?.addEventListener('click', function () {
+        shareInput.select();
+        navigator.clipboard.writeText(shareInput.value).then(function () {
+            alert('لینک کپی شد!');
+        });
+    });
+    document.getElementById('btn-native-share')?.addEventListener('click', function () {
+        if (navigator.share) {
+            navigator.share({ title: 'نتیجه آزمون', url: shareInput.value });
+        } else {
+            shareInput.select();
+            document.execCommand('copy');
+            alert('لینک کپی شد');
+        }
+    });
+})();
+</script>
 {% endblock %}

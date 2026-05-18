@@ -111,56 +111,72 @@ class SignUpForm(forms.ModelForm):
 
 class UserAddDashboardForm(forms.ModelForm):
     """Form for adding new users in the admin dashboard"""
+
     password = forms.CharField(
         label='رمز عبور',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'رمز عبور'
+            'placeholder': 'حداقل ۸ کاراکتر',
+            'id': 'id_password',
+            'autocomplete': 'new-password',
         }),
         min_length=8,
-        required=True
+        required=True,
     )
     confirm_password = forms.CharField(
         label='تکرار رمز عبور',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'تکرار رمز عبور'
+            'placeholder': 'تکرار رمز عبور',
+            'id': 'id_confirm_password',
+            'autocomplete': 'new-password',
         }),
-        required=True
+        required=True,
+    )
+    credits = forms.IntegerField(
+        label='اعتبار اولیه آزمون',
+        min_value=0,
+        max_value=9999,
+        initial=0,
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': '0',
+            'min': '0',
+        }),
+        help_text='تعداد دفعاتی که کاربر می‌تواند با اعتبار آزمون بدهد.',
+    )
+    subscription_status = forms.ChoiceField(
+        label='وضعیت اشتراک',
+        choices=User.SubscriptionStatus.choices,
+        initial=User.SubscriptionStatus.FREE,
+        widget=forms.Select(attrs={'class': 'form-select'}),
     )
     is_active = forms.BooleanField(
-        label='فعال',
+        label='حساب فعال',
         required=False,
         initial=True,
-        widget=forms.CheckboxInput(attrs={
-            'class': 'form-check-input',
-            'id': 'switch-1'
-        })
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
     )
     is_staff = forms.BooleanField(
-        label='دسترسی ادمین',
+        label='دسترسی پنل مدیریت',
         required=False,
         initial=False,
-        widget=forms.CheckboxInput(attrs={
-            'class': 'form-check-input',
-            'id': 'switch-2'
-        })
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
     )
     is_verified = forms.BooleanField(
-        label='تایید شده',
+        label='تأیید شده (مجاز به ورود)',
         required=False,
         initial=True,
-        widget=forms.CheckboxInput(attrs={
-            'class': 'form-check-input',
-            'id': 'switch-3'
-        })
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
     )
 
     class Meta:
         model = User
         fields = [
             'first_name', 'last_name', 'username', 'phone_number', 'email',
-            'is_active', 'is_staff', 'is_verified'
+            'credits', 'subscription_status',
+            'is_active', 'is_staff', 'is_verified',
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={
@@ -207,10 +223,20 @@ class UserAddDashboardForm(forms.ModelForm):
         }
 
     def clean_phone_number(self):
-        phone_number = self.cleaned_data.get('phone_number')
+        phone_number = (self.cleaned_data.get('phone_number') or '').strip()
         if not phone_number.isdigit() or len(phone_number) != 11:
-            raise ValidationError('شماره موبایل باید 11 رقمی و فقط شامل اعداد باشد.')
+            raise ValidationError('شماره موبایل باید ۱۱ رقم و فقط عدد باشد (مثال: 09123456789).')
+        if not phone_number.startswith('09'):
+            raise ValidationError('شماره موبایل باید با 09 شروع شود.')
         return phone_number
+
+    def clean_username(self):
+        username = (self.cleaned_data.get('username') or '').strip()
+        if not username:
+            raise ValidationError('نام کاربری الزامی است.')
+        if not username.replace('_', '').isalnum():
+            raise ValidationError('نام کاربری فقط می‌تواند شامل حروف انگلیسی، اعداد و _ باشد.')
+        return username
 
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
@@ -222,6 +248,70 @@ class UserAddDashboardForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
+        user.credits = self.cleaned_data.get('credits') or 0
+        status = self.cleaned_data.get('subscription_status', User.SubscriptionStatus.FREE)
+        user.subscription_status = status
+        user.is_premium = status == User.SubscriptionStatus.PREMIUM
+        if commit:
+            user.save()
+        return user
+
+
+class UserEditDashboardForm(forms.ModelForm):
+    """ویرایش کاربر در پنل مدیریت — رمز عبور اختیاری."""
+
+    password = forms.CharField(
+        label='رمز عبور جدید',
+        required=False,
+        min_length=8,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'خالی = بدون تغییر',
+            'autocomplete': 'new-password',
+        }),
+        help_text='در صورت خالی بودن، رمز قبلی حفظ می‌شود.',
+    )
+    confirm_password = forms.CharField(
+        label='تکرار رمز عبور',
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'تکرار رمز جدید',
+            'autocomplete': 'new-password',
+        }),
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            'first_name', 'last_name', 'username', 'phone_number', 'email',
+            'credits', 'subscription_status',
+            'is_active', 'is_staff', 'is_verified',
+        ]
+        widgets = UserAddDashboardForm.Meta.widgets
+        labels = UserAddDashboardForm.Meta.labels
+        error_messages = UserAddDashboardForm.Meta.error_messages
+
+    clean_phone_number = UserAddDashboardForm.clean_phone_number
+    clean_username = UserAddDashboardForm.clean_username
+
+    def clean_confirm_password(self):
+        password = self.cleaned_data.get('password') or ''
+        confirm = self.cleaned_data.get('confirm_password') or ''
+        if password and password != confirm:
+            raise ValidationError('رمز عبور با تکرار آن مطابقت ندارد.')
+        if confirm and not password:
+            raise ValidationError('رمز عبور را وارد کنید.')
+        return confirm
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        if password:
+            user.set_password(password)
+        status = self.cleaned_data.get('subscription_status', User.SubscriptionStatus.FREE)
+        user.subscription_status = status
+        user.is_premium = status == User.SubscriptionStatus.PREMIUM
         if commit:
             user.save()
         return user

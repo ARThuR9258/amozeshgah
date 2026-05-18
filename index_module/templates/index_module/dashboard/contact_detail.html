@@ -1,0 +1,32 @@
+{% extends 'layout/_master.html' %}
+
+{% block title %}پیام — {{ msg.name }}{% endblock %}
+
+{% block content %}
+<div class="dash-page-header">
+    <h1><i class="fas fa-envelope-open"></i> جزئیات پیام</h1>
+    <a href="{% url 'dashboard_contact_messages' %}" class="btn btn-outline-secondary btn-sm">بازگشت</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="dash-card-panel">
+            <p class="text-muted small mb-1">متن پیام</p>
+            <p style="white-space: pre-wrap; line-height: 1.85;">{{ msg.message }}</p>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="dash-card-panel mb-3">
+            <p><strong>نام:</strong> {{ msg.name }}</p>
+            <p><strong>ایمیل:</strong> <a href="mailto:{{ msg.email }}">{{ msg.email }}</a></p>
+            {% if msg.phone %}<p><strong>موبایل:</strong> {{ msg.phone }}</p>{% endif %}
+            <p><strong>موضوع:</strong> {{ msg.get_subject_display }}</p>
+            <p><strong>تاریخ:</strong> {{ msg.created_at|date:"Y/m/d H:i" }}</p>
+        </div>
+        <div class="d-grid gap-2">
+            <a href="{% url 'dashboard_contact_toggle_read' msg.pk %}" class="btn btn-outline-primary">تغییر وضعیت خوانده</a>
+            <a href="{% url 'dashboard_contact_delete' msg.pk %}" class="btn btn-outline-danger" onclick="return confirm('پیام حذف شود؟')">حذف پیام</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

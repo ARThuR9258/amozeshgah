@@ -1,0 +1,23 @@
+{% if is_paginated %}
+<nav class="browse-pagination" aria-label="صفحه‌بندی">
+    {% if page_obj.has_previous %}
+    <a class="browse-page-link" href="?{% if browse_query %}{{ browse_query }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="صفحه قبل">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+    {% else %}
+    <span class="browse-page-link disabled"><i class="fas fa-chevron-right"></i></span>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    <a class="browse-page-link {% if page_obj.number == num %}active{% endif %}" href="?{% if browse_query %}{{ browse_query }}&{% endif %}page={{ num }}">{{ num }}</a>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a class="browse-page-link" href="?{% if browse_query %}{{ browse_query }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="صفحه بعد">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    {% else %}
+    <span class="browse-page-link disabled"><i class="fas fa-chevron-left"></i></span>
+    {% endif %}
+</nav>
+{% endif %}

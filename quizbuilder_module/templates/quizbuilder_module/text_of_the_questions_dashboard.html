@@ -1,169 +1,61 @@
 {% extends 'layout/_master.html' %}
 
-{% block title %}
-	متن سوال ها
-{% endblock %}
-
+{% block title %}متن سوالات{% endblock %}
 
 {% block content %}
-<body>
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <a href="{% url 'quizbuilder:quiz_list_dashboard' %}">آزمون‌ها</a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>متن سوالات</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-file-alt"></i> متن سوالات آزمون</h1>
+            <p class="da-page-subtitle">{{ stats.total }} سوال ثبت‌شده</p>
+        </div>
+        <div class="da-page-actions">
+            <a href="{% url 'quizbuilder:dashboard_question_add' %}" class="da-btn da-btn-primary"><i class="fas fa-plus"></i> سوال جدید</a>
+        </div>
+    </div>
 
-<div class="main-body-content">
-    <div class="main-header">
-                    <div class="inner">
-                        <div class="title">
-                            <h1><i class="fi fi-rs-users"></i>لیست متن سوال ها</span>
-                            </h1>
-                            <div class="breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb-list mb-0">
-                                        <li class="breadcrumb-item"><a href="index.html">داشبورد</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">لیست متن سوال ها</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="btns-action">
-                            <a href="user-add.html" class="btn btn-primary btn-small icon-right"><i
-                                    class="fi fi-rs-add"></i><span>متن سوال جدید</span></a>
-                            <button type="button" class="btn btn-primary btn-small icon-right btn-collapse"
-                                data-collapse-target="#collapse-search"><i
-                                    class="fi fi-rs-search"></i><span>جستجو</span></button>
-                        </div>
-                    </div>
-                </div>
-    <div class="main-inner">
-                    <!-- Search Content -->
-                    <div class="card-collapse search-page-content" id="collapse-search">
-                        <div class="search-inner">
-                            <div class="forms-group">
-                                <div class="row align-items-end">
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="input-group no-icon small">
-                                            <label>شماره سفارش، نام کاربر، شماره همراه</label>
-                                            <input type="text" class="input">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="select-group size-small">
-                                            <label>وضعیت</label>
-                                            <select class="select">
-                                                <option value="1">همه</option>
-                                                <option value="2">جدید</option>
-                                                <option value="2">فقط مرد</option>
-                                                <option value="2">فقط مرد</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="filter-inner">
-                                            <div class="pick-date">
-                                                <div class="input-group no-icon small">
-                                                    <label>از تاریخ</label>
-                                                    <input type="text" class="input" id="select-calendar-from"
-                                                        placeholder="از">
-                                                </div>
-                                            </div>
-                                            <div class="pick-date">
-                                                <div class="input-group no-icon small">
-                                                    <label>تا تاریخ</label>
-                                                    <input type="text" class="input" id="select-calendar-until"
-                                                        placeholder="تا">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6">
-                                        <div class="button-search">
-                                            <button type="button" class="btn btn-primary">جستجو</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table-custom">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <div class="checkbox-group m-0">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="checbox-select-all">
-                                        </div>
-                                    </th>
-                                    <th scope="col">#</th>
-                                    <th scope="col">آزمون</th>
-                                    <th scope="col">متن سوال</th>
-                                    <th scope="col">بارم</th>
-                                    <th scope="col">گزینه های سوال</th>
-                                    <th scope="col">عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+    <form method="get" class="da-filter-form">
+        <input type="search" name="q" class="form-control flex-grow-1" placeholder="جستجو متن سوال یا نام آزمون..." value="{{ search_query }}">
+        <select name="quiz" class="form-select" style="max-width:200px">
+            <option value="">همه آزمون‌ها</option>
+            {% for qz in quiz_choices %}
+            <option value="{{ qz.pk }}" {% if quiz_filter == qz.pk|stringformat:'s' %}selected{% endif %}>{{ qz.title }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="da-btn da-btn-primary"><i class="fas fa-search"></i> جستجو</button>
+        {% if search_query or quiz_filter %}<a href="{% url 'quizbuilder:text_quiz_list_dashboard' %}" class="da-btn da-btn-ghost">پاک کردن</a>{% endif %}
+    </form>
 
-                                {% for quiz_text in quiz_texts %}
-                                	<tr>
-                                    <td scope="row">
-                                        <div class="checkbox-group m-0">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="checbox-select-1">
-                                        </div>
-                                    </td>
-                                    <td scope="row">{{ forloop.counter }}</td>
-                                    <td>{{ quiz_text.quiz }}</td>
-                                    <td>{{ quiz_text.description }}</td>
-                                    <td>{{ quiz_text.score }}</td>
-                                    <td>{% for choice in quiz_text.choices.all %}
-                                        {{ choice }}
-                                        {% if not forloop.last %}
-                                        	_
-                                        {% endif %} 
-                                    {% endfor %}
-                                    </td>
-                                    <td>
-                                        <div class="btns-action">
-                                            <a href="user-add.html" class="btn-circle"><i
-                                                    class="fi fi-rs-pencil"></i></a>
-                                            <a href="#" class="btn-circle color-red" data-modal-name="modal-delete"><i
-                                                    class="fi fi-rs-trash"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Pagination -->
-                    <div class="mypagination">
-                        <div class="pagination-prev">
-                            <a href="#" class="btn-pagination prev disabled">
-                                <i class="fi fi-rs-arrow-small-right"></i>
-                                <span>صفحه قبلی</span>
-                            </a>
-                        </div>
-                        <div class="pagination-info">
-                            <h6>صفحه</h6>
-                            <div class="pagination-jump">
-                                <input class="pagination-input" type="number" value="1">
-                            </div>
-                            <h6>از</h6>
-                            <div class="curent-page-number">16</div>
-                        </div>
-                        <div class="pagination-next">
-                            <a href="#" class="btn-pagination next">
-                                <i class="fi fi-rs-arrow-small-left"></i>
-                                <span>صفحه بعدی</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <div class="da-panel">
+        <div class="da-panel-head"><h2>سوالات</h2><span class="da-count">{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ quiz_texts|length }}{% endif %}</span></div>
+        <div class="da-table-wrap">
+            <table class="da-table">
+                <thead>
+                    <tr><th>آزمون</th><th>متن سوال</th><th>بارم</th><th>گزینه‌ها</th><th></th></tr>
+                </thead>
+                <tbody>
+                {% for item in quiz_texts %}
+                    <tr>
+                        <td><span class="da-badge da-badge-info">{{ item.quiz.title }}</span></td>
+                        <td class="da-desc-cell" title="{{ item.description }}">{{ item.description|truncatechars:80 }}</td>
+                        <td><strong>{{ item.score }}</strong></td>
+                        <td>{{ item.choices.count }}</td>
+                        <td><a href="{% url 'quizbuilder:dashboard_question_edit' item.pk %}" class="da-btn da-btn-sm da-btn-outline" title="ویرایش"><i class="fas fa-pen"></i></a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5"><div class="da-empty"><i class="fas fa-file-alt"></i><p>سوالی نیست</p></div></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'layout/dashboard/pagination.html' %}
+    </div>
 </div>
-
-</body>
 {% endblock %}
-
-
-
-

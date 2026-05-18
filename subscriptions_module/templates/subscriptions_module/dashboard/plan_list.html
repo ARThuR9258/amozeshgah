@@ -1,0 +1,69 @@
+{% extends 'layout/_master.html' %}
+{% load humanize %}
+
+{% block title %}پلن‌های اشتراک{% endblock %}
+
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div class="da-page-header-main">
+            <nav class="da-breadcrumb">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>اشتراک و پرداخت</span>
+                <span class="da-breadcrumb-sep"><i class="fas fa-chevron-left"></i></span>
+                <span>پلن‌ها</span>
+            </nav>
+            <h1 class="da-page-title"><i class="fas fa-gem"></i> پلن‌های اشتراک</h1>
+            <p class="da-page-subtitle">مدیریت پکیج‌های اعتباری و اشتراک زمانی</p>
+        </div>
+        <div class="da-page-actions">
+            <a href="{% url 'dashboard_plan_add' %}" class="da-btn da-btn-primary"><i class="fas fa-plus"></i> پلن جدید</a>
+        </div>
+    </div>
+
+    <div class="da-stats-bar">
+        <div class="da-stat-mini da-stat-mini--primary"><strong>{{ stats.total }}</strong><span>کل پلن‌ها</span></div>
+        <div class="da-stat-mini da-stat-mini--success"><strong>{{ stats.active }}</strong><span>فعال</span></div>
+    </div>
+
+    <form method="get" class="da-filter-form">
+        <input type="search" name="q" class="form-control flex-grow-1" placeholder="جستجو نام یا slug..." value="{{ search_query }}">
+        <select name="active" class="form-select" style="max-width:140px">
+            <option value="">همه</option>
+            <option value="1" {% if active_filter == '1' %}selected{% endif %}>فعال</option>
+            <option value="0" {% if active_filter == '0' %}selected{% endif %}>غیرفعال</option>
+        </select>
+        <button type="submit" class="da-btn da-btn-primary"><i class="fas fa-search"></i> جستجو</button>
+        {% if search_query or active_filter %}<a href="{% url 'dashboard_plans' %}" class="da-btn da-btn-ghost">پاک کردن</a>{% endif %}
+    </form>
+
+    <div class="da-panel">
+        <div class="da-panel-head"><h2>لیست پلن‌ها</h2><span class="da-count">{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ plans|length }}{% endif %}</span></div>
+        <div class="da-table-wrap">
+            <table class="da-table">
+                <thead><tr><th>نام پلن</th><th>نوع</th><th>قیمت</th><th>اعتبار/مدت</th><th>وضعیت</th><th></th></tr></thead>
+                <tbody>
+                {% for plan in plans %}
+                    <tr>
+                        <td>
+                            <span class="da-plan-name">{{ plan.name }}</span>
+                            {% if plan.is_popular %}<i class="fas fa-star text-warning ms-1"></i>{% endif %}
+                            <br><span class="da-plan-slug">{{ plan.slug }}</span>
+                        </td>
+                        <td><span class="da-badge da-badge-info">{{ plan.get_plan_type_display }}</span></td>
+                        <td><span class="da-price">{{ plan.price|intcomma }} تومان</span></td>
+                        <td class="small">{% if plan.credits_amount %}{{ plan.credits_amount }} اعتبار{% elif plan.duration_days %}{{ plan.duration_days }} روز{% else %}—{% endif %}</td>
+                        <td>{% if plan.is_active %}<span class="da-badge da-badge-success">فعال</span>{% else %}<span class="da-badge da-badge-muted">غیرفعال</span>{% endif %}</td>
+                        <td><a href="{% url 'dashboard_plan_edit' plan.pk %}" class="da-btn da-btn-sm da-btn-outline"><i class="fas fa-pen"></i> ویرایش</a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6"><div class="da-empty"><i class="fas fa-gem"></i><p>پلنی نیست</p><a href="{% url 'dashboard_plan_add' %}" class="da-btn da-btn-primary da-btn-sm mt-2">افزودن پلن</a></div></td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'layout/dashboard/pagination.html' %}
+    </div>
+</div>
+{% endblock %}

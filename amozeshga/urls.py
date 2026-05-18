@@ -25,6 +25,7 @@ urlpatterns = [
     path('account/', include('account_module.urls')),
     path('questions/', include('sample_questions.urls')),
     path('quiz/', include('quizbuilder_module.urls')),
+    path('pricing/', include('subscriptions_module.urls')),
 ]
 
 # Serve media files in development

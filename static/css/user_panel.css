@@ -1,0 +1,530 @@
+.user-panel-page {
+    --up-bg: #0f1219;
+    --up-card: #1a2030;
+    --up-card-2: #222a3d;
+    --up-border: rgba(255, 255, 255, 0.08);
+    --up-text: #f0f2f5;
+    --up-muted: #94a3b8;
+    --up-accent: #4dabf7;
+    --up-purple: #8b5cf6;
+    --up-success: #34d399;
+    --up-gradient: linear-gradient(135deg, #4dabf7, #8b5cf6);
+    padding: 2rem 0 4rem;
+    min-height: 70vh;
+}
+
+.user-panel-page .panel-header {
+    background: var(--up-card);
+    border: 1px solid var(--up-border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-panel-page .avatar-ring {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: var(--up-gradient);
+    padding: 3px;
+    flex-shrink: 0;
+}
+
+.user-panel-page .avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--up-card-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--up-accent);
+}
+
+.user-panel-page .panel-header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--up-text);
+    margin: 0 0 0.25rem;
+}
+
+.user-panel-page .panel-header .meta {
+    color: var(--up-muted);
+    font-size: 0.9rem;
+}
+
+.user-panel-page .badge-plan {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.user-panel-page .badge-plan.premium {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(77, 171, 247, 0.2));
+    color: #c4b5fd;
+    border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+.user-panel-page .badge-plan.credit {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--up-success);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+.user-panel-page .badge-plan.free {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--up-muted);
+    border: 1px solid var(--up-border);
+}
+
+.user-panel-page .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.user-panel-page .stat-card {
+    background: var(--up-card);
+    border: 1px solid var(--up-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.user-panel-page .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(77, 171, 247, 0.3);
+}
+
+.user-panel-page .stat-card .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.user-panel-page .stat-card .icon.blue { background: rgba(77, 171, 247, 0.15); color: var(--up-accent); }
+.user-panel-page .stat-card .icon.green { background: rgba(52, 211, 153, 0.15); color: var(--up-success); }
+.user-panel-page .stat-card .icon.purple { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+
+.user-panel-page .stat-card .value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--up-text);
+    line-height: 1.2;
+}
+
+.user-panel-page .stat-card .label {
+    font-size: 0.85rem;
+    color: var(--up-muted);
+    margin-top: 0.25rem;
+}
+
+/* گرید داشبورد: حساب + آزمون در یک ردیف، تراکنش تمام‌عرض */
+.user-panel-page .panel-dashboard {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.5fr);
+    grid-template-areas:
+        "account quizzes"
+        "transactions transactions";
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.user-panel-page .panel-card--account { grid-area: account; }
+.user-panel-page .panel-card--quizzes { grid-area: quizzes; }
+.user-panel-page .panel-card--transactions { grid-area: transactions; }
+
+.user-panel-page .panel-card {
+    background: var(--up-card);
+    border: 1px solid var(--up-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    min-height: 100%;
+}
+
+.user-panel-page .panel-card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--up-text);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--up-border);
+}
+
+.user-panel-page .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.92rem;
+}
+
+.user-panel-page .info-row:last-child { border-bottom: none; }
+.user-panel-page .info-row span:first-child { color: var(--up-muted); }
+.user-panel-page .info-row span:last-child { color: var(--up-text); font-weight: 500; }
+
+.user-panel-page .stat-card .value-sm {
+    font-size: 1rem;
+}
+
+.user-panel-page .text-accent {
+    color: #c4b5fd;
+    font-weight: 600;
+}
+
+.user-panel-page .panel-card h2 i {
+    color: var(--up-accent);
+}
+
+.user-panel-page .quiz-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    background: var(--up-card-2);
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.user-panel-page .quiz-item-title {
+    color: var(--up-text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-panel-page .tx-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.user-panel-page .tx-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem 1.1rem;
+    background: var(--up-card-2);
+    border-radius: 10px;
+    border: 1px solid var(--up-border);
+}
+
+.user-panel-page .tx-item-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.user-panel-page .tx-type {
+    color: var(--up-text);
+    font-weight: 600;
+}
+
+.user-panel-page .tx-date {
+    color: var(--up-muted);
+    font-size: 0.8rem;
+}
+
+.user-panel-page .tx-item-amount {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+}
+
+.user-panel-page .tx-item-amount small {
+    color: var(--up-muted);
+    font-size: 0.78rem;
+}
+
+.user-panel-page .quiz-item .score {
+    color: var(--up-success);
+    font-weight: 700;
+}
+
+.user-panel-page .tx-item .amount-plus { color: var(--up-success); }
+.user-panel-page .tx-item .amount-minus { color: #f87171; }
+
+.user-panel-page .btn-panel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-panel-page .btn-panel.primary {
+    background: var(--up-gradient);
+    color: #fff;
+    border: none;
+}
+
+.user-panel-page .btn-panel.outline {
+    background: transparent;
+    color: var(--up-accent);
+    border: 1px solid rgba(77, 171, 247, 0.4);
+}
+
+.user-panel-page .btn-panel:hover {
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+.user-panel-page .empty-hint {
+    color: var(--up-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.user-panel-page .access-banner {
+    background: linear-gradient(135deg, rgba(77, 171, 247, 0.12), rgba(139, 92, 246, 0.12));
+    border: 1px solid rgba(77, 171, 247, 0.25);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.user-panel-page .access-banner p {
+    margin: 0;
+    color: var(--up-text);
+    font-size: 0.95rem;
+}
+
+@media (max-width: 991px) {
+    .user-panel-page .panel-dashboard {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "account"
+            "quizzes"
+            "transactions";
+    }
+}
+
+@media (max-width: 576px) {
+    .user-panel-page .panel-header {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .user-panel-page .quiz-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-panel-page .tx-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-panel-page .tx-item-amount {
+        align-items: flex-start;
+        text-align: right;
+    }
+
+    .user-panel-page .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Resume banner */
+.user-panel-page .resume-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.35rem;
+    margin-bottom: 1.25rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(77, 171, 247, 0.12));
+    border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+.user-panel-page .resume-banner-body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-panel-page .resume-banner-body i {
+    font-size: 1.75rem;
+    color: var(--up-success);
+}
+
+.user-panel-page .resume-banner p {
+    margin: 0.2rem 0 0;
+    color: var(--up-muted);
+    font-size: 0.88rem;
+}
+
+/* Progress chart */
+.user-panel-page .panel-card--chart {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.5rem;
+}
+
+.user-panel-page .chart-subtitle {
+    color: var(--up-muted);
+    font-size: 0.85rem;
+    margin: -0.5rem 0 1rem;
+}
+
+/* Exam history */
+.user-panel-page .panel-card--history {
+    grid-column: 1 / -1;
+}
+
+.user-panel-page .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.user-panel-page .history-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: var(--up-card-2);
+    border-radius: 12px;
+    border: 1px solid var(--up-border);
+}
+
+.user-panel-page .history-date {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--up-muted);
+    margin-top: 0.15rem;
+}
+
+.user-panel-page .history-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.user-panel-page .history-percent {
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 8px;
+}
+
+.user-panel-page .history-percent.pass {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--up-success);
+}
+
+.user-panel-page .history-percent.fail {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+}
+
+.user-panel-page .history-share {
+    color: var(--up-muted);
+    padding: 0.35rem;
+}
+
+.user-panel-page .history-share:hover {
+    color: var(--up-accent);
+}
+
+/* Orders */
+.user-panel-page .orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.user-panel-page .order-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--up-card-2);
+    border-radius: 10px;
+}
+
+.user-panel-page .order-date {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--up-muted);
+}
+
+.user-panel-page .order-amount {
+    font-weight: 700;
+    color: var(--up-text);
+}
+
+.user-panel-page .order-status {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+}
+
+.user-panel-page .order-status--paid {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--up-success);
+}
+
+.user-panel-page .order-status--pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.user-panel-page .panel-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: var(--up-accent);
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.user-panel-page .stat-card--wide {
+    grid-column: span 2;
+}
+
+@media (max-width: 576px) {
+    .user-panel-page .stat-card--wide {
+        grid-column: span 1;
+    }
+}

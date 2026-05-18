@@ -62,7 +62,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding-top: 80px;
+    padding-top: 0; /* هدر جدید در header-footer.css */
 }
 
 /* Fixed header styles */
