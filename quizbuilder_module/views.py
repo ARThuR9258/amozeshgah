@@ -43,6 +43,7 @@ class ExamHubView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         from subscriptions_module.services import can_take_quiz
+        from subscriptions_module.services import get_active_subscription
 
         context = super().get_context_data(**kwargs)
         active = get_active_session(self.request.user)
@@ -51,6 +52,16 @@ class ExamHubView(LoginRequiredMixin, TemplateView):
             user=self.request.user,
             status__in=(ExamSessionStatus.COMPLETED, ExamSessionStatus.EXPIRED),
         ).count()
+        passed_count = ExamSession.objects.filter(user=self.request.user, passed=True).count()
+        user_total = ExamSession.objects.filter(
+            user=self.request.user,
+            status__in=(ExamSessionStatus.COMPLETED, ExamSessionStatus.EXPIRED),
+        ).count()
+        user_pass_rate = int(round((passed_count / user_total) * 100)) if user_total else 0
+
+        sub = get_active_subscription(self.request.user)
+        plan_name = sub.plan.name if sub else 'رایگان'
+        plan_expires = sub.expires_at if sub else None
 
         context.update({
             'active_session': active,
@@ -61,6 +72,12 @@ class ExamHubView(LoginRequiredMixin, TemplateView):
             'quiz_access': can_take_quiz(self.request.user),
             'completed_exams': completed,
             'pass_percent': PASS_PERCENT,
+            'user_total_exams': user_total,
+            'user_passed_exams': passed_count,
+            'user_pass_rate': user_pass_rate,
+            'plan_name': plan_name,
+            'plan_expires': plan_expires,
+            'credits': self.request.user.credits or 0,
         })
         return context
 

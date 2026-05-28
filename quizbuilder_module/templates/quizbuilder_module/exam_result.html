@@ -8,98 +8,132 @@
 {% endblock %}
 
 {% block content %}
-<div class="exam-result py-5">
+<div class="exam-result-page py-4 py-lg-5">
     <div class="container">
-        <div class="text-center mb-4" data-aos="fade-up">
-            {% if summary.passed %}
-            <div class="exam-result-icon text-success"><i class="fas fa-trophy"></i></div>
-            <h1 class="fw-bold text-success">تبریک! قبول شدی</h1>
-            {% else %}
-            <div class="exam-result-icon text-warning"><i class="fas fa-redo"></i></div>
-            <h1 class="fw-bold">نیاز به تمرین بیشتر</h1>
-            {% endif %}
-            <p class="text-muted">حداقل {{ pass_percent }}٪ برای قبولی لازم است</p>
-        </div>
+        <header class="exam-result-hero card border-0 shadow-sm mb-4" data-aos="fade-up">
+            <div class="card-body">
+                <div class="exam-result-hero-row">
+                    <div class="exam-result-hero-copy">
+                        <div class="exam-kicker">نتیجه جلسه #{{ session.id }}</div>
+                        {% if summary.passed %}
+                            <h1 class="exam-result-title text-success">تبریک! قبول شدی</h1>
+                            <p class="exam-result-sub">عالی بود. همین ریتم تمرین رو ادامه بده.</p>
+                        {% else %}
+                            <h1 class="exam-result-title">نیاز به تمرین بیشتر</h1>
+                            <p class="exam-result-sub">اشکالی نداره؛ مرور سوالات غلط، سریع‌ترین راه پیشرفته.</p>
+                        {% endif %}
+                        <p class="text-muted mb-0">حداقل {{ pass_percent }}٪ برای قبولی لازم است</p>
+                    </div>
 
-        <div class="row g-3 mb-4 justify-content-center">
-            <div class="col-6 col-md-3" data-aos="fade-up">
-                <div class="card border-0 shadow-sm text-center h-100">
-                    <div class="card-body">
-                        <div class="fs-2 fw-bold text-primary">{{ summary.percent }}٪</div>
-                        <div class="small text-muted">درصد</div>
+                    <div class="exam-score-ring" style="--p: {{ summary.percent }};">
+                        <div class="exam-score-ring-inner">
+                            <div class="exam-score-value">{{ summary.percent }}٪</div>
+                            <div class="exam-score-label">درصد</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-6 col-md-3" data-aos="fade-up">
-                <div class="card border-0 shadow-sm text-center h-100">
-                    <div class="card-body">
-                        <div class="fs-2 fw-bold text-success">{{ summary.correct_count }}</div>
-                        <div class="small text-muted">صحیح</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3" data-aos="fade-up">
-                <div class="card border-0 shadow-sm text-center h-100">
-                    <div class="card-body">
-                        <div class="fs-2 fw-bold text-danger">{{ summary.wrong_count }}</div>
-                        <div class="small text-muted">غلط</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3" data-aos="fade-up">
-                <div class="card border-0 shadow-sm text-center h-100">
-                    <div class="card-body">
-                        <div class="fs-2 fw-bold text-secondary">{{ summary.skipped_count }}</div>
-                        <div class="small text-muted">بدون پاسخ</div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        {% if wrong_questions %}
-        <section class="card border-0 shadow-sm mb-4" data-aos="fade-up">
-            <div class="card-header bg-transparent border-0 pt-4 px-4">
-                <h2 class="h5 fw-bold mb-0"><i class="fas fa-times-circle text-danger me-2"></i>سوالات غلط</h2>
-            </div>
-            <div class="card-body px-4 pb-4">
-                {% for item in wrong_questions %}
-                <article class="exam-review-item mb-4 pb-4 border-bottom">
-                    {% with q=item.question %}
-                    {% if q.image %}
-                    <img src="{{ q.image.url }}" alt="" class="img-fluid rounded mb-3 exam-q-image" loading="lazy">
-                    {% endif %}
-                    <p class="fw-semibold">{{ q.text }}</p>
-                    <p class="small mb-2">
-                        <span class="text-danger">پاسخ شما: گزینه {{ item.selected }}</span>
-                        ·
-                        <span class="text-success">پاسخ صحیح: گزینه {{ item.correct }}</span>
-                    </p>
-                    <div class="row g-2">
-                        {% for opt in q.get_options_display %}
-                        <div class="col-12 col-md-6">
-                            <div class="exam-review-opt p-2 rounded {% if opt.number == item.correct %}border border-success bg-success-subtle{% elif opt.number == item.selected %}border border-danger bg-danger-subtle{% else %}bg-light{% endif %}">
-                                {% if opt.image %}
-                                <img src="{{ opt.image.url }}" alt="" class="exam-option-img d-block mb-1" loading="lazy">
-                                {% endif %}
-                                <span class="small">{{ opt.text }}</span>
+                <div class="row g-3 mt-3">
+                    <div class="col-6 col-lg-3">
+                        <div class="card ex-stat border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="ex-stat-icon text-success"><i class="fas fa-check"></i></div>
+                                <div class="ex-stat-value">{{ summary.correct_count }}</div>
+                                <div class="ex-stat-label">صحیح</div>
                             </div>
                         </div>
-                        {% endfor %}
                     </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card ex-stat border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="ex-stat-icon text-danger"><i class="fas fa-xmark"></i></div>
+                                <div class="ex-stat-value">{{ summary.wrong_count }}</div>
+                                <div class="ex-stat-label">غلط</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card ex-stat border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="ex-stat-icon text-secondary"><i class="fas fa-forward"></i></div>
+                                <div class="ex-stat-value">{{ summary.skipped_count }}</div>
+                                <div class="ex-stat-label">بدون پاسخ</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card ex-stat border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="ex-stat-icon text-info"><i class="fas fa-list-ol"></i></div>
+                                <div class="ex-stat-value">{{ summary.total }}</div>
+                                <div class="ex-stat-label">کل سوالات</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        {% if wrong_questions %}
+        <section class="card exam-wrong-card border-0 shadow-sm mb-4" data-aos="fade-up">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                    <h2 class="h5 fw-bold mb-0"><i class="fas fa-triangle-exclamation text-warning me-2"></i>سوالات غلط</h2>
+                    <span class="badge rounded-pill text-bg-warning text-dark">برای یادگیری سریع، فقط همین‌ها رو مرور کن</span>
+                </div>
+
+                <div class="exam-wrong-list">
+                    {% for item in wrong_questions %}
+                    {% with q=item.question %}
+                    <details class="exam-wrong-item">
+                        <summary>
+                            <span class="exam-wrong-num">#{{ forloop.counter }}</span>
+                            <span class="exam-wrong-title">{{ q.text|truncatechars:90 }}</span>
+                            <span class="exam-wrong-meta">
+                                <span class="chip chip-bad">شما: {{ item.selected }}</span>
+                                <span class="chip chip-good">صحیح: {{ item.correct }}</span>
+                            </span>
+                            <span class="exam-wrong-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+                        </summary>
+                        <div class="exam-wrong-body">
+                            {% if q.image %}
+                            <div class="exam-q-image mb-3">
+                                <img src="{{ q.image.url }}" alt="" class="img-fluid rounded" loading="lazy">
+                            </div>
+                            {% endif %}
+                            <p class="exam-q-text mb-3">{{ q.text|linebreaksbr }}</p>
+
+                            <div class="row g-2">
+                                {% for opt in q.get_options_display %}
+                                <div class="col-12 col-md-6">
+                                    <div class="exam-review-opt2 {% if opt.number == item.correct %}is-correct{% elif opt.number == item.selected %}is-wrong{% endif %}">
+                                        <div class="exam-review-opt2-head">
+                                            <span class="badge rounded-pill text-bg-light text-dark">گزینه {{ opt.number }}</span>
+                                        </div>
+                                        {% if opt.image %}
+                                        <img src="{{ opt.image.url }}" alt="" class="exam-option-img mb-2" loading="lazy">
+                                        {% endif %}
+                                        <div class="exam-review-opt2-text">{{ opt.text }}</div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </details>
                     {% endwith %}
-                </article>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </section>
         {% endif %}
 
-        <div class="text-center d-flex flex-wrap gap-2 justify-content-center">
-            <a href="{% url 'quizbuilder:exam_hub' %}" class="btn btn-primary btn-lg">
+        <div class="exam-result-actions d-flex flex-wrap gap-2 justify-content-center">
+            <a href="{% url 'quizbuilder:exam_hub' %}" class="btn btn-primary btn-lg px-4">
                 <i class="fas fa-home me-2"></i>بازگشت به آزمون‌ها
             </a>
             <form method="post" action="{% url 'quizbuilder:exam_start' %}" class="d-inline">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-primary btn-lg">آزمون جدید</button>
+                <button type="submit" class="btn btn-outline-light btn-lg px-4">آزمون جدید</button>
             </form>
         </div>
     </div>

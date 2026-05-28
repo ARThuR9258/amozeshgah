@@ -8,75 +8,190 @@
 {% endblock %}
 
 {% block content %}
-<div class="exam-hub py-5">
-    <div class="container">
-        <div class="text-center mb-5" data-aos="fade-up">
-            <span class="badge rounded-pill text-bg-primary mb-3">آزمون داینامیک</span>
-            <h1 class="fw-bold">آزمون شبیه‌سازی آیین‌نامه</h1>
-            <p class="text-muted mb-0">
-                هر بار {{ required_questions }} سوال تصادفی · {{ exam_minutes }} دقیقه · حداقل {{ pass_percent }}٪ برای قبولی
-            </p>
-        </div>
-
-        <div class="row g-4 justify-content-center mb-4">
-            <div class="col-md-4" data-aos="fade-up">
-                <div class="card exam-stat-card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-database text-primary fs-3 mb-2"></i>
-                        <h3 class="fw-bold mb-0">{{ active_question_count }}</h3>
-                        <p class="text-muted small mb-0">سوال فعال در بانک</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
-                <div class="card exam-stat-card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-check-double text-success fs-3 mb-2"></i>
-                        <h3 class="fw-bold mb-0">{{ completed_exams }}</h3>
-                        <p class="text-muted small mb-0">آزمون انجام‌شده</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card exam-action-card border-0 shadow mx-auto" style="max-width: 520px;" data-aos="zoom-in">
-            <div class="card-body p-4 p-md-5 text-center">
-                {% if active_session %}
-                <div class="alert alert-warning mb-4">
-                    <i class="fas fa-hourglass-half me-1"></i>
-                    یک آزمون ناتمام دارید — می‌توانید ادامه دهید.
-                </div>
-                <a href="{% url 'quizbuilder:exam_take' active_session.pk %}" class="btn btn-primary btn-lg w-100 mb-2">
-                    <i class="fas fa-play me-2"></i>ادامه آزمون
-                </a>
-                {% elif can_start %}
-                    {% if quiz_access.allowed %}
-                    <form method="post" action="{% url 'quizbuilder:exam_start' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-lg w-100">
-                            <i class="fas fa-bolt me-2"></i>شروع آزمون
-                        </button>
-                    </form>
-                    <p class="text-muted small mt-3 mb-0">
-                        {% if quiz_access.access_type == 'free_daily' %}
-                        {{ quiz_access.free_attempts_remaining }} آزمون رایگان امروز باقی مانده
-                        {% elif quiz_access.access_type == 'credit' %}
-                        اعتبار باقی‌مانده: {{ quiz_access.credits_remaining }}
-                        {% else %}
-                        دسترسی نامحدود فعال است
-                        {% endif %}
+<div class="exam-hub">
+    <section class="exam-hero" data-aos="fade-up">
+        <div class="container">
+            <div class="exam-hero-inner">
+                <div class="exam-hero-copy">
+                    <span class="exam-hero-badge">
+                        <i class="fas fa-bolt"></i>
+                        سریع، تمیز و دقیق
+                    </span>
+                    <h1 class="exam-hero-title">آزمون آنلاین آیین نامه رانندگی</h1>
+                    <p class="exam-hero-sub">
+                        هر بار <strong>{{ required_questions }}</strong> سوال تصادفی از بانک سوالات ·
+                        <strong>{{ exam_minutes }}</strong> دقیقه زمان ·
+                        حداقل <strong>{{ pass_percent }}٪</strong> برای قبولی
                     </p>
-                    {% else %}
-                    <p class="text-danger mb-3">{{ quiz_access.message }}</p>
-                    <a href="{% url 'subscriptions:pricing' %}" class="btn btn-outline-primary w-100">مشاهده پلن‌ها</a>
-                    {% endif %}
-                {% else %}
-                <p class="text-danger mb-0">
-                    حداقل {{ required_questions }} سوال فعال لازم است. الان {{ active_question_count }} سوال دارید.
-                </p>
-                {% endif %}
+
+                    <div class="exam-hero-actions">
+                        {% if active_session %}
+                            <a href="{% url 'quizbuilder:exam_take' active_session.pk %}" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-play me-2"></i>ادامه آزمون
+                            </a>
+                            <a href="#stats" class="btn btn-outline-light btn-lg px-4">
+                                <i class="fas fa-chart-line me-2"></i>مشاهده آمار
+                            </a>
+                        {% else %}
+                            {% if can_start and quiz_access.allowed %}
+                                <form method="post" action="{% url 'quizbuilder:exam_start' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                                        <i class="fas fa-paper-plane me-2"></i>شروع آزمون
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{% url 'subscriptions:pricing' %}" class="btn btn-primary btn-lg px-4">
+                                    <i class="fas fa-gem me-2"></i>دریافت دسترسی
+                                </a>
+                            {% endif %}
+                            <a href="#stats" class="btn btn-outline-light btn-lg px-4">
+                                <i class="fas fa-circle-info me-2"></i>راهنما
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="exam-hero-note">
+                        {% if quiz_access.allowed %}
+                            <i class="fas fa-shield-halved"></i>
+                            {{ quiz_access.message }}
+                        {% else %}
+                            <i class="fas fa-triangle-exclamation"></i>
+                            {{ quiz_access.message }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="exam-hero-visual" aria-hidden="true">
+                    <div class="exam-hero-card">
+                        <div class="exam-hero-card-top">
+                            <span>Driving Exam</span>
+                            <span class="pill">1404</span>
+                        </div>
+                        <div class="exam-hero-card-mid">
+                            <div class="icon">
+                                <i class="fas fa-car-side"></i>
+                            </div>
+                            <div>
+                                <div class="t1">پلتفرم تمرین حرفه‌ای</div>
+                                <div class="t2">پاسخ‌ها خودکار ذخیره می‌شوند</div>
+                            </div>
+                        </div>
+                        <div class="exam-hero-card-bars">
+                            <div class="bar b1"></div>
+                            <div class="bar b2"></div>
+                            <div class="bar b3"></div>
+                        </div>
+                    </div>
+                    <div class="exam-hero-glow g1"></div>
+                    <div class="exam-hero-glow g2"></div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section class="py-4" id="stats">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-6 col-lg-3" data-aos="fade-up">
+                    <div class="card ex-stat border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="ex-stat-icon text-primary"><i class="fas fa-clipboard-check"></i></div>
+                            <div class="ex-stat-value">{{ user_total_exams }}</div>
+                            <div class="ex-stat-label">آزمون‌های انجام‌شده شما</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="60">
+                    <div class="card ex-stat border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="ex-stat-icon text-success"><i class="fas fa-trophy"></i></div>
+                            <div class="ex-stat-value">{{ user_passed_exams }}</div>
+                            <div class="ex-stat-label">قبولی‌های شما</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="120">
+                    <div class="card ex-stat border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="ex-stat-icon text-warning"><i class="fas fa-gem"></i></div>
+                            <div class="ex-stat-value">{{ plan_name }}</div>
+                            <div class="ex-stat-label">
+                                پلن فعال{% if plan_expires %} · تا {{ plan_expires|date:"Y/m/d" }}{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="180">
+                    <div class="card ex-stat border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="ex-stat-icon text-info"><i class="fas fa-coins"></i></div>
+                            <div class="ex-stat-value">
+                                {% if quiz_access.access_type == 'free_daily' %}
+                                    {{ quiz_access.free_attempts_remaining }}
+                                {% elif quiz_access.access_type == 'credit' %}
+                                    {{ quiz_access.credits_remaining }}
+                                {% else %}
+                                    ∞
+                                {% endif %}
+                            </div>
+                            <div class="ex-stat-label">
+                                {% if quiz_access.access_type == 'free_daily' %}
+                                    آزمون رایگان امروز باقی‌مانده
+                                {% elif quiz_access.access_type == 'credit' %}
+                                    اعتبار باقی‌مانده
+                                {% else %}
+                                    دسترسی نامحدود
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mt-3">
+                <div class="col-lg-7" data-aos="fade-up">
+                    <div class="card ex-panel border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 fw-bold mb-2">چطور بهترین نتیجه را بگیری؟</h2>
+                            <ul class="ex-checklist">
+                                <li><i class="fas fa-check"></i> با تمرکز و بدون عجله پاسخ بده</li>
+                                <li><i class="fas fa-check"></i> اگر شک داری، رد شو و بعد برگرد</li>
+                                <li><i class="fas fa-check"></i> بعد از آزمون، «سوالات غلط» را مرور کن</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5" data-aos="fade-up" data-aos-delay="80">
+                    <div class="card ex-panel border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 fw-bold mb-2">شروع سریع</h2>
+                            {% if active_session %}
+                                <p class="text-muted mb-3">یک آزمون ناتمام دارید. ادامه دهید تا از ابتدا شروع نشود.</p>
+                                <a href="{% url 'quizbuilder:exam_take' active_session.pk %}" class="btn btn-primary w-100">
+                                    <i class="fas fa-play me-2"></i>ادامه آزمون
+                                </a>
+                            {% else %}
+                                {% if can_start and quiz_access.allowed %}
+                                    <form method="post" action="{% url 'quizbuilder:exam_start' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-bolt me-2"></i>شروع آزمون
+                                        </button>
+                                    </form>
+                                {% elif can_start %}
+                                    <p class="text-danger mb-3">{{ quiz_access.message }}</p>
+                                    <a href="{% url 'subscriptions:pricing' %}" class="btn btn-outline-primary w-100">مشاهده پلن‌ها</a>
+                                {% else %}
+                                    <p class="text-danger mb-0">حداقل {{ required_questions }} سوال فعال لازم است.</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 {% endblock %}
