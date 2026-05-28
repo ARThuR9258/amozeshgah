@@ -28,6 +28,7 @@ urlpatterns = [
     path('pricing/', include('subscriptions_module.urls')),
 ]
 
-# Serve media files in development
-if settings.DEBUG:
+# media: در development یا با SERVE_MEDIA=True از Django سرو می‌شود
+# در production معمولاً nginx مسیر /media/ را از MEDIA_ROOT می‌خواند
+if settings.SERVE_MEDIA:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

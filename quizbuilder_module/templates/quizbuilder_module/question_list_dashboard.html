@@ -1,0 +1,42 @@
+{% extends 'layout/_master.html' %}
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <div>
+            <h1 class="da-page-title">بانک سوالات</h1>
+            <p class="da-page-sub">سوالات فعال: {{ stats.active }} از {{ stats.total }}</p>
+        </div>
+        <a href="{% url 'quizbuilder:dashboard_question_add' %}" class="da-btn da-btn-primary"><i class="fas fa-plus"></i> سوال جدید</a>
+    </div>
+    <div class="da-card">
+        <div class="table-responsive">
+            <table class="table da-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>متن</th>
+                        <th>دسته</th>
+                        <th>سختی</th>
+                        <th>فعال</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in questions %}
+                    <tr>
+                        <td>{{ q.id }}</td>
+                        <td>{{ q.text|truncatechars:60 }}</td>
+                        <td>{{ q.category.name }}</td>
+                        <td>{{ q.get_difficulty_display }}</td>
+                        <td>{% if q.is_active %}<span class="badge text-bg-success">بله</span>{% else %}<span class="badge text-bg-secondary">خیر</span>{% endif %}</td>
+                        <td><a href="{% url 'quizbuilder:dashboard_question_edit' q.pk %}" class="da-btn da-btn-sm da-btn-outline"><i class="fas fa-pen"></i></a></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted">سوالی ثبت نشده</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

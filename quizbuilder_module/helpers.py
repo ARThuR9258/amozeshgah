@@ -1,43 +1,44 @@
-class QUIZ_STATUS:
-    OPEN = "open"
-    CLOSE = "close"
-    CHOICES = (
-        (OPEN, "باز"),
-        (CLOSE, "بسته"),
-    )
+"""ثابت‌ها و انتخاب‌های وضعیت آزمون داینامیک."""
 
 
-class QuizStatusClass:
-    OPEN = "open"
-    CLOSE = "close"
-    CHOICES = (
-        (OPEN, 'success'),
-        (CLOSE, 'danger'),
-    )
+class ExamSessionStatus:
+    IN_PROGRESS = 'in_progress'
+    COMPLETED = 'completed'
+    EXPIRED = 'expired'
+
+    CHOICES = [
+        (IN_PROGRESS, 'در حال انجام'),
+        (COMPLETED, 'پایان‌یافته'),
+        (EXPIRED, 'زمان تمام شده'),
+    ]
 
 
-class UserQuizChoice:
-    PENDING = 'pending'
-    DONE = 'done'
-    PASS = 'pass'
-    FAIL = 'fail'
+class QuestionDifficulty:
+    EASY = 'easy'
+    MEDIUM = 'medium'
+    HARD = 'hard'
 
-    CHOICES = (
-        (PENDING, 'در حال انجام'),
-        (DONE, 'انجام شده'),
-        (PASS, 'پاس شده'),
-        (FAIL, 'رد شده')
-    )
+    CHOICES = [
+        (EASY, 'آسان'),
+        (MEDIUM, 'متوسط'),
+        (HARD, 'سخت'),
+    ]
 
 
-class UserQuizStatusClass:
-    PENDING = 'pending'
-    DONE = 'done'
-    PASS = 'pass'
-    FAIL = 'fail'
-    CHOICES = (
-        (PENDING, 'warning'),
-        (DONE, 'warning'),
-        (PASS, 'success'),
-        (FAIL, 'danger'),
-    )
+class ChoiceNumber:
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+
+    CHOICES = [
+        (ONE, 'گزینه ۱'),
+        (TWO, 'گزینه ۲'),
+        (THREE, 'گزینه ۳'),
+        (FOUR, 'گزینه ۴'),
+    ]
+
+
+EXAM_QUESTION_COUNT = 20
+EXAM_DURATION_MINUTES = 30
+PASS_PERCENT = 60

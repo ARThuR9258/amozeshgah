@@ -80,7 +80,8 @@ def user_panel_view(request):
         get_active_subscription,
     )
     from subscriptions_module.models import CreditTransaction
-    from quizbuilder_module.models import UserQuiz
+    from quizbuilder_module.helpers import ExamSessionStatus, PASS_PERCENT
+    from quizbuilder_module.models import ExamSession
 
     user = request.user
     user.refresh_subscription_status()
@@ -98,34 +99,32 @@ def user_panel_view(request):
     }
 
     from subscriptions_module.models import PaymentOrder
-    from quizbuilder_module.quiz_services import build_analysis, PASS_PERCENT
     import json
 
-    completed_statuses = ('done', 'pass', 'fail')
+    completed_statuses = (
+        ExamSessionStatus.COMPLETED,
+        ExamSessionStatus.EXPIRED,
+    )
     exam_history = (
-        UserQuiz.objects.filter(user=user, status__in=completed_statuses)
-        .select_related('quiz')
-        .order_by('-finished_at', '-start_time')[:15]
+        ExamSession.objects.filter(user=user, status__in=completed_statuses)
+        .order_by('-finished_at', '-started_at')[:15]
     )
     history_enriched = []
     chart_labels = []
     chart_percents = []
-    for uq in exam_history:
-        analysis = build_analysis(uq, uq.quiz)
+    for session in exam_history:
         history_enriched.append({
-            'uq': uq,
-            'percent': analysis.percent,
-            'passed': analysis.passed or uq.status == 'pass',
+            'session': session,
+            'percent': session.percent,
+            'passed': session.passed,
         })
-    for uq in reversed(exam_history[:10]):
-        analysis = build_analysis(uq, uq.quiz)
-        chart_labels.append(uq.quiz.title[:24])
-        chart_percents.append(analysis.percent)
+    for session in reversed(exam_history[:10]):
+        chart_labels.append(f'آزمون #{session.pk}')
+        chart_percents.append(session.percent)
 
-    pending_quiz = (
-        UserQuiz.objects.filter(user=user, status='pending')
-        .select_related('quiz')
-        .order_by('-start_time')
+    pending_session = (
+        ExamSession.objects.filter(user=user, status=ExamSessionStatus.IN_PROGRESS)
+        .order_by('-started_at')
         .first()
     )
 
@@ -139,8 +138,8 @@ def user_panel_view(request):
         .order_by('-created_at')[:8]
     )
 
-    total_pass = UserQuiz.objects.filter(user=user, status='pass').count()
-    total_done = UserQuiz.objects.filter(user=user, status__in=completed_statuses).count()
+    total_pass = ExamSession.objects.filter(user=user, passed=True).count()
+    total_done = ExamSession.objects.filter(user=user, status__in=completed_statuses).count()
 
     context = {
         'user': user,
@@ -162,7 +161,7 @@ def user_panel_view(request):
         'total_pass': total_pass,
         'pass_percent_threshold': PASS_PERCENT,
         'exam_history': history_enriched,
-        'pending_quiz': pending_quiz,
+        'pending_session': pending_session,
         'recent_transactions': recent_transactions,
         'recent_orders': recent_orders,
         'chart_labels_json': json.dumps(chart_labels, ensure_ascii=False),

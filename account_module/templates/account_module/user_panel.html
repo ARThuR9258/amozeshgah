@@ -33,16 +33,16 @@
             </div>
         </header>
 
-        {% if pending_quiz %}
+        {% if pending_session %}
         <div class="resume-banner" data-aos="fade-up">
             <div class="resume-banner-body">
                 <i class="fas fa-hourglass-half"></i>
                 <div>
                     <strong>آزمون ناتمام دارید</strong>
-                    <p>«{{ pending_quiz.quiz.title }}» — از همان‌جا ادامه دهید</p>
+                    <p>جلسه #{{ pending_session.id }} — از همان‌جا ادامه دهید</p>
                 </div>
             </div>
-            <a href="{% url 'quizbuilder:take_quiz' pending_quiz.quiz_id %}" class="btn-panel primary">
+            <a href="{% url 'quizbuilder:exam_take' pending_session.pk %}" class="btn-panel primary">
                 <i class="fas fa-play"></i> ادامه آزمون
             </a>
         </div>
@@ -101,16 +101,13 @@
                     {% for item in exam_history %}
                     <div class="history-item">
                         <div class="history-main">
-                            <strong>{{ item.uq.quiz.title }}</strong>
-                            <span class="history-date">{{ item.uq.finished_at|default:item.uq.start_time|date:"Y/m/d H:i" }}</span>
+                            <strong>آزمون #{{ item.session.id }}</strong>
+                            <span class="history-date">{{ item.session.finished_at|default:item.session.started_at|date:"Y/m/d H:i" }}</span>
                         </div>
                         <div class="history-meta">
                             <span class="history-percent {% if item.passed %}pass{% else %}fail{% endif %}">{{ item.percent }}٪</span>
-                            <span class="history-score">{{ item.uq.score }} نمره</span>
-                            {% if item.uq.share_token %}
-                            <a href="{% url 'quizbuilder:quiz_share_result' item.uq.share_token %}" class="history-share" target="_blank" rel="noopener" title="لینک اشتراک"><i class="fas fa-share-alt"></i></a>
-                            {% endif %}
-                            <a href="{% url 'quizbuilder:quiz_result' item.uq.quiz_id %}" class="btn-panel outline btn-sm">نتیجه</a>
+                            <span class="history-score">{{ item.session.correct_count }} صحیح</span>
+                            <a href="{% url 'quizbuilder:exam_result' item.session.pk %}" class="btn-panel outline btn-sm">نتیجه</a>
                         </div>
                     </div>
                     {% endfor %}

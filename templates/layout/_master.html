@@ -81,24 +81,24 @@
                     </a>
                 </li>
 
-                <li class="nav-item {% if 'quiz' in request.path and 'text' not in request.path %}active{% endif %}">
-                    <a class="sub-item" href="{% url 'quizbuilder:quiz_list_dashboard' %}">
-                        <i class="fas fa-clipboard-list"></i>
-                        <span class="title">آزمون ها</span>
+                <li class="nav-item {% if 'categories' in request.path %}active{% endif %}">
+                    <a class="sub-item" href="{% url 'quizbuilder:category_list_dashboard' %}">
+                        <i class="fas fa-folder"></i>
+                        <span class="title">دسته‌بندی سوالات</span>
                     </a>
                 </li>
 
-                <li class="nav-item {% if 'text' in request.path %}active{% endif %}">
-                    <a class="sub-item" href="{% url 'quizbuilder:text_quiz_list_dashboard' %}">
+                <li class="nav-item {% if 'questions' in request.path %}active{% endif %}">
+                    <a class="sub-item" href="{% url 'quizbuilder:question_list_dashboard' %}">
                         <i class="fas fa-file-alt"></i>
-                        <span class="title">متن سوال ها</span>
+                        <span class="title">بانک سوالات</span>
                     </a>
                 </li>
 
-                <li class="nav-item {% if 'user_response' in request.path %}active{% endif %}">
-                    <a class="sub-item" href="{% url 'quizbuilder:user_response_dashboard' %}">
+                <li class="nav-item {% if 'sessions' in request.path or 'user_response' in request.path %}active{% endif %}">
+                    <a class="sub-item" href="{% url 'quizbuilder:exam_session_list_dashboard' %}">
                         <i class="fas fa-user-check"></i>
-                        <span class="title">پاسخ نامه های کاربران</span>
+                        <span class="title">جلسات آزمون</span>
                     </a>
                 </li>
 

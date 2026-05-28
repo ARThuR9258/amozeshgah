@@ -37,9 +37,27 @@ class Migration(migrations.Migration):
             field=models.SlugField(allow_unicode=True, blank=True, max_length=220, unique=False),
         ),
         migrations.RunPython(populate_slugs, migrations.RunPython.noop),
-        migrations.AlterField(
-            model_name='samplequestion',
-            name='slug',
-            field=models.SlugField(allow_unicode=True, blank=True, max_length=220, unique=True),
+        migrations.SeparateDatabaseAndState(
+            database_operations=[
+                migrations.RunSQL(
+                    sql="""
+                    CREATE UNIQUE INDEX IF NOT EXISTS
+                    sample_questions_samplequestion_slug_uniq
+                    ON sample_questions_samplequestion (slug);
+                    """,
+                    reverse_sql="""
+                    DROP INDEX IF EXISTS sample_questions_samplequestion_slug_uniq;
+                    """,
+                ),
+            ],
+            state_operations=[
+                migrations.AlterField(
+                    model_name='samplequestion',
+                    name='slug',
+                    field=models.SlugField(
+                        allow_unicode=True, blank=True, max_length=220, unique=True
+                    ),
+                ),
+            ],
         ),
     ]

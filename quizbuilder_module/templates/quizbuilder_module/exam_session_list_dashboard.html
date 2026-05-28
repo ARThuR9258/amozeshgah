@@ -1,0 +1,29 @@
+{% extends 'layout/_master.html' %}
+{% block content %}
+<div class="da-page">
+    <div class="da-page-header">
+        <h1 class="da-page-title">جلسات آزمون کاربران</h1>
+    </div>
+    <div class="da-card">
+        <table class="table da-table">
+            <thead>
+                <tr><th>#</th><th>کاربر</th><th>وضعیت</th><th>درصد</th><th>شروع</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for s in sessions %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.user }}</td>
+                    <td>{{ s.get_status_display }}</td>
+                    <td>{{ s.percent }}٪</td>
+                    <td>{{ s.started_at|date:"Y/m/d H:i" }}</td>
+                    <td><a href="{% url 'quizbuilder:dashboard_exam_session_detail' s.pk %}" class="da-btn da-btn-sm da-btn-outline">جزئیات</a></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted">رکوردی نیست</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

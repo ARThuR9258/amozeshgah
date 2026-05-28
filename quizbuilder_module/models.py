@@ -1,207 +1,191 @@
-import datetime
+from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.contrib.auth import get_user_model
-from django.utils import timezone
-from quizbuilder_module.helpers import QUIZ_STATUS, UserQuizChoice, QuizStatusClass, UserQuizStatusClass
-from quizbuilder_module.mixins import QuizStartedSmsMixin
 
-User = get_user_model()
+from quizbuilder_module.helpers import (
+    ChoiceNumber,
+    ExamSessionStatus,
+    EXAM_DURATION_MINUTES,
+    QuestionDifficulty,
+)
 
 
-class Quiz(QuizStartedSmsMixin, models.Model):
-    """ آزمون """
-    title = models.CharField(verbose_name='عنوان', max_length=255)
-    desc = models.TextField(verbose_name='توضیحات', max_length=500)
-    status = models.CharField(verbose_name='وضعیت', default='open', choices=QUIZ_STATUS.CHOICES, max_length=50)
-    time = models.PositiveIntegerField(verbose_name='مدت زمان آزمون (دقیقه)', null=True, blank=True)
-    expire_time = models.DateTimeField(verbose_name='تاریخ پایان آزمون', null=True, blank=True)
+class Category(models.Model):
+    name = models.CharField(max_length=120, verbose_name='نام دسته')
+    slug = models.SlugField(max_length=120, unique=True, allow_unicode=True, verbose_name='شناسه')
+    is_active = models.BooleanField(default=True, verbose_name='فعال')
+    display_order = models.PositiveSmallIntegerField(default=0, verbose_name='ترتیب نمایش')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
 
     class Meta:
-        verbose_name = 'آزمون'
-        verbose_name_plural = 'آزمون ها'
+        verbose_name = 'دسته‌بندی'
+        verbose_name_plural = 'دسته‌بندی‌ها'
+        ordering = ['display_order', 'name']
 
     def __str__(self):
-        return self.title or '---'
-
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-    #     if self.time:
-    #         self.expire_time = self.created_at.togregorian() + relativedelta(minutes=self.time)
-    #     super().save(*args, **kwargs)
-
-    @property
-    def get_status(self):
-        return dict(QUIZ_STATUS.CHOICES).get(self.status, '')
-
-    @property
-    def get_status_class(self):
-        return dict(QuizStatusClass.CHOICES).get(self.status, '')
+        return self.name
 
 
-class QuizQuestionChoice(models.Model):
-    """ گزینه های سوال """
-    text = models.CharField(
-        max_length=256,
-        verbose_name='متن جواب'
-    )
+class Question(models.Model):
+    text = models.TextField(verbose_name='متن سوال')
     image = models.ImageField(
-        verbose_name='تصویر گزینه',
-        upload_to='question_options/',
+        upload_to='exam/questions/',
+        blank=True,
         null=True,
-        blank=True
-    )
-    is_answer = models.BooleanField(
-        default=False,
-        verbose_name='جواب صحیح است؟'
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='تاریخ ایجاد'
-    )
-
-    class Meta:
-        verbose_name = 'گزینه ها'
-        verbose_name_plural = 'گزینه ها'
-        ordering = ['created_at']
-
-    def __str__(self):
-        return self.text[:100]
-
-
-class QuizQuestion(models.Model):
-    """ سوالات آزمون """
-    quiz = models.ForeignKey(
-        to=Quiz,
-        verbose_name='آزمون',
-        on_delete=models.CASCADE,
-        related_name="questions",
-    )
-    description = models.TextField(
-        verbose_name='متن سوال'
-    )
-    image = models.ImageField(
         verbose_name='تصویر سوال',
-        upload_to='questions/',
+    )
+    option_1 = models.CharField(max_length=500, verbose_name='گزینه ۱')
+    option_2 = models.CharField(max_length=500, verbose_name='گزینه ۲')
+    option_3 = models.CharField(max_length=500, verbose_name='گزینه ۳')
+    option_4 = models.CharField(max_length=500, verbose_name='گزینه ۴')
+    option_1_image = models.ImageField(
+        upload_to='exam/options/',
+        blank=True,
         null=True,
-        blank=True
+        verbose_name='تصویر گزینه ۱',
     )
-    score = models.PositiveIntegerField(
-        default=0,
-        verbose_name='بارم'
+    option_2_image = models.ImageField(
+        upload_to='exam/options/',
+        blank=True,
+        null=True,
+        verbose_name='تصویر گزینه ۲',
     )
-    choices = models.ManyToManyField(
-        verbose_name='گزینه های سوال',
-        to=QuizQuestionChoice,
+    option_3_image = models.ImageField(
+        upload_to='exam/options/',
+        blank=True,
+        null=True,
+        verbose_name='تصویر گزینه ۳',
     )
+    option_4_image = models.ImageField(
+        upload_to='exam/options/',
+        blank=True,
+        null=True,
+        verbose_name='تصویر گزینه ۴',
+    )
+    correct_answer = models.PositiveSmallIntegerField(
+        choices=ChoiceNumber.CHOICES,
+        validators=[MinValueValidator(1), MaxValueValidator(4)],
+        verbose_name='پاسخ صحیح',
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        related_name='questions',
+        verbose_name='دسته‌بندی',
+    )
+    difficulty = models.CharField(
+        max_length=20,
+        choices=QuestionDifficulty.CHOICES,
+        default=QuestionDifficulty.MEDIUM,
+        verbose_name='سطح سختی',
+    )
+    is_active = models.BooleanField(default=True, verbose_name='فعال')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='آخرین ویرایش')
 
     class Meta:
-        verbose_name = 'متن سوال'
-        verbose_name_plural = 'متن سوال ها'
-
-
+        verbose_name = 'سوال'
+        verbose_name_plural = 'سوالات'
+        ordering = ['-id']
 
     def __str__(self):
-        return f'{self.quiz}, {self.description[:100]}'
+        return self.text[:80]
 
-    @property
-    def correct_choice(self):
-        return self.choices.filter(is_answer=True).first()
+    def get_option_text(self, number: int) -> str:
+        return getattr(self, f'option_{number}', '') or ''
+
+    def get_option_image(self, number: int):
+        return getattr(self, f'option_{number}_image', None)
+
+    def get_options_display(self):
+        """لیست گزینه‌ها برای قالب: (شماره، متن، تصویر)."""
+        items = []
+        for num in range(1, 5):
+            items.append({
+                'number': num,
+                'text': self.get_option_text(num),
+                'image': self.get_option_image(num),
+                'is_correct': num == self.correct_answer,
+            })
+        return items
 
 
-class UserQuiz(models.Model):
-    """ پاسخنامه کاربر """
+class ExamSession(models.Model):
     user = models.ForeignKey(
-        to=User,
-        related_name='quizzes',
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='exam_sessions',
         verbose_name='کاربر',
-        on_delete=models.CASCADE,
-    )
-    quiz = models.ForeignKey(
-        to=Quiz,
-        verbose_name='آزمون',
-        on_delete=models.CASCADE,
-        related_name='user_quizzes',
     )
     status = models.CharField(
+        max_length=20,
+        choices=ExamSessionStatus.CHOICES,
+        default=ExamSessionStatus.IN_PROGRESS,
         verbose_name='وضعیت',
-        default=UserQuizChoice.PENDING,
-        choices=UserQuizChoice.CHOICES,
-        max_length=255
     )
-    start_time = models.DateTimeField(
-        verbose_name='زمان شروع آزمون',
-        null=True, blank=True
+    question_ids = models.JSONField(
+        default=list,
+        verbose_name='شناسه سوالات آزمون',
+        help_text='۲۰ سوال انتخاب‌شده به صورت تصادفی',
     )
-    score = models.PositiveIntegerField(
-        default=0,
-        verbose_name='نمره(بارم)'
-    )
-    finished_at = models.DateTimeField(
-        verbose_name='زمان پایان',
-        null=True,
-        blank=True,
-    )
-    time_spent_seconds = models.PositiveIntegerField(
-        verbose_name='مدت شرکت (ثانیه)',
-        default=0,
-    )
-    share_token = models.CharField(
-        max_length=32,
-        unique=True,
-        null=True,
-        blank=True,
-        db_index=True,
-        verbose_name='توکن اشتراک نتیجه',
-    )
+    started_at = models.DateTimeField(auto_now_add=True, verbose_name='شروع')
+    expires_at = models.DateTimeField(verbose_name='پایان مهلت')
+    finished_at = models.DateTimeField(null=True, blank=True, verbose_name='زمان اتمام')
+    time_spent_seconds = models.PositiveIntegerField(default=0, verbose_name='مدت (ثانیه)')
+    correct_count = models.PositiveSmallIntegerField(default=0, verbose_name='تعداد صحیح')
+    wrong_count = models.PositiveSmallIntegerField(default=0, verbose_name='تعداد غلط')
+    skipped_count = models.PositiveSmallIntegerField(default=0, verbose_name='بدون پاسخ')
+    percent = models.PositiveSmallIntegerField(default=0, verbose_name='درصد')
+    passed = models.BooleanField(default=False, verbose_name='قبولی')
 
     class Meta:
-        verbose_name = 'پاسخ نامه کاربر'
-        verbose_name_plural = 'پاسخ نامه های کاربران'
-
+        verbose_name = 'جلسه آزمون'
+        verbose_name_plural = 'جلسات آزمون'
+        ordering = ['-started_at']
 
     def __str__(self):
-        return f'{self.user}, {self.quiz}'
+        return f'آزمون #{self.pk} — {self.user}'
 
     @property
-    def get_status(self):
-        return dict(UserQuizChoice.CHOICES).get(self.status, '')
+    def total_questions(self):
+        return len(self.question_ids or [])
 
     @property
-    def get_status_class(self):
-        return dict(UserQuizStatusClass.CHOICES).get(self.status, '')
+    def is_in_progress(self):
+        return self.status == ExamSessionStatus.IN_PROGRESS
 
 
-
-
-class UserQuizQuestionAnswer(models.Model):
-    """ پاسخ های کاربر """
-    user_quiz = models.ForeignKey(
-        to=UserQuiz,
+class UserAnswer(models.Model):
+    session = models.ForeignKey(
+        ExamSession,
         on_delete=models.CASCADE,
-        related_name='user_quiz_questions',
-        verbose_name='پاسخنامه کاربر',
+        related_name='answers',
+        verbose_name='جلسه آزمون',
     )
     question = models.ForeignKey(
-        to=QuizQuestion,
+        Question,
+        on_delete=models.CASCADE,
+        related_name='user_answers',
         verbose_name='سوال',
-        on_delete=models.CASCADE,
     )
-    answer = models.ForeignKey(
-        to=QuizQuestionChoice,
-        on_delete=models.CASCADE,
-        verbose_name='پاسخ کاربر',
+    selected_choice = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(4)],
+        verbose_name='گزینه انتخابی',
     )
-
+    is_correct = models.BooleanField(null=True, blank=True, verbose_name='صحیح بود؟')
+    answered_at = models.DateTimeField(null=True, blank=True, verbose_name='زمان پاسخ')
 
     class Meta:
-        verbose_name = 'پاسخ های کاربر'
-        verbose_name_plural = 'پاسخ های کاربران'
-
+        verbose_name = 'پاسخ کاربر'
+        verbose_name_plural = 'پاسخ‌های کاربر'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['session', 'question'],
+                name='unique_answer_per_session_question',
+            ),
+        ]
 
     def __str__(self):
-        return f'{self.user_quiz}, {self.answer}'
-
-    @property
-    def get_user(self):
-        return self.user_quiz.user
-
+        return f'{self.session_id} — Q{self.question_id}'

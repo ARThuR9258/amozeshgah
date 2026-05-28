@@ -1,0 +1,113 @@
+/* آزمون داینامیک — هماهنگ با تم تیره سایت */
+
+.exam-top {
+    border-radius: 16px;
+    position: sticky;
+    top: 0.75rem;
+    z-index: 100;
+}
+
+.exam-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background: rgba(220, 53, 69, 0.12);
+    color: #dc3545;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.exam-timer.is-low {
+    animation: exam-pulse 1s infinite;
+    background: #dc3545;
+    color: #fff;
+}
+
+@keyframes exam-pulse {
+    50% {
+        opacity: 0.85;
+    }
+}
+
+.exam-question-card {
+    border-radius: 16px;
+}
+
+.exam-q-image img {
+    max-height: 280px;
+    width: 100%;
+    object-fit: contain;
+    background: #0b1220;
+}
+
+.exam-q-text {
+    font-size: 1.05rem;
+    line-height: 1.85;
+}
+
+/* گزینه‌ها: چون تم سایت متن کارت‌ها را سفید می‌کند، باید داخل باکس سفید، متن تیره شود */
+.exam-option {
+    display: block;
+    margin: 0;
+    cursor: pointer;
+}
+
+.exam-option-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.exam-option-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    background: #fff;
+    color: #111827; /* fix: متن روی سفید نامرئی نشود */
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    min-height: 100%;
+}
+
+.exam-option-input:checked + .exam-option-body {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.18);
+    background: rgba(13, 110, 253, 0.06);
+}
+
+.exam-option-img-wrap {
+    display: block;
+    text-align: center;
+}
+
+.exam-option-img {
+    max-height: 120px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.exam-option-text {
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+@media (max-width: 576px) {
+    .exam-top {
+        position: static;
+    }
+
+    .exam-timer {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .exam-q-image img {
+        max-height: 200px;
+    }
+}
+

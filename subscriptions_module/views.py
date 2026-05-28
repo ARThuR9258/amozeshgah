@@ -100,10 +100,7 @@ class CheckoutView(LoginRequiredMixin, View):
             f'پرداخت با موفقیت انجام شد. پلن «{plan.name}» برای شما فعال شد.',
         )
 
-        next_quiz = request.GET.get('quiz_id') or request.POST.get('quiz_id')
-        if next_quiz:
-            return redirect('quizbuilder:take_quiz', quiz_id=next_quiz)
-        return redirect('subscriptions:pricing')
+        return redirect('quizbuilder:exam_hub')
 
 
 class PaymentCallbackView(LoginRequiredMixin, View):

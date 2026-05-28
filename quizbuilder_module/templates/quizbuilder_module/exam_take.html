@@ -1,0 +1,109 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}در حال آزمون — آیین‌نامه پلاس{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/exam.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="exam-page py-4">
+    <div class="container">
+        <header class="exam-top card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <h1 class="h4 fw-bold mb-1">آزمون آنلاین</h1>
+                        <p class="text-muted small mb-0">{{ total_questions }} سوال · {{ exam_minutes }} دقیقه</p>
+                    </div>
+                    <div class="exam-timer" id="exam-timer" data-seconds="{{ time_left_seconds }}">
+                        <i class="fas fa-clock"></i>
+                        <span id="time-remaining">--:--</span>
+                    </div>
+                </div>
+                <div class="progress mt-3" style="height: 8px;">
+                    <div class="progress-bar" id="exam-progress-bar" role="progressbar" style="width: 0%"></div>
+                </div>
+                <div class="d-flex justify-content-between mt-2 small text-muted">
+                    <span id="exam-progress-text">۰ از {{ total_questions }}</span>
+                    <span id="exam-save-status"></span>
+                </div>
+            </div>
+        </header>
+
+        <form method="post" action="{{ submit_url }}" id="exam-form" class="exam-form">
+            {% csrf_token %}
+            <input type="hidden" name="session_id" value="{{ session.id }}">
+
+            {% for question in questions %}
+            <article class="card exam-question-card border-0 shadow-sm mb-3"
+                     id="q{{ forloop.counter }}"
+                     data-question-id="{{ question.id }}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge text-bg-secondary">سوال {{ forloop.counter }}</span>
+                        <span class="badge text-bg-light text-dark">{{ question.get_difficulty_display }}</span>
+                    </div>
+
+                    {% if question.image %}
+                    <div class="exam-q-image mb-3">
+                        <img src="{{ question.image.url }}" alt="" class="img-fluid rounded" loading="lazy">
+                    </div>
+                    {% endif %}
+
+                    <p class="exam-q-text fw-semibold">{{ question.text|linebreaksbr }}</p>
+
+                    <div class="row g-2 exam-options">
+                        {% for opt in question.get_options_display %}
+                        <div class="col-12 col-md-6">
+                            <label class="exam-option w-100">
+                                <input type="radio"
+                                       name="q{{ question.id }}"
+                                       value="{{ opt.number }}"
+                                       class="exam-option-input"
+                                       data-question-id="{{ question.id }}">
+                                <span class="exam-option-body">
+                                    {% if opt.image %}
+                                    <span class="exam-option-img-wrap">
+                                        <img src="{{ opt.image.url }}" alt="" class="exam-option-img" loading="lazy">
+                                    </span>
+                                    {% endif %}
+                                    <span class="exam-option-text">{{ opt.text }}</span>
+                                </span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-4">
+                    <p class="text-muted small mb-3"><i class="fas fa-cloud-upload-alt"></i> پاسخ‌ها خودکار ذخیره می‌شوند</p>
+                    <button type="submit" class="btn btn-primary btn-lg px-5" id="exam-submit-btn">
+                        <i class="fas fa-paper-plane me-2"></i>ثبت نهایی آزمون
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    window.EXAM_CONFIG = {
+        sessionId: {{ session.id }},
+        saveUrl: "{{ save_answer_url|escapejs }}",
+        submitUrl: "{{ submit_url|escapejs }}",
+        csrfToken: "{{ csrf_token }}",
+        timeLeft: {{ time_left_seconds }},
+        totalQuestions: {{ total_questions }},
+        savedAnswers: {{ saved_answers_json|safe }}
+    };
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/exam_session.js' %}"></script>
+{% endblock %}

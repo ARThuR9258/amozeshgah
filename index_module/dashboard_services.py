@@ -8,7 +8,8 @@ from django.utils.encoding import force_str
 from django.utils import timezone
 
 from index_module.models import ContactMessage
-from quizbuilder_module.models import Quiz, QuizQuestion, UserQuiz, UserQuizQuestionAnswer
+from quizbuilder_module.models import Category, ExamSession, Question, UserAnswer
+from quizbuilder_module.helpers import ExamSessionStatus
 from sample_questions.models import SampleQuestion
 from subscriptions_module.models import (
     CreditTransaction,
@@ -40,12 +41,15 @@ def get_dashboard_stats():
     return {
         'users_count': User.objects.count(),
         'users_staff_count': User.objects.filter(is_staff=True).count(),
-        'quizzes_count': Quiz.objects.count(),
-        'quizzes_open_count': Quiz.objects.filter(status='open').count(),
+        'quizzes_count': ExamSession.objects.count(),
+        'quizzes_open_count': ExamSession.objects.filter(
+            status=ExamSessionStatus.IN_PROGRESS
+        ).count(),
         'sample_questions_count': SampleQuestion.objects.filter(is_active=True).count(),
-        'quiz_questions_count': QuizQuestion.objects.count(),
-        'user_quizzes_count': UserQuiz.objects.count(),
-        'answers_count': UserQuizQuestionAnswer.objects.count(),
+        'quiz_questions_count': Question.objects.count(),
+        'user_quizzes_count': ExamSession.objects.count(),
+        'answers_count': UserAnswer.objects.count(),
+        'categories_count': Category.objects.count(),
         'plans_count': SubscriptionPlan.objects.filter(is_active=True).count(),
         'active_subscriptions_count': UserSubscription.objects.filter(
             is_active=True, status=UserSubscription.Status.ACTIVE
@@ -132,8 +136,8 @@ def get_dashboard_charts_data(days=14):
 
     # شرکت در آزمون روزانه
     quizzes_daily_qs = (
-        UserQuiz.objects.filter(start_time__gte=range_start)
-        .annotate(d=TruncDate('start_time'))
+        ExamSession.objects.filter(started_at__gte=range_start)
+        .annotate(d=TruncDate('started_at'))
         .values('d')
         .annotate(c=Count('id'))
         .order_by('d')
@@ -182,25 +186,22 @@ def get_dashboard_charts_data(days=14):
         sub_values.append(row['c'])
     sub_bg = [sub_colors.get(row['subscription_status'], '#94a3b8') for row in sub_rows]
 
-    # وضعیت پاسخنامه آزمون
-    from quizbuilder_module.helpers import UserQuizChoice
-
+    # وضعیت جلسات آزمون
     quiz_rows = (
-        UserQuiz.objects.values('status')
+        ExamSession.objects.values('status')
         .annotate(c=Count('id'))
         .order_by('-c')
     )
     quiz_labels = []
     quiz_values = []
     quiz_colors = {
-        UserQuizChoice.PENDING: '#f59e0b',
-        UserQuizChoice.DONE: '#6366f1',
-        UserQuizChoice.PASS: '#10b981',
-        UserQuizChoice.FAIL: '#ef4444',
+        ExamSessionStatus.IN_PROGRESS: '#f59e0b',
+        ExamSessionStatus.COMPLETED: '#10b981',
+        ExamSessionStatus.EXPIRED: '#ef4444',
     }
     for row in quiz_rows:
         key = row['status']
-        quiz_labels.append(force_str(dict(UserQuizChoice.CHOICES).get(key, key)))
+        quiz_labels.append(force_str(dict(ExamSessionStatus.CHOICES).get(key, key)))
         quiz_values.append(row['c'])
     quiz_bg = [quiz_colors.get(row['status'], '#94a3b8') for row in quiz_rows]
 
