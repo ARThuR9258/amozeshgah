@@ -1,0 +1,14 @@
+<td class="text-end ap-actions">
+  {% if detail_url %}
+  <a href="{{ detail_url }}" class="btn btn-sm btn-light rounded-pill ap-btn-action" title="مشاهده"><i class="fas fa-eye"></i></a>
+  {% endif %}
+  {% if edit_url %}
+  <button type="button" class="btn btn-sm btn-primary rounded-pill ap-btn-action" title="ویرایش"
+          hx-get="{{ edit_url }}" hx-target="#apModalBody" hx-swap="innerHTML"><i class="fas fa-pen"></i></button>
+  {% endif %}
+  {% if delete_url %}
+  <button type="button" class="btn btn-sm btn-outline-danger rounded-pill ap-btn-action" title="حذف"
+          hx-post="{{ delete_url }}" hx-confirm="{{ delete_confirm|default:'حذف شود؟' }}"
+          hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'><i class="fas fa-trash"></i></button>
+  {% endif %}
+</td>

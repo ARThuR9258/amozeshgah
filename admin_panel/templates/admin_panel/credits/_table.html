@@ -1,0 +1,23 @@
+{% with table_target='apCreditsTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:credits_table' %}" hx-target="#{{ table_target }}" hx-trigger="keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-8"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو کاربر یا توضیح..." value="{{ filters.q }}"></div></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>کاربر</th><th>مقدار</th><th>نوع</th><th>توضیح</th><th>تاریخ</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td class="fw-semibold">{{ item.user }}</td>
+        <td><strong class="{% if item.amount > 0 %}text-success{% elif item.amount < 0 %}text-danger{% endif %}">{{ item.amount }}</strong></td>
+        <td><span class="badge bg-light text-dark border">{{ item.get_transaction_type_display }}</span></td>
+        <td class="ap-muted">{{ item.description|default:"—"|truncatechars:40 }}</td>
+        <td class="ap-muted">{{ item.created_at|date:"Y/m/d H:i" }}</td>
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=5 icon='fas fa-coins' message='تراکنشی نیست' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}

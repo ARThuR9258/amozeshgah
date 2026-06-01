@@ -1,0 +1,35 @@
+{% load widget_tweaks %}
+<script>window.AP_MODAL_TITLE = "{{ title|escapejs }}";</script>
+<form method="post" class="ap-form-modal"
+      action="{{ request.path }}"
+      {% if multipart %}enctype="multipart/form-data" hx-encoding="multipart/form-data"{% endif %}
+      hx-post="{{ request.path }}"
+      hx-target="#apModalBody"
+      hx-swap="innerHTML">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  <div class="alert alert-danger border-0 rounded-3">{{ form.non_field_errors }}</div>
+  {% endif %}
+  {% for field in form %}
+  <div class="mb-3">
+    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+    {% if field.field.widget.input_type == 'checkbox' %}
+    <div class="form-check form-switch ps-0">
+      {% render_field field class="form-check-input ms-0" %}
+    </div>
+    {% elif field.field.widget.input_type == 'file' %}
+    {% render_field field class="form-control" %}
+    {% else %}
+    {% render_field field class="form-control" %}
+    {% endif %}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+    {% for err in field.errors %}<div class="text-danger small mt-1">{{ err }}</div>{% endfor %}
+  </div>
+  {% endfor %}
+  <div class="d-flex justify-content-end gap-2 pt-3 mt-2 border-top">
+    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">انصراف</button>
+    <button type="submit" class="btn btn-primary ap-btn-primary rounded-pill px-4 shadow-sm">
+      <i class="fas fa-check ms-2"></i>{{ submit_label|default:"ذخیره" }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,24 @@
+{% with table_target='apAnswersTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:answers_table' %}" hx-target="#{{ table_target }}" hx-trigger="change, keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-6"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو..." value="{{ filters.q }}"></div></div>
+  <div class="col-md-3"><select name="correct" class="form-select"><option value="">همه</option><option value="1" {% if filters.correct == '1' %}selected{% endif %}>صحیح</option><option value="0" {% if filters.correct == '0' %}selected{% endif %}>غلط</option></select></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>کاربر</th><th>سوال</th><th>گزینه</th><th>نتیجه</th><th>زمان</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td class="fw-semibold">{{ item.session.user.phone_number }}</td>
+        <td>{{ item.question.text|truncatechars:60 }}</td>
+        <td>{{ item.selected_choice|default:"—" }}</td>
+        <td>{% if item.is_correct %}<span class="badge bg-success-subtle text-success">صحیح</span>{% elif item.is_correct == False %}<span class="badge bg-danger-subtle text-danger">غلط</span>{% else %}—{% endif %}</td>
+        <td class="ap-muted">{{ item.answered_at|date:"Y/m/d H:i"|default:"—" }}</td>
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=5 icon='fas fa-clipboard-check' message='پاسخی ثبت نشده' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}

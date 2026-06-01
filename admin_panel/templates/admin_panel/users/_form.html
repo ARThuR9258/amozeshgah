@@ -1,0 +1,162 @@
+{% load widget_tweaks %}
+<script>window.AP_MODAL_TITLE = "";</script>
+
+<form method="post" class="ap-glass-form"
+      action="{{ request.path }}"
+      hx-post="{{ request.path }}"
+      hx-target="#apModalBody"
+      hx-swap="innerHTML">
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+  <div class="alert ap-glass-alert text-danger mb-3">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <div class="ap-glass-hero">
+    <div class="ap-glass-hero-avatar">
+      {% if 'ویرایش' in title %}<i class="fas fa-user-edit"></i>{% else %}<i class="fas fa-user-plus"></i>{% endif %}
+    </div>
+    <div>
+      <h2>{{ title }}</h2>
+      <p>{% if 'ویرایش' in title %}ویرایش اطلاعات، دسترسی و اشتراک کاربر{% else %}اطلاعات حساب، دسترسی و اشتراک را تکمیل کنید{% endif %}</p>
+    </div>
+  </div>
+
+  <section class="ap-glass-section">
+    <div class="ap-glass-section-title"><i class="fas fa-id-card"></i> اطلاعات شخصی</div>
+    <div class="row g-2">
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-user field-icon"></i>
+            {% render_field form.first_name class="form-control" placeholder="نام" %}
+          </div>
+          {% for e in form.first_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-user field-icon"></i>
+            {% render_field form.last_name class="form-control" placeholder="نام خانوادگی" %}
+          </div>
+          {% for e in form.last_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.username.id_for_label }}">{{ form.username.label }} <span class="text-danger">*</span></label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-at field-icon"></i>
+            {% render_field form.username class="form-control" placeholder="نام کاربری" %}
+          </div>
+          {% for e in form.username.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }} <span class="text-danger">*</span></label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-mobile-alt field-icon"></i>
+            {% render_field form.phone_number class="form-control" placeholder="09123456789" dir="ltr" %}
+          </div>
+          {% for e in form.phone_number.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="ap-glass-field mb-0">
+          <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-envelope field-icon"></i>
+            {% render_field form.email class="form-control" placeholder="email@example.com" dir="ltr" %}
+          </div>
+          {% for e in form.email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ap-glass-section">
+    <div class="ap-glass-section-title"><i class="fas fa-lock"></i> امنیت</div>
+    <div class="row g-2">
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.password.id_for_label }}">{{ form.password.label }}{% if form.password.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-key field-icon"></i>
+            {% render_field form.password class="form-control" %}
+          </div>
+          {% if form.password.help_text %}<div class="form-text">{{ form.password.help_text }}</div>{% endif %}
+          {% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.confirm_password.id_for_label }}">{{ form.confirm_password.label }}{% if form.confirm_password.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-lock field-icon"></i>
+            {% render_field form.confirm_password class="form-control" %}
+          </div>
+          {% for e in form.confirm_password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ap-glass-section">
+    <div class="ap-glass-section-title"><i class="fas fa-gem"></i> اشتراک و اعتبار</div>
+    <div class="row g-2">
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.credits.id_for_label }}">{{ form.credits.label }}</label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-coins field-icon"></i>
+            {% render_field form.credits class="form-control" %}
+          </div>
+          {% if form.credits.help_text %}<div class="form-text">{{ form.credits.help_text }}</div>{% endif %}
+          {% for e in form.credits.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ap-glass-field">
+          <label for="{{ form.subscription_status.id_for_label }}">{{ form.subscription_status.label }} <span class="text-danger">*</span></label>
+          <div class="ap-glass-input-wrap">
+            <i class="fas fa-crown field-icon"></i>
+            {% render_field form.subscription_status class="form-select" %}
+          </div>
+          {% for e in form.subscription_status.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ap-glass-section">
+    <div class="ap-glass-section-title"><i class="fas fa-sliders-h"></i> دسترسی‌ها</div>
+    <div class="ap-glass-toggles">
+      <div class="ap-glass-toggle">
+        <label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+        {% render_field form.is_active class="form-check-input" role="switch" %}
+      </div>
+      <div class="ap-glass-toggle">
+        <label for="{{ form.is_staff.id_for_label }}">{{ form.is_staff.label }}</label>
+        {% render_field form.is_staff class="form-check-input" role="switch" %}
+      </div>
+      <div class="ap-glass-toggle">
+        <label for="{{ form.is_verified.id_for_label }}">{{ form.is_verified.label }}</label>
+        {% render_field form.is_verified class="form-check-input" role="switch" %}
+      </div>
+    </div>
+    {% for e in form.is_active.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+    {% for e in form.is_staff.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+    {% for e in form.is_verified.errors %}<div class="text-danger small mt-1">{{ e }}</div>{% endfor %}
+  </section>
+
+  <div class="ap-glass-actions">
+    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">انصراف</button>
+    <button type="submit" class="btn btn-submit">
+      <i class="fas fa-check ms-2"></i>{{ submit_label|default:"ذخیره" }}
+    </button>
+  </div>
+</form>

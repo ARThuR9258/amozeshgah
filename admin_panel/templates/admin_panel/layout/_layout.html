@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}پنل مدیریت{% endblock %} | آیین‌نامه پلاس</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'admin_panel/css/admin.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_panel/css/list-pages.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_panel/css/glass-form.css' %}">
+  <link rel="stylesheet" href="{% static 'admin_panel/css/glass-theme.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="ap-body">
+<div class="ap-wrapper">
+  <aside class="ap-sidebar" id="apSidebar">
+    <button type="button" class="ap-sidebar-close d-lg-none" id="apSidebarClose" aria-label="بستن"><i class="fas fa-times"></i></button>
+    <div class="ap-logo">
+      <img src="{% static 'dashboard/images/logo.svg' %}" alt="">
+      <span>پنل مدیریت</span>
+    </div>
+    <nav class="ap-nav">
+      <a href="{% url 'admin_panel:dashboard' %}" class="ap-nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <i class="fas fa-tachometer-alt"></i><span>داشبورد</span>
+      </a>
+
+      <div class="ap-nav-group {% if '/dashboard/users' in request.path %}is-open{% endif %}">
+        <button type="button" class="ap-nav-item ap-nav-toggle" data-ap-collapse="apNavUsers">
+          <i class="fas fa-users"></i><span>مدیریت کاربران</span>
+          <i class="fas fa-chevron-down ap-chevron"></i>
+        </button>
+        <div class="ap-nav-sub {% if '/dashboard/users' in request.path %}show{% endif %}" id="apNavUsers">
+          <a href="{% url 'admin_panel:users_list' %}" class="{% if request.resolver_match.url_name == 'users_list' %}active{% endif %}">لیست کاربران</a>
+          <a href="{% url 'admin_panel:users_create' %}" class="{% if request.resolver_match.url_name == 'users_create' %}active{% endif %}" hx-get="{% url 'admin_panel:users_create' %}" hx-target="#apModalBody" hx-swap="innerHTML">افزودن کاربر</a>
+        </div>
+      </div>
+
+      <div class="ap-nav-label">محتوا و آزمون</div>
+      <a href="{% url 'admin_panel:samples_list' %}" class="ap-nav-item {% if '/dashboard/samples' in request.path %}active{% endif %}">
+        <i class="fas fa-question-circle"></i><span>نمونه سوال ها</span>
+      </a>
+      <a href="{% url 'admin_panel:categories_list' %}" class="ap-nav-item {% if '/dashboard/categories' in request.path %}active{% endif %}">
+        <i class="fas fa-folder"></i><span>دسته‌بندی سوالات</span>
+      </a>
+      <a href="{% url 'admin_panel:questions_list' %}" class="ap-nav-item {% if '/dashboard/questions' in request.path %}active{% endif %}">
+        <i class="fas fa-file-alt"></i><span>بانک سوالات</span>
+      </a>
+      <a href="{% url 'admin_panel:sessions_list' %}" class="ap-nav-item {% if '/dashboard/sessions' in request.path %}active{% endif %}">
+        <i class="fas fa-user-check"></i><span>جلسات آزمون</span>
+      </a>
+      <a href="{% url 'admin_panel:answers_list' %}" class="ap-nav-item {% if '/dashboard/answers' in request.path %}active{% endif %}">
+        <i class="fas fa-clipboard-check"></i><span>پاسخ های کاربران</span>
+      </a>
+      <a href="{% url 'admin_panel:questions_list' %}" class="ap-nav-item">
+        <i class="fas fa-cogs"></i><span>گزینه ها</span>
+      </a>
+
+      <div class="ap-nav-label">مالی و ارتباط</div>
+      <div class="ap-nav-group {% if '/dashboard/plans' in request.path or '/dashboard/orders' in request.path or '/dashboard/subscriptions' in request.path or '/dashboard/credits' in request.path %}is-open{% endif %}">
+        <button type="button" class="ap-nav-item ap-nav-toggle" data-ap-collapse="apNavSubs">
+          <i class="fas fa-gem"></i><span>اشتراک و پرداخت</span>
+          {% if sidebar_pending_orders %}<span class="ap-badge">{{ sidebar_pending_orders }}</span>{% endif %}
+          <i class="fas fa-chevron-down ap-chevron"></i>
+        </button>
+        <div class="ap-nav-sub {% if '/dashboard/plans' in request.path or '/dashboard/orders' in request.path or '/dashboard/subscriptions' in request.path or '/dashboard/credits' in request.path %}show{% endif %}" id="apNavSubs">
+          <a href="{% url 'admin_panel:plans_list' %}">پلن‌ها</a>
+          <a href="{% url 'admin_panel:orders_list' %}">سفارش‌ها</a>
+          <a href="{% url 'admin_panel:subscriptions_list' %}">اشتراک کاربران</a>
+          <a href="{% url 'admin_panel:credits_list' %}">تراکنش اعتبار</a>
+        </div>
+      </div>
+      <a href="{% url 'admin_panel:contacts_list' %}" class="ap-nav-item {% if '/dashboard/contacts' in request.path %}active{% endif %}">
+        <i class="fas fa-envelope"></i><span>پیام‌های تماس</span>
+        {% if sidebar_unread_messages %}<span class="ap-badge">{{ sidebar_unread_messages }}</span>{% endif %}
+      </a>
+    </nav>
+  </aside>
+  <div class="ap-overlay" id="apOverlay"></div>
+
+  <div class="ap-main">
+    <div class="ap-bg-mesh" aria-hidden="true"></div>
+    <header class="ap-topbar">
+      <button type="button" class="ap-icon-btn d-lg-none" id="apMenuBtn"><i class="fas fa-bars"></i></button>
+      <div class="flex-grow-1"></div>
+      <a href="{% url 'first_page' %}" class="ap-icon-btn" title="مشاهده سایت" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+      <button type="button" class="ap-icon-btn" id="apThemeBtn" title="تم"><i class="fas fa-circle-half-stroke"></i></button>
+      <div class="ap-user-pill">
+        <span class="ap-avatar">{{ request.user.username|slice:":1"|upper }}</span>
+        <span class="d-none d-md-inline">{{ request.user.get_full_name|default:request.user.username }}</span>
+      </div>
+      <a href="{% url 'log_out_page' %}" class="ap-icon-btn text-danger" title="خروج"><i class="fas fa-sign-out-alt"></i></a>
+    </header>
+    <main class="ap-content">
+      {% if messages %}
+      <div class="ap-toast-stack">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show ap-alert" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+<div class="modal fade" id="apModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content ap-modal-content border-0 shadow-lg">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold" id="apModalTitle">—</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="apModalBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ap-toast-fixed" id="apToastFixed" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+<script src="{% static 'admin_panel/js/admin.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

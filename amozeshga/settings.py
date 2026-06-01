@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'quizbuilder_module',
     'subscriptions_module',
     'widget_tweaks',
+    'admin_panel.apps.AdminPanelConfig',
 ]
 
 MIDDLEWARE = [

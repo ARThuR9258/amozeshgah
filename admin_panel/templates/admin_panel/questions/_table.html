@@ -1,0 +1,28 @@
+{% with table_target='apQuestionsTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:questions_table' %}" hx-target="#{{ table_target }}" hx-trigger="change, keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-4"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو متن سوال..." value="{{ filters.q }}"></div></div>
+  <div class="col-md-3"><select name="category" class="form-select"><option value="">همه دسته‌ها</option>{% for c in categories %}<option value="{{ c.id }}" {% if filters.category == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="difficulty" class="form-select"><option value="">سختی</option>{% for k,l in difficulty_choices %}<option value="{{ k }}" {% if filters.difficulty == k %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="active" class="form-select"><option value="">وضعیت</option><option value="1" {% if filters.active == '1' %}selected{% endif %}>فعال</option><option value="0" {% if filters.active == '0' %}selected{% endif %}>غیرفعال</option></select></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>#</th><th>متن</th><th>دسته</th><th>سختی</th><th>فعال</th><th class="text-end">عملیات</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td><span class="ap-row-id">#{{ item.id }}</span></td>
+        <td><div class="fw-semibold">{{ item.text|truncatechars:80 }}</div></td>
+        <td><span class="badge bg-light text-dark border">{{ item.category.name }}</span></td>
+        <td>{{ item.get_difficulty_display }}</td>
+        <td>{% if item.is_active %}<span class="badge bg-success-subtle text-success">فعال</span>{% else %}<span class="badge bg-secondary-subtle">غیرفعال</span>{% endif %}</td>
+        {% url 'admin_panel:questions_update' item.pk as edit_url %}{% url 'admin_panel:questions_delete' item.pk as delete_url %}
+        {% include 'admin_panel/partials/_row_actions.html' with delete_confirm='حذف سوال؟' %}
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=6 icon='fas fa-file-alt' message='سوالی ثبت نشده' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}

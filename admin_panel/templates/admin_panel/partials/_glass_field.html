@@ -1,0 +1,29 @@
+{% load widget_tweaks glass_form %}
+<div class="ap-glass-field {% if field|is_textarea or field|is_file %}col-12{% else %}col-md-6{% endif %}">
+  <label for="{{ field.id_for_label }}">
+    {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+  </label>
+  {% if field|is_file %}
+  <div class="ap-glass-file-wrap">
+    <i class="fas {{ field|glass_icon }}"></i>
+    {% render_field field class="form-control" %}
+  </div>
+  {% elif field|is_textarea %}
+  <div class="ap-glass-input-wrap ap-glass-input-wrap--area">
+    <i class="fas {{ field|glass_icon }} field-icon field-icon--area"></i>
+    {% render_field field class="form-control" rows="3" %}
+  </div>
+  {% elif field|is_select %}
+  <div class="ap-glass-input-wrap">
+    <i class="fas {{ field|glass_icon }} field-icon"></i>
+    {% render_field field class="form-select" %}
+  </div>
+  {% else %}
+  <div class="ap-glass-input-wrap">
+    <i class="fas {{ field|glass_icon }} field-icon"></i>
+    {% render_field field class="form-control" %}
+  </div>
+  {% endif %}
+  {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+  {% for err in field.errors %}<div class="text-danger small mt-1">{{ err }}</div>{% endfor %}
+</div>

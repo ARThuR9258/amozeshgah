@@ -1,0 +1,46 @@
+{% extends 'admin_panel/layout/_layout.html' %}
+{% block title %}جلسه #{{ session.id }}{% endblock %}
+{% block content %}
+<div class="ap-page ap-accent-cyan">
+  <header class="ap-page-hero ap-detail-hero">
+    <div class="ap-page-hero-main">
+      <div class="ap-page-icon"><i class="fas fa-user-check"></i></div>
+      <div>
+        <nav class="ap-page-breadcrumb"><a href="{% url 'admin_panel:dashboard' %}">داشبورد</a><span>/</span><a href="{% url 'admin_panel:sessions_list' %}">جلسات</a><span>/</span><span>#{{ session.id }}</span></nav>
+        <h1>جلسه آزمون #{{ session.id }}</h1>
+        <p class="ap-muted mb-0 small">{{ session.user }} · {{ session.get_status_display }}</p>
+      </div>
+    </div>
+    <a href="{% url 'admin_panel:sessions_list' %}" class="btn btn-light rounded-pill px-4"><i class="fas fa-arrow-right ms-2"></i>بازگشت</a>
+  </header>
+  {% if summary %}
+  <div class="row g-3 mb-4 ap-stat-grid">
+    <div class="col-6 col-md-3"><div class="ap-stat-card"><strong>{{ summary.percent }}٪</strong><span>درصد نمره</span></div></div>
+    <div class="col-6 col-md-3"><div class="ap-stat-card"><strong class="text-success">{{ summary.correct_count }}</strong><span>پاسخ صحیح</span></div></div>
+    <div class="col-6 col-md-3"><div class="ap-stat-card"><strong class="text-danger">{{ summary.wrong_count }}</strong><span>پاسخ غلط</span></div></div>
+    <div class="col-6 col-md-3"><div class="ap-stat-card"><strong class="text-secondary">{{ summary.skipped_count }}</strong><span>بدون پاسخ</span></div></div>
+  </div>
+  {% endif %}
+  <div class="ap-data-card">
+    <div class="ap-data-card-head"><h2><i class="fas fa-list-check text-muted ms-2 small"></i>پاسخ‌های این جلسه</h2></div>
+    <div class="ap-data-card-body p-0">
+      <div class="ap-table-responsive border-0">
+        <table class="table ap-table align-middle mb-0">
+          <thead><tr><th>سوال</th><th>انتخاب</th><th>نتیجه</th></tr></thead>
+          <tbody>
+            {% for a in answers %}
+            <tr>
+              <td>{{ a.question.text|truncatechars:100 }}</td>
+              <td>{{ a.selected_choice|default:"—" }}</td>
+              <td>{% if a.is_correct %}<span class="badge bg-success-subtle text-success">صحیح</span>{% elif a.is_correct == False %}<span class="badge bg-danger-subtle text-danger">غلط</span>{% else %}—{% endif %}</td>
+            </tr>
+            {% empty %}
+            {% include 'admin_panel/partials/_empty_state.html' with colspan=3 icon='fas fa-clipboard' message='پاسخی ثبت نشده' %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

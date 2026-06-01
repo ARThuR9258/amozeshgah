@@ -1,0 +1,9 @@
+<tr>
+  <td colspan="{{ colspan }}" class="p-0 border-0">
+    <div class="ap-empty-state">
+      <i class="{{ icon|default:'fas fa-inbox' }}"></i>
+      <p>{{ message|default:'موردی یافت نشد' }}</p>
+      {% if hint %}<small class="text-muted d-block mt-1">{{ hint }}</small>{% endif %}
+    </div>
+  </td>
+</tr>

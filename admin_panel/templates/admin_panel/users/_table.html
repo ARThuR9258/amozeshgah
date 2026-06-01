@@ -1,0 +1,27 @@
+{% with table_target='apUsersTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:users_table' %}" hx-target="#{{ table_target }}" hx-trigger="change, keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-5"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو نام، موبایل..." value="{{ filters.q }}"></div></div>
+  <div class="col-md-3"><select name="role" class="form-select"><option value="">همه نقش‌ها</option><option value="staff" {% if filters.role == 'staff' %}selected{% endif %}>ادمین</option></select></div>
+  <div class="col-md-3"><select name="active" class="form-select"><option value="">فعالیت</option><option value="1" {% if filters.active == '1' %}selected{% endif %}>فعال</option><option value="0" {% if filters.active == '0' %}selected{% endif %}>غیرفعال</option></select></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>#</th><th>کاربر</th><th>موبایل</th><th>اشتراک</th><th>اعتبار</th><th class="text-end">عملیات</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td><span class="ap-row-id">#{{ item.id }}</span></td>
+        <td><div class="fw-semibold">{{ item.get_full_name|default:item.username }}</div><small class="ap-muted">{{ item.username }}</small></td>
+        <td dir="ltr" class="text-end">{{ item.phone_number|default:"—" }}</td>
+        <td><span class="badge bg-primary-subtle text-primary">{{ item.get_subscription_status_display }}</span></td>
+        <td><strong>{{ item.credits }}</strong></td>
+        {% url 'admin_panel:users_update' item.pk as edit_url %}{% url 'admin_panel:users_delete' item.pk as delete_url %}
+        {% include 'admin_panel/partials/_row_actions.html' with delete_confirm='حذف کاربر؟' %}
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=6 icon='fas fa-users' message='کاربری یافت نشد' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}

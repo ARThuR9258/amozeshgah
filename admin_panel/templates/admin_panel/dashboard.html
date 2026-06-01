@@ -1,0 +1,380 @@
+{% extends 'admin_panel/layout/_layout.html' %}
+{% load static humanize %}
+
+{% block title %}داشبورد{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'admin_panel/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="ap-dash">
+  <!-- هیرو -->
+  <section class="ap-dash-hero">
+    <div class="ap-dash-hero-inner">
+      <div class="ap-dash-hero-text">
+        <span class="ap-dash-badge"><i class="fas fa-circle text-success" style="font-size:.45rem"></i> پنل مدیریت فعال</span>
+        <h1>سلام، {{ request.user.get_full_name|default:request.user.username }} 👋</h1>
+        <p>خلاصه وضعیت آیین‌نامه پلاس — کاربران، فروش، آزمون‌ها و پیام‌ها را یک‌جا ببینید.</p>
+      </div>
+      <div class="ap-dash-hero-actions d-flex flex-wrap gap-2">
+        <a href="{% url 'admin_panel:users_create' %}" class="btn btn-light rounded-pill px-4 fw-semibold shadow-sm"
+           hx-get="{% url 'admin_panel:users_create' %}" hx-target="#apModalBody" hx-swap="innerHTML">
+          <i class="fas fa-user-plus ms-2"></i>کاربر جدید
+        </a>
+        <a href="{% url 'first_page' %}" class="btn btn-outline-light rounded-pill px-4" target="_blank" rel="noopener">
+          <i class="fas fa-external-link-alt ms-2"></i>مشاهده سایت
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI -->
+  <div class="row g-3 mb-3">
+    <div class="col-sm-6 col-xl-3">
+      <a href="{% url 'admin_panel:users_list' %}" class="ap-dash-kpi ap-dash-kpi--indigo text-decoration-none">
+        <div class="ap-dash-kpi-icon"><i class="fas fa-users"></i></div>
+        <div class="ap-dash-kpi-body">
+          <strong>{{ stats.users_count|intcomma }}</strong>
+          <span>کاربران ثبت‌شده</span>
+          <small>{{ stats.users_staff_count }} مدیر سیستم</small>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <a href="{% url 'admin_panel:orders_list' %}" class="ap-dash-kpi ap-dash-kpi--emerald text-decoration-none">
+        <div class="ap-dash-kpi-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="ap-dash-kpi-body">
+          <strong>{{ stats.sales_month|intcomma }}</strong>
+          <span>فروش ۳۰ روز اخیر (تومان)</span>
+          <small>امروز: {{ stats.sales_today|intcomma }} تومان</small>
+          {% if stats.pending_orders_count %}
+          <span class="ap-dash-kpi-alert"><i class="fas fa-clock"></i> {{ stats.pending_orders_count }} سفارش معلق</span>
+          {% endif %}
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <a href="{% url 'admin_panel:sessions_list' %}" class="ap-dash-kpi ap-dash-kpi--violet text-decoration-none">
+        <div class="ap-dash-kpi-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="ap-dash-kpi-body">
+          <strong>{{ stats.quizzes_open_count }}</strong>
+          <span>آزمون در جریان</span>
+          <small>از {{ stats.quizzes_count }} جلسه کل</small>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <a href="{% url 'admin_panel:contacts_list' %}" class="ap-dash-kpi ap-dash-kpi--amber text-decoration-none">
+        <div class="ap-dash-kpi-icon"><i class="fas fa-envelope"></i></div>
+        <div class="ap-dash-kpi-body">
+          <strong>{{ stats.unread_messages_count }}</strong>
+          <span>پیام خوانده‌نشده</span>
+          <small>{{ stats.messages_count }} پیام کل</small>
+          {% if stats.unread_messages_count %}
+          <span class="ap-dash-kpi-alert"><i class="fas fa-bell"></i> نیاز به بررسی</span>
+          {% endif %}
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- خلاصه سریع -->
+  <div class="ap-dash-pills mb-4">
+    <span class="badge rounded-pill ap-dash-pill"><i class="fas fa-file-pdf ms-1"></i> <strong>{{ stats.sample_questions_count }}</strong> نمونه سوال</span>
+    <span class="badge rounded-pill ap-dash-pill"><i class="fas fa-question-circle ms-1"></i> <strong>{{ stats.quiz_questions_count }}</strong> سوال آزمون</span>
+    <span class="badge rounded-pill ap-dash-pill"><i class="fas fa-folder ms-1"></i> <strong>{{ stats.categories_count }}</strong> دسته</span>
+    <span class="badge rounded-pill ap-dash-pill"><i class="fas fa-id-card ms-1"></i> <strong>{{ stats.active_subscriptions_count }}</strong> اشتراک فعال</span>
+    <span class="badge rounded-pill ap-dash-pill"><i class="fas fa-check-circle ms-1"></i> <strong>{{ stats.paid_orders_count }}</strong> سفارش پرداخت‌شده</span>
+    <span class="badge rounded-pill ap-dash-pill"><i class="fas fa-gem ms-1"></i> <strong>{{ stats.plans_count }}</strong> پلن فعال</span>
+    <span class="badge rounded-pill ap-dash-pill"><i class="fas fa-reply ms-1"></i> <strong>{{ stats.answers_count|intcomma }}</strong> پاسخ ثبت‌شده</span>
+  </div>
+
+  <!-- نمودارها -->
+  {{ chart_data|json_script:"ap-chart-data" }}
+  <section class="mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+      <div>
+        <h2 class="ap-dash-section-title mb-1"><i class="fas fa-chart-area text-primary ms-2"></i>تحلیل و نمودارها</h2>
+        <p class="text-muted small mb-0">۱۴ روز اخیر — بر اساس داده واقعی سیستم</p>
+      </div>
+    </div>
+
+    <div class="ap-dash-charts">
+      <article class="ap-dash-chart ap-dash-chart--hero ap-dash-chart--sales">
+        <header class="ap-dash-chart-head">
+          <div>
+            <h3><i class="fas fa-coins text-success"></i> روند فروش روزانه</h3>
+            <p class="text-muted small mb-0">سفارش‌های پرداخت‌شده</p>
+          </div>
+          <div class="ap-dash-chart-kpis">
+            <span class="ap-dash-chart-kpi"><em>امروز</em><strong>{{ stats.sales_today|intcomma }}</strong></span>
+            <span class="ap-dash-chart-kpi"><em>هفته</em><strong>{{ stats.sales_week|intcomma }}</strong></span>
+            <span class="ap-dash-chart-kpi ap-dash-chart-kpi--accent"><em>۱۴ روز</em><strong id="apTotalSales">—</strong></span>
+          </div>
+        </header>
+        <div class="ap-dash-canvas ap-dash-canvas--tall">
+          <canvas id="chartSales" aria-label="نمودار فروش"></canvas>
+        </div>
+      </article>
+
+      <article class="ap-dash-chart ap-dash-chart--donut">
+        <header class="ap-dash-chart-head">
+          <h3><i class="fas fa-receipt text-warning"></i> وضعیت سفارش‌ها</h3>
+        </header>
+        <div class="ap-dash-canvas ap-dash-canvas--donut">
+          <canvas id="chartOrders" aria-label="نمودار سفارش‌ها"></canvas>
+        </div>
+      </article>
+
+      <article class="ap-dash-chart">
+        <header class="ap-dash-chart-head">
+          <h3><i class="fas fa-user-plus text-primary"></i> ثبت‌نام کاربران</h3>
+          <span class="badge rounded-pill bg-primary-subtle text-primary" id="apTotalUsers">—</span>
+        </header>
+        <div class="ap-dash-canvas">
+          <canvas id="chartUsers" aria-label="نمودار کاربران"></canvas>
+        </div>
+      </article>
+
+      <article class="ap-dash-chart">
+        <header class="ap-dash-chart-head">
+          <h3><i class="fas fa-clipboard-check text-purple"></i> شرکت در آزمون</h3>
+          <span class="badge rounded-pill bg-purple-subtle text-purple" id="apTotalQuizzes">—</span>
+        </header>
+        <div class="ap-dash-canvas">
+          <canvas id="chartQuizActivity" aria-label="نمودار آزمون"></canvas>
+        </div>
+      </article>
+
+      <article class="ap-dash-chart ap-dash-chart--donut">
+        <header class="ap-dash-chart-head">
+          <h3><i class="fas fa-id-card text-info"></i> نوع اشتراک کاربران</h3>
+        </header>
+        <div class="ap-dash-canvas ap-dash-canvas--donut">
+          <canvas id="chartSubscriptions" aria-label="نمودار اشتراک"></canvas>
+        </div>
+      </article>
+
+      <article class="ap-dash-chart ap-dash-chart--donut">
+        <header class="ap-dash-chart-head">
+          <h3><i class="fas fa-tasks text-secondary"></i> وضعیت جلسات آزمون</h3>
+        </header>
+        <div class="ap-dash-canvas ap-dash-canvas--donut">
+          <canvas id="chartQuizStatus" aria-label="نمودار وضعیت آزمون"></canvas>
+        </div>
+      </article>
+
+      <article class="ap-dash-chart ap-dash-chart--wide" id="apPlanCard">
+        <header class="ap-dash-chart-head">
+          <h3><i class="fas fa-gem text-warning"></i> درآمد به تفکیک پلن</h3>
+        </header>
+        <div class="ap-dash-canvas">
+          <canvas id="chartPlans" aria-label="نمودار پلن‌ها"></canvas>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- دسترسی سریع -->
+  <div class="mb-3">
+    <h2 class="ap-dash-section-title"><i class="fas fa-th-large text-primary ms-2"></i>دسترسی سریع</h2>
+  </div>
+  <div class="row g-3 mb-4">
+    <div class="col-md-6 col-xl-4">
+      <div class="card ap-dash-module border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="ap-dash-module-icon bg-primary-subtle text-primary"><i class="fas fa-users"></i></div>
+            <span class="badge bg-light text-dark">{{ stats.users_count }} نفر</span>
+          </div>
+          <h3 class="h6 fw-bold">کاربران</h3>
+          <p class="text-muted small">مدیریت حساب‌ها و دسترسی ادمین</p>
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <a href="{% url 'admin_panel:users_list' %}" class="btn btn-sm btn-outline-primary rounded-pill">لیست</a>
+            <a href="{% url 'admin_panel:users_create' %}" class="btn btn-sm btn-primary rounded-pill"
+               hx-get="{% url 'admin_panel:users_create' %}" hx-target="#apModalBody" hx-swap="innerHTML">افزودن</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card ap-dash-module border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="ap-dash-module-icon bg-danger-subtle text-danger"><i class="fas fa-file-pdf"></i></div>
+            <span class="badge bg-light text-dark">{{ stats.sample_questions_count }} فایل</span>
+          </div>
+          <h3 class="h6 fw-bold">نمونه سوالات</h3>
+          <p class="text-muted small">مدیریت PDF نمونه سوالات</p>
+          <a href="{% url 'admin_panel:samples_list' %}" class="btn btn-sm btn-outline-primary rounded-pill mt-3">مدیریت</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card ap-dash-module border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="ap-dash-module-icon bg-purple-subtle text-purple"><i class="fas fa-clipboard-check"></i></div>
+            <span class="badge bg-light text-dark">{{ stats.quiz_questions_count }} سوال</span>
+          </div>
+          <h3 class="h6 fw-bold">آزمون‌ها</h3>
+          <p class="text-muted small">بانک سوال، دسته‌بندی و جلسات</p>
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <a href="{% url 'admin_panel:questions_list' %}" class="btn btn-sm btn-outline-primary rounded-pill">سوالات</a>
+            <a href="{% url 'admin_panel:categories_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill">دسته‌ها</a>
+            <a href="{% url 'admin_panel:sessions_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill">جلسات</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card ap-dash-module border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="ap-dash-module-icon bg-success-subtle text-success"><i class="fas fa-gem"></i></div>
+            <span class="badge bg-light text-dark">{{ stats.paid_orders_count }} پرداخت</span>
+          </div>
+          <h3 class="h6 fw-bold">اشتراک و پرداخت</h3>
+          <p class="text-muted small">پلن، سفارش و اعتبار</p>
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <a href="{% url 'admin_panel:plans_list' %}" class="btn btn-sm btn-outline-primary rounded-pill">پلن‌ها</a>
+            <a href="{% url 'admin_panel:orders_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill">سفارش‌ها</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card ap-dash-module border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="ap-dash-module-icon bg-warning-subtle text-warning"><i class="fas fa-envelope-open-text"></i></div>
+            {% if stats.unread_messages_count %}
+            <span class="badge bg-danger">{{ stats.unread_messages_count }} جدید</span>
+            {% else %}
+            <span class="badge bg-success-subtle text-success">همه خوانده</span>
+            {% endif %}
+          </div>
+          <h3 class="h6 fw-bold">پیام‌های تماس</h3>
+          <p class="text-muted small">{{ stats.messages_count }} پیام از فرم تماس</p>
+          <a href="{% url 'admin_panel:contacts_list' %}" class="btn btn-sm btn-outline-primary rounded-pill mt-3">مشاهده</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card ap-dash-module border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="ap-dash-module-icon bg-info-subtle text-info"><i class="fas fa-chart-pie"></i></div>
+            <span class="badge bg-light text-dark">{{ stats.user_quizzes_count }} شرکت</span>
+          </div>
+          <h3 class="h6 fw-bold">نتایج و پاسخ‌ها</h3>
+          <p class="text-muted small">بررسی عملکرد شرکت‌کنندگان</p>
+          <a href="{% url 'admin_panel:answers_list' %}" class="btn btn-sm btn-outline-primary rounded-pill mt-3">پاسخ‌ها</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- فعالیت اخیر -->
+  <div class="mb-3">
+    <h2 class="ap-dash-section-title"><i class="fas fa-bolt text-warning ms-2"></i>فعالیت اخیر</h2>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100 ap-dash-activity">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+          <h3 class="h6 fw-bold mb-0"><i class="fas fa-envelope text-primary ms-2"></i>آخرین پیام‌ها</h3>
+          <a href="{% url 'admin_panel:contacts_list' %}" class="small text-decoration-none">همه</a>
+        </div>
+        <div class="card-body pt-0">
+          {% if recent_messages %}
+          <ul class="list-group list-group-flush ap-dash-activity-list">
+            {% for msg in recent_messages %}
+            <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center">
+              <div class="ap-dash-avatar ap-dash-avatar--msg">{{ msg.name|slice:":1" }}</div>
+              <div class="flex-grow-1 min-width-0">
+                <a href="{% url 'admin_panel:contacts_detail' msg.pk %}" class="fw-semibold text-decoration-none d-block text-truncate">{{ msg.name }}</a>
+                <span class="text-muted small">{{ msg.get_subject_display }}</span>
+              </div>
+              <div class="text-end">
+                {% if not msg.is_read %}<span class="badge bg-danger">جدید</span>{% endif %}
+                <div class="text-muted small mt-1">{{ msg.created_at|date:"Y/m/d" }}</div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <div class="text-center text-muted py-4"><i class="fas fa-inbox fa-2x mb-2 d-block opacity-50"></i>پیامی ثبت نشده</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100 ap-dash-activity">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+          <h3 class="h6 fw-bold mb-0"><i class="fas fa-shopping-bag text-success ms-2"></i>آخرین سفارش‌ها</h3>
+          <a href="{% url 'admin_panel:orders_list' %}" class="small text-decoration-none">همه</a>
+        </div>
+        <div class="card-body pt-0">
+          {% if recent_orders %}
+          <ul class="list-group list-group-flush ap-dash-activity-list">
+            {% for order in recent_orders %}
+            <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center">
+              <div class="ap-dash-avatar ap-dash-avatar--order">{{ order.user.username|slice:":1"|upper }}</div>
+              <div class="flex-grow-1 min-width-0">
+                <strong class="d-block text-truncate">{{ order.user.get_full_name|default:order.user.username }}</strong>
+                <span class="text-muted small">{{ order.plan.name|default:"—" }} — {{ order.amount|intcomma }} تومان</span>
+              </div>
+              <div>
+                {% if order.status == 'paid' %}
+                <span class="badge bg-success-subtle text-success">{{ order.get_status_display }}</span>
+                {% elif order.status == 'pending' %}
+                <span class="badge bg-warning-subtle text-warning">{{ order.get_status_display }}</span>
+                {% else %}
+                <span class="badge bg-secondary-subtle text-secondary">{{ order.get_status_display }}</span>
+                {% endif %}
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <div class="text-center text-muted py-4"><i class="fas fa-shopping-cart fa-2x mb-2 d-block opacity-50"></i>سفارشی نیست</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100 ap-dash-activity">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+          <h3 class="h6 fw-bold mb-0"><i class="fas fa-user-clock text-info ms-2"></i>کاربران جدید</h3>
+          <a href="{% url 'admin_panel:users_list' %}" class="small text-decoration-none">همه</a>
+        </div>
+        <div class="card-body pt-0">
+          {% if recent_users %}
+          <ul class="list-group list-group-flush ap-dash-activity-list">
+            {% for u in recent_users %}
+            <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center">
+              <div class="ap-dash-avatar">{{ u.first_name|default:u.username|slice:":1"|upper }}</div>
+              <div class="flex-grow-1 min-width-0">
+                <strong class="d-block text-truncate">{{ u.get_full_name|default:u.username }}</strong>
+                <span class="text-muted small" dir="ltr">{{ u.phone_number|default:u.email|default:"—" }}</span>
+              </div>
+              <span class="text-muted small">{{ u.date_joined|date:"Y/m/d" }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <div class="text-center text-muted py-4"><i class="fas fa-users fa-2x mb-2 d-block opacity-50"></i>کاربری نیست</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="{% static 'admin_panel/js/dashboard-charts.js' %}"></script>
+{% endblock %}

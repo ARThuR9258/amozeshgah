@@ -1,0 +1,29 @@
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="ap-pagination" aria-label="صفحه‌بندی">
+  <ul class="pagination justify-content-center mb-0 flex-wrap">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="#"
+         hx-get="{{ request.path }}?page={{ page_obj.previous_page_number }}{% for k,v in filters.items %}{% if v %}&{{ k }}={{ v|urlencode }}{% endif %}{% endfor %}"
+         hx-target="#{{ table_target }}"
+         hx-swap="innerHTML">
+        <i class="fas fa-chevron-right ms-1"></i> قبلی
+      </a>
+    </li>
+    {% endif %}
+    <li class="page-item disabled">
+      <span class="page-link bg-light">صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
+    </li>
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="#"
+         hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}{% for k,v in filters.items %}{% if v %}&{{ k }}={{ v|urlencode }}{% endif %}{% endfor %}"
+         hx-target="#{{ table_target }}"
+         hx-swap="innerHTML">
+        بعدی <i class="fas fa-chevron-left me-1"></i>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}

@@ -1,0 +1,26 @@
+{% with table_target='apOrdersTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:orders_table' %}" hx-target="#{{ table_target }}" hx-trigger="change, keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-4"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو..." value="{{ filters.q }}"></div></div>
+  <div class="col-md-4"><select name="status" class="form-select"><option value="">وضعیت</option>{% for k,l in status_choices %}<option value="{{ k }}" {% if filters.status == k %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>#</th><th>کاربر</th><th>پلن</th><th>مبلغ</th><th>وضعیت</th><th class="text-end">عملیات</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td><span class="ap-row-id">#{{ item.id }}</span></td>
+        <td class="fw-semibold">{{ item.user }}</td>
+        <td>{{ item.plan.name|default:"—" }}</td>
+        <td><strong>{{ item.amount|floatformat:0 }}</strong></td>
+        <td>{% if item.status == 'paid' %}<span class="badge bg-success-subtle text-success">{{ item.get_status_display }}</span>{% elif item.status == 'pending' %}<span class="badge bg-warning-subtle text-warning">{{ item.get_status_display }}</span>{% else %}<span class="badge bg-secondary-subtle">{{ item.get_status_display }}</span>{% endif %}</td>
+        {% url 'admin_panel:orders_update' item.pk as edit_url %}
+        {% include 'admin_panel/partials/_row_actions.html' %}
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=6 icon='fas fa-shopping-bag' message='سفارشی نیست' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}

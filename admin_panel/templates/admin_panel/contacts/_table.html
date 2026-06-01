@@ -1,0 +1,25 @@
+{% with table_target='apContactsTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:contacts_table' %}" hx-target="#{{ table_target }}" hx-trigger="change, keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-6"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو نام یا ایمیل..." value="{{ filters.q }}"></div></div>
+  <div class="col-md-3"><select name="unread" class="form-select"><option value="">همه</option><option value="1" {% if filters.unread == '1' %}selected{% endif %}>خوانده‌نشده</option></select></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>نام</th><th>موضوع</th><th>تاریخ</th><th>وضعیت</th><th class="text-end">عملیات</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr class="{% if not item.is_read %}ap-row-unread{% endif %}">
+        <td class="fw-semibold">{{ item.name }}</td>
+        <td>{{ item.get_subject_display }}</td>
+        <td class="ap-muted">{{ item.created_at|date:"Y/m/d H:i" }}</td>
+        <td>{% if item.is_read %}<span class="badge bg-secondary-subtle">خوانده</span>{% else %}<span class="badge bg-warning-subtle text-warning">جدید</span>{% endif %}</td>
+        {% url 'admin_panel:contacts_detail' item.pk as detail_url %}{% url 'admin_panel:contacts_delete' item.pk as delete_url %}
+        {% include 'admin_panel/partials/_row_actions.html' with delete_confirm='حذف پیام؟' %}
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=5 icon='fas fa-envelope-open' message='پیامی نیست' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}

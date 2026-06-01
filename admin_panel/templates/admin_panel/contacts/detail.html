@@ -1,0 +1,29 @@
+{% extends 'admin_panel/layout/_layout.html' %}
+{% block title %}پیام تماس{% endblock %}
+{% block content %}
+<div class="ap-page ap-accent-amber">
+  <header class="ap-page-hero ap-detail-hero">
+    <div class="ap-page-hero-main">
+      <div class="ap-page-icon"><i class="fas fa-envelope-open-text"></i></div>
+      <div>
+        <nav class="ap-page-breadcrumb"><a href="{% url 'admin_panel:dashboard' %}">داشبورد</a><span>/</span><a href="{% url 'admin_panel:contacts_list' %}">پیام‌ها</a><span>/</span><span>{{ msg.name }}</span></nav>
+        <h1>{{ msg.name }}</h1>
+        <p class="ap-muted mb-0 small">{{ msg.email }}{% if msg.phone %} · {{ msg.phone }}{% endif %}</p>
+      </div>
+    </div>
+    <a href="{% url 'admin_panel:contacts_list' %}" class="btn btn-light rounded-pill px-4"><i class="fas fa-arrow-right ms-2"></i>بازگشت</a>
+  </header>
+  <div class="ap-detail-card">
+    <div class="ap-detail-meta">
+      <span><i class="fas fa-tag ms-1"></i> {{ msg.get_subject_display }}</span>
+      <span><i class="fas fa-clock ms-1"></i> {{ msg.created_at|date:"Y/m/d H:i" }}</span>
+      {% if msg.is_read %}<span class="badge bg-secondary-subtle">خوانده شده</span>{% else %}<span class="badge bg-warning-subtle text-warning">جدید</span>{% endif %}
+    </div>
+    <div class="ap-message-body">{{ msg.message|linebreaksbr }}</div>
+    <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+      <form method="post" action="{% url 'admin_panel:contacts_toggle_read' msg.pk %}">{% csrf_token %}<button type="submit" class="btn btn-outline-primary rounded-pill px-4"><i class="fas fa-envelope ms-2"></i>تغییر وضعیت خوانده</button></form>
+      <form method="post" action="{% url 'admin_panel:contacts_delete' msg.pk %}" onsubmit="return confirm('حذف شود؟')">{% csrf_token %}<button type="submit" class="btn btn-outline-danger rounded-pill px-4"><i class="fas fa-trash ms-2"></i>حذف</button></form>
+    </div>
+  </div>
+</div>
+{% endblock %}

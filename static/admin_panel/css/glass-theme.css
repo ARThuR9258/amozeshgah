@@ -1,0 +1,284 @@
+/* تم شیشه‌ای سراسری پنل مدیریت */
+:root {
+  --ap-glass-surface: rgba(255, 255, 255, 0.72);
+  --ap-glass-surface-strong: rgba(255, 255, 255, 0.88);
+  --ap-glass-border: rgba(255, 255, 255, 0.85);
+  --ap-glass-border-soft: rgba(148, 163, 184, 0.22);
+  --ap-glass-blur: blur(20px) saturate(1.35);
+  --ap-glass-shadow: 0 8px 32px rgba(99, 102, 241, 0.08), 0 2px 8px rgba(15, 23, 42, 0.04);
+  --ap-glass-shadow-hover: 0 16px 48px rgba(99, 102, 241, 0.14), 0 4px 16px rgba(15, 23, 42, 0.06);
+  --ap-bg-mesh-1: #e0e7ff;
+  --ap-bg-mesh-2: #f5f3ff;
+  --ap-bg-mesh-3: #ecfeff;
+}
+
+/* پس‌زمینه اصلی */
+.ap-body {
+  background: linear-gradient(145deg, #eef2ff 0%, #f8fafc 40%, #f0fdfa 100%);
+  min-height: 100vh;
+}
+
+.ap-bg-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: var(--ap-sidebar-w);
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ap-bg-mesh::before,
+.ap-bg-mesh::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+}
+
+.ap-bg-mesh::before {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  left: 10%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, transparent 70%);
+}
+
+.ap-bg-mesh::after {
+  width: 380px;
+  height: 380px;
+  bottom: -60px;
+  right: 5%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%);
+}
+
+.ap-main {
+  position: relative;
+  z-index: 1;
+}
+
+.ap-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* سایدبار — لبه شیشه‌ای */
+.ap-sidebar {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: -12px 0 48px rgba(0, 0, 0, 0.15);
+}
+
+.ap-nav-item.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.55), rgba(139, 92, 246, 0.4)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.ap-badge {
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}
+
+/* تاپ‌بار شیشه‌ای */
+.ap-topbar {
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: var(--ap-glass-blur);
+  -webkit-backdrop-filter: var(--ap-glass-blur);
+  border-bottom: 1px solid var(--ap-glass-border) !important;
+  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.06);
+  height: 68px;
+}
+
+.ap-icon-btn {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--ap-glass-border) !important;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.ap-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.12);
+}
+
+.ap-user-pill {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--ap-glass-border) !important;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+}
+
+.ap-avatar {
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+/* دکمه‌های اصلی */
+.ap-btn-primary,
+.btn-primary.ap-btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%) !important;
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+  font-weight: 700;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ap-btn-primary:hover,
+.btn-primary.ap-btn-primary:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #6d28d9 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.42);
+}
+
+/* کارت‌های عمومی */
+.ap-card,
+.ap-data-card,
+.ap-page-hero,
+.ap-detail-card,
+.ap-detail-hero.ap-page-hero,
+.ap-stat-grid .ap-stat-card {
+  background: var(--ap-glass-surface) !important;
+  backdrop-filter: var(--ap-glass-blur);
+  -webkit-backdrop-filter: var(--ap-glass-blur);
+  border: 1px solid var(--ap-glass-border) !important;
+  box-shadow: var(--ap-glass-shadow) !important;
+}
+
+.ap-data-card-head {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-bottom: 1px solid var(--ap-glass-border-soft) !important;
+  backdrop-filter: blur(12px);
+}
+
+.ap-filters-bar {
+  background: rgba(255, 255, 255, 0.45) !important;
+  border: 1px solid var(--ap-glass-border) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.ap-table-responsive {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--ap-glass-border-soft) !important;
+  backdrop-filter: blur(8px);
+}
+
+.ap-table thead th {
+  background: rgba(248, 250, 252, 0.75) !important;
+  backdrop-filter: blur(8px);
+}
+
+.ap-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.06) !important;
+}
+
+.ap-count-badge {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.ap-pagination .page-link {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--ap-glass-border-soft) !important;
+}
+
+/* پیام‌های flash */
+.ap-toast-stack .alert {
+  border-radius: 14px;
+  border: 1px solid var(--ap-glass-border);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--ap-glass-shadow);
+}
+
+.ap-toast-fixed {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.95)) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ——— داشبورد ——— */
+.ap-dash-hero {
+  box-shadow: 0 24px 56px rgba(79, 70, 229, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ap-dash-kpi {
+  background: var(--ap-glass-surface) !important;
+  backdrop-filter: var(--ap-glass-blur);
+  -webkit-backdrop-filter: var(--ap-glass-blur);
+  border: 1px solid var(--ap-glass-border) !important;
+  box-shadow: var(--ap-glass-shadow) !important;
+}
+
+.ap-dash-kpi:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--ap-glass-shadow-hover) !important;
+  border-color: rgba(99, 102, 241, 0.35) !important;
+}
+
+.ap-dash-kpi-icon {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.ap-dash-pill {
+  background: var(--ap-glass-surface) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--ap-glass-border) !important;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+}
+
+.ap-dash-chart {
+  background: var(--ap-glass-surface) !important;
+  backdrop-filter: var(--ap-glass-blur);
+  -webkit-backdrop-filter: var(--ap-glass-blur);
+  border: 1px solid var(--ap-glass-border) !important;
+  box-shadow: var(--ap-glass-shadow) !important;
+}
+
+.ap-dash-chart:hover {
+  box-shadow: var(--ap-glass-shadow-hover) !important;
+}
+
+.ap-dash-chart-kpi {
+  background: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--ap-glass-border-soft) !important;
+}
+
+.ap-dash-module,
+.ap-dash-activity {
+  background: var(--ap-glass-surface) !important;
+  backdrop-filter: var(--ap-glass-blur);
+  -webkit-backdrop-filter: var(--ap-glass-blur);
+  border: 1px solid var(--ap-glass-border) !important;
+  box-shadow: var(--ap-glass-shadow) !important;
+}
+
+.ap-dash-module:hover {
+  box-shadow: var(--ap-glass-shadow-hover) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+}
+
+.ap-dash-activity .card-header {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(10px);
+}
+
+.ap-dash-module-icon {
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.15);
+}
+
+/* overlay موبایل */
+.ap-overlay {
+  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.5) !important;
+}
+
+@media (max-width: 991.98px) {
+  .ap-bg-mesh {
+    right: 0;
+  }
+}

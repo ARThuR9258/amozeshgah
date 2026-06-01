@@ -1,0 +1,24 @@
+{% with table_target='apPlansTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:plans_table' %}" hx-target="#{{ table_target }}" hx-trigger="keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-8"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو پلن..." value="{{ filters.q }}"></div></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>نام</th><th>قیمت</th><th>نوع</th><th>فعال</th><th class="text-end">عملیات</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td class="fw-semibold"><i class="fas fa-gem text-warning ms-1"></i> {{ item.name }}</td>
+        <td><strong>{{ item.price|floatformat:0 }}</strong> <small class="ap-muted">تومان</small></td>
+        <td>{{ item.get_plan_type_display }}</td>
+        <td>{% if item.is_active %}<span class="badge bg-success-subtle text-success">فعال</span>{% else %}<span class="badge bg-secondary-subtle">غیرفعال</span>{% endif %}</td>
+        {% url 'admin_panel:plans_update' item.pk as edit_url %}{% url 'admin_panel:plans_delete' item.pk as delete_url %}
+        {% include 'admin_panel/partials/_row_actions.html' with delete_confirm='حذف پلن؟' %}
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=5 icon='fas fa-gem' message='پلنی تعریف نشده' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}

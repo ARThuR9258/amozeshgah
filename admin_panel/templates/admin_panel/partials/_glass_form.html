@@ -1,0 +1,63 @@
+{% load widget_tweaks glass_form %}
+<script>window.AP_MODAL_TITLE = "";</script>
+
+<form method="post" class="ap-glass-form {{ form_extra_class }}"
+      action="{{ request.path }}"
+      {% if multipart %}enctype="multipart/form-data" hx-encoding="multipart/form-data"{% endif %}
+      hx-post="{{ request.path }}"
+      hx-target="#apModalBody"
+      hx-swap="innerHTML">
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+  <div class="alert ap-glass-alert text-danger mb-3">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <div class="ap-glass-hero">
+    <div class="ap-glass-hero-avatar">
+      <i class="fas {{ form_icon|default:'fa-plus-circle' }}"></i>
+    </div>
+    <div>
+      <h2>{{ title }}</h2>
+      <p>{{ form_subtitle|default:"فیلدهای زیر را تکمیل و ذخیره کنید" }}</p>
+    </div>
+  </div>
+
+  <section class="ap-glass-section">
+    <div class="ap-glass-section-title">
+      <i class="fas {{ section_icon|default:'fa-edit' }}"></i> {{ section_title|default:"اطلاعات" }}
+    </div>
+    <div class="row g-2">
+      {% for field in form %}
+        {% if not field|is_checkbox %}
+          {% include 'admin_panel/partials/_glass_field.html' %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  {% form_has_checkboxes form as has_toggles %}
+  {% if has_toggles %}
+  <section class="ap-glass-section">
+    <div class="ap-glass-section-title"><i class="fas fa-toggle-on"></i> تنظیمات</div>
+    <div class="ap-glass-toggles">
+      {% for field in form %}
+        {% if field|is_checkbox %}
+        <div class="ap-glass-toggle">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {% render_field field class="form-check-input" role="switch" %}
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% for field in form %}{% if field|is_checkbox %}{% for err in field.errors %}<div class="text-danger small mt-1">{{ err }}</div>{% endfor %}{% endif %}{% endfor %}
+  </section>
+  {% endif %}
+
+  <div class="ap-glass-actions">
+    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">انصراف</button>
+    <button type="submit" class="btn btn-submit">
+      <i class="fas fa-check ms-2"></i>{{ submit_label|default:"ذخیره" }}
+    </button>
+  </div>
+</form>

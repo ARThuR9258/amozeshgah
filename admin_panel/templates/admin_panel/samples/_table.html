@@ -1,0 +1,26 @@
+{% with table_target='apSamplesTable' %}
+{% include 'admin_panel/partials/_table_meta.html' %}
+<form id="apFilterForm" class="ap-filters-bar row g-2" hx-get="{% url 'admin_panel:samples_table' %}" hx-target="#{{ table_target }}" hx-trigger="change, keyup changed delay:350ms from:input" hx-swap="innerHTML">
+  <div class="col-md-8"><div class="ap-search-wrap"><i class="fas fa-search"></i><input type="search" name="q" class="form-control" placeholder="جستجو عنوان..." value="{{ filters.q }}"></div></div>
+  <div class="col-md-3"><select name="active" class="form-select"><option value="">همه</option><option value="1" {% if filters.active == '1' %}selected{% endif %}>فعال</option><option value="0" {% if filters.active == '0' %}selected{% endif %}>غیرفعال</option></select></div>
+</form>
+<div class="ap-table-responsive">
+  <table class="table ap-table align-middle mb-0">
+    <thead><tr><th>#</th><th>عنوان</th><th>حجم</th><th>فعال</th><th>تاریخ</th><th class="text-end">عملیات</th></tr></thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td><span class="ap-row-id">#{{ item.id }}</span></td>
+        <td class="fw-semibold"><i class="fas fa-file-pdf text-danger ms-1"></i> {{ item.title }}</td>
+        <td class="ap-muted">{{ item.get_file_size }}</td>
+        <td>{% if item.is_active %}<span class="badge bg-success-subtle text-success">فعال</span>{% else %}<span class="badge bg-secondary-subtle">غیرفعال</span>{% endif %}</td>
+        <td class="ap-muted">{{ item.created_at|date:"Y/m/d" }}</td>
+        {% url 'admin_panel:samples_update' item.pk as edit_url %}{% url 'admin_panel:samples_delete' item.pk as delete_url %}
+        {% include 'admin_panel/partials/_row_actions.html' %}
+      </tr>
+      {% empty %}{% include 'admin_panel/partials/_empty_state.html' with colspan=6 icon='fas fa-file-pdf' message='فایل PDFی نیست' %}{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include 'admin_panel/partials/_pagination.html' %}
+{% endwith %}
