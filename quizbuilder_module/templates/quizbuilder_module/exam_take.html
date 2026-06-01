@@ -12,22 +12,25 @@
     <div class="container">
         <header class="exam-top card border-0 shadow-sm mb-4">
             <div class="card-body">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div class="exam-top-head">
                     <div>
                         <h1 class="h4 fw-bold mb-1">آزمون آنلاین</h1>
                         <p class="text-muted small mb-0">{{ total_questions }} سوال · {{ exam_minutes }} دقیقه</p>
                     </div>
                     <div class="exam-timer" id="exam-timer" data-seconds="{{ time_left_seconds }}">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-clock" aria-hidden="true"></i>
                         <span id="time-remaining">--:--</span>
                     </div>
                 </div>
-                <div class="progress mt-3" style="height: 8px;">
-                    <div class="progress-bar" id="exam-progress-bar" role="progressbar" style="width: 0%"></div>
+                <div class="exam-progress-wrap">
+                    <div class="exam-progress-track" aria-hidden="true">
+                        <div class="exam-progress-fill" id="exam-progress-bar" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%"></div>
+                    </div>
+                    <span class="exam-progress-text" id="exam-progress-text">۰ از {{ total_questions }} سوال</span>
                 </div>
-                <div class="d-flex justify-content-between mt-2 small text-muted">
-                    <span id="exam-progress-text">۰ از {{ total_questions }}</span>
-                    <span id="exam-save-status"></span>
+                <div class="exam-top-foot">
+                    <span class="exam-save-status" id="exam-save-status" aria-live="polite"></span>
                 </div>
             </div>
         </header>

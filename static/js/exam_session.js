@@ -24,10 +24,18 @@
         return match ? decodeURIComponent(match[2]) : '';
     }
 
+    function countAnswered() {
+        return form.querySelectorAll('.exam-option-input:checked').length;
+    }
+
     function updateProgress(answered) {
-        var pct = total ? Math.round((answered / total) * 100) : 0;
-        if (progressBar) progressBar.style.width = pct + '%';
-        if (progressText) progressText.textContent = answered + ' از ' + total + ' سوال';
+        var n = typeof answered === 'number' ? answered : countAnswered();
+        var pct = total ? Math.round((n / total) * 100) : 0;
+        if (progressBar) {
+            progressBar.style.width = pct + '%';
+            progressBar.setAttribute('aria-valuenow', String(pct));
+        }
+        if (progressText) progressText.textContent = n + ' از ' + total + ' سوال';
     }
 
     function restoreSaved() {
@@ -40,17 +48,18 @@
         } catch (e) {
             // ignore restore errors
         }
-        var answered = form.querySelectorAll('.exam-option-input:checked').length;
-        updateProgress(answered);
+        updateProgress();
     }
 
-    function setSaveStatus(msg) {
+    function setSaveStatus(msg, state) {
         if (!saveStatus) return;
         saveStatus.textContent = msg || '';
+        saveStatus.classList.remove('is-saving', 'is-saved', 'is-error');
+        if (state) saveStatus.classList.add(state);
     }
 
     function saveAnswer(questionId, choiceNumber) {
-        setSaveStatus('در حال ذخیره…');
+        setSaveStatus('در حال ذخیره…', 'is-saving');
         fetch(cfg.saveUrl, {
             method: 'POST',
             headers: {
@@ -69,14 +78,14 @@
                     return;
                 }
                 if (data && data.ok) {
-                    setSaveStatus('ذخیره شد ✓');
-                    updateProgress(data.answered || 0);
+                    setSaveStatus('ذخیره شد ✓', 'is-saved');
+                    updateProgress(typeof data.answered === 'number' ? data.answered : countAnswered());
                 } else {
-                    setSaveStatus((data && data.error) ? data.error : 'خطا در ذخیره');
+                    setSaveStatus((data && data.error) ? data.error : 'خطا در ذخیره', 'is-error');
                 }
             })
             .catch(function () {
-                setSaveStatus('خطا در ارتباط');
+                setSaveStatus('خطا در ارتباط', 'is-error');
             });
     }
 
@@ -107,6 +116,7 @@
 
     Array.prototype.forEach.call(form.querySelectorAll('.exam-option-input'), function (input) {
         input.addEventListener('change', function () {
+            updateProgress();
             saveAnswer(this.dataset.questionId, this.value);
         });
     });

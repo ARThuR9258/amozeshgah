@@ -115,6 +115,11 @@ def save_answer(session: ExamSession, question_id, choice_number) -> tuple[bool,
     if choice_number not in (1, 2, 3, 4):
         return False, 'گزینه نامعتبر است.'
 
+    try:
+        question_id = int(question_id)
+    except (TypeError, ValueError):
+        return False, 'سوال نامعتبر است.'
+
     if question_id not in (session.question_ids or []):
         return False, 'سوال در این آزمون نیست.'
 

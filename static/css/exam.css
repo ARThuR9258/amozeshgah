@@ -449,6 +449,77 @@
     position: sticky;
     top: 0.75rem;
     z-index: 100;
+    background: rgba(15, 18, 25, 0.72) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28) !important;
+}
+
+.exam-top-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.exam-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.exam-progress-track {
+    flex: 1;
+    min-width: 140px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.exam-progress-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #4dabf7, #8b5cf6);
+    box-shadow: 0 0 12px rgba(77, 171, 247, 0.45);
+    transition: width 0.35s ease;
+}
+
+.exam-progress-text {
+    font-size: 0.82rem;
+    color: var(--site-muted, rgba(255, 255, 255, 0.65));
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.exam-top-foot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    min-height: 1.25rem;
+}
+
+.exam-save-status {
+    font-size: 0.78rem;
+    color: var(--site-muted, rgba(255, 255, 255, 0.55));
+}
+
+.exam-save-status.is-saved {
+    color: #34d399;
+}
+
+.exam-save-status.is-saving {
+    color: #4dabf7;
+}
+
+.exam-save-status.is-error {
+    color: #f87171;
 }
 
 @media (max-width: 991px) {
