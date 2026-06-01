@@ -1,11 +1,13 @@
 from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
 from admin_panel.auth import AdminRequiredMixin
-from admin_panel.htmx import htmx_trigger, render_modal_form
+from admin_panel.htmx import htmx_trigger, is_htmx, render_modal_form
 
 
 class ModalFormView(AdminRequiredMixin, View):
@@ -16,6 +18,7 @@ class ModalFormView(AdminRequiredMixin, View):
     submit_create = 'ذخیره'
     submit_update = 'ثبت تغییرات'
     refresh_event = 'apRefreshTable'
+    list_url_name = ''
     multipart = False
     form_icon = 'fa-plus-circle'
     form_subtitle = ''
@@ -47,9 +50,19 @@ class ModalFormView(AdminRequiredMixin, View):
             'section_title': self.section_title,
             'section_icon': self.section_icon,
             'form_extra_class': self.form_extra_class,
+            'refresh_event': self.refresh_event,
         })
 
+    def _list_redirect(self):
+        if self.list_url_name:
+            return HttpResponseRedirect(reverse(self.list_url_name))
+        return None
+
     def _success(self, message):
+        if not is_htmx(self.request):
+            resp = self._list_redirect()
+            if resp:
+                return resp
         return htmx_trigger({
             'apModalClose': True,
             self.refresh_event: True,

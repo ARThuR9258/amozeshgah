@@ -48,6 +48,7 @@ class SampleCreateView(ModalFormView):
     section_icon = 'fa-file-pdf'
     multipart = True
     refresh_event = 'apRefreshSamples'
+    list_url_name = 'admin_panel:samples_list'
 
     def get(self, request):
         return self._render(request, self.form_class(), self.create_title, self.submit_create)
@@ -68,6 +69,7 @@ class SampleUpdateView(ModalFormView):
     section_icon = 'fa-file-pdf'
     multipart = True
     refresh_event = 'apRefreshSamples'
+    list_url_name = 'admin_panel:samples_list'
 
     def get(self, request, pk):
         obj = self.get_object(pk)
@@ -85,6 +87,7 @@ class SampleUpdateView(ModalFormView):
 class SampleDeleteView(ModalFormView):
     model = SampleQuestion
     refresh_event = 'apRefreshSamples'
+    list_url_name = 'admin_panel:samples_list'
 
     def post(self, request, pk):
         self.get_object(pk).delete()

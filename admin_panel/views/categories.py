@@ -44,6 +44,7 @@ class CategoryCreateView(ModalFormView):
     form_subtitle = 'نام، شناسه و ترتیب نمایش دسته را مشخص کنید'
     section_icon = 'fa-folder'
     refresh_event = 'apRefreshCategories'
+    list_url_name = 'admin_panel:categories_list'
 
     def get(self, request):
         return self._render(request, self.form_class(), self.create_title, self.submit_create)
@@ -63,6 +64,7 @@ class CategoryUpdateView(ModalFormView):
     form_subtitle = 'ویرایش مشخصات دسته‌بندی'
     section_icon = 'fa-folder'
     refresh_event = 'apRefreshCategories'
+    list_url_name = 'admin_panel:categories_list'
 
     def get(self, request, pk):
         obj = self.get_object(pk)
@@ -80,6 +82,7 @@ class CategoryUpdateView(ModalFormView):
 class CategoryDeleteView(ModalFormView):
     model = Category
     refresh_event = 'apRefreshCategories'
+    list_url_name = 'admin_panel:categories_list'
 
     def post(self, request, pk):
         self.get_object(pk).delete()

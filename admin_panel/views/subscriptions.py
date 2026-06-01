@@ -49,6 +49,7 @@ class PlanCreateView(ModalFormView):
     section_icon = 'fa-gem'
     form_extra_class = 'ap-glass-form--wide'
     refresh_event = 'apRefreshPlans'
+    list_url_name = 'admin_panel:plans_list'
 
     def get(self, request):
         return self._render(request, self.form_class(), self.create_title, self.submit_create)
@@ -69,6 +70,7 @@ class PlanUpdateView(ModalFormView):
     section_icon = 'fa-gem'
     form_extra_class = 'ap-glass-form--wide'
     refresh_event = 'apRefreshPlans'
+    list_url_name = 'admin_panel:plans_list'
 
     def get(self, request, pk):
         obj = self.get_object(pk)
@@ -86,6 +88,7 @@ class PlanUpdateView(ModalFormView):
 class PlanDeleteView(ModalFormView):
     model = SubscriptionPlan
     refresh_event = 'apRefreshPlans'
+    list_url_name = 'admin_panel:plans_list'
 
     def post(self, request, pk):
         self.get_object(pk).delete()
@@ -132,6 +135,7 @@ class OrderUpdateView(ModalFormView):
     model = PaymentOrder
     form_class = PaymentOrderDashboardForm
     refresh_event = 'apRefreshOrders'
+    list_url_name = 'admin_panel:orders_list'
 
     def get(self, request, pk):
         obj = self.get_object(pk)
@@ -181,6 +185,7 @@ class SubscriptionUpdateView(ModalFormView):
     form_subtitle = 'ویرایش اشتراک، تاریخ شروع و انقضا'
     section_icon = 'fa-id-card'
     refresh_event = 'apRefreshSubscriptions'
+    list_url_name = 'admin_panel:subscriptions_list'
 
     def get(self, request, pk):
         obj = self.get_object(pk)

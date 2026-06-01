@@ -3,10 +3,13 @@
 
 <form method="post" class="ap-glass-form {{ form_extra_class }}"
       action="{{ request.path }}"
+      data-ap-refresh="{{ refresh_event|default:'' }}"
       {% if multipart %}enctype="multipart/form-data" hx-encoding="multipart/form-data"{% endif %}
       hx-post="{{ request.path }}"
       hx-target="#apModalBody"
-      hx-swap="innerHTML">
+      hx-swap="innerHTML"
+      hx-indicator="#apModalIndicator"
+      hx-disabled-elt="button[type=submit], .btn-submit">
   {% csrf_token %}
 
   {% if form.non_field_errors %}

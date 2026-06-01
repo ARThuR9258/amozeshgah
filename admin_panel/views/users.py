@@ -60,6 +60,7 @@ class UserCreateView(ModalFormView):
     form_template = 'admin_panel/users/_form.html'
     create_title = 'کاربر جدید'
     refresh_event = 'apRefreshUsers'
+    list_url_name = 'admin_panel:users_list'
 
     def get(self, request):
         return self._render(request, self.form_class(), self.create_title, self.submit_create)
@@ -77,6 +78,7 @@ class UserUpdateView(ModalFormView):
     form_class = UserEditDashboardForm
     form_template = 'admin_panel/users/_form.html'
     refresh_event = 'apRefreshUsers'
+    list_url_name = 'admin_panel:users_list'
 
     def get(self, request, pk):
         obj = self.get_object(pk)
@@ -96,6 +98,7 @@ class UserUpdateView(ModalFormView):
 class UserDeleteView(ModalFormView):
     model = User
     refresh_event = 'apRefreshUsers'
+    list_url_name = 'admin_panel:users_list'
 
     def post(self, request, pk):
         obj = self.get_object(pk)

@@ -4,7 +4,12 @@
       <div class="ap-page-icon"><i class="fas {{ page_icon|default:'fa-table' }}"></i></div>
       <div>
         <nav class="ap-page-breadcrumb" aria-label="breadcrumb">
-          <a href="{% url 'admin_panel:dashboard' %}"><i class="fas fa-home"></i> داشبورد</a>
+          <a href="{% url 'admin_panel:dashboard' %}"
+             hx-boost="true"
+             hx-target="#apMainContent"
+             hx-select="#apMainContent"
+             hx-swap="innerHTML show:window:top"
+             hx-push-url="true"><i class="fas fa-home"></i> داشبورد</a>
           <span>/</span>
           <span>{{ page_title }}</span>
         </nav>
@@ -16,7 +21,10 @@
       {% block list_header_actions %}{% endblock %}
       {% if create_url %}
       <button type="button" class="btn btn-primary ap-btn-primary rounded-pill px-4 shadow-sm"
-              hx-get="{{ create_url }}" hx-target="#apModalBody" hx-swap="innerHTML">
+              hx-get="{{ create_url }}"
+              hx-target="#apModalBody"
+              hx-swap="innerHTML"
+              hx-indicator="#apModalIndicator">
         <i class="fas fa-plus ms-2"></i>افزودن
       </button>
       {% endif %}
@@ -31,14 +39,16 @@
       {% block list_filters %}{% endblock %}
       <div id="{{ table_id }}"
            class="ap-table-wrap"
+           data-ap-table-url="{{ table_url }}"
            hx-get="{{ table_url }}"
            hx-trigger="load, {{ refresh_event }} from:body"
            hx-target="#{{ table_id }}"
            hx-swap="innerHTML"
-           hx-include="{{ filter_form_id|default:'#apFilterForm' }}">
-        <div class="ap-loading py-5 text-center">
+           hx-include="{{ filter_form_id|default:'#apFilterForm' }}"
+           hx-indicator="#{{ table_id }}">
+        <div class="ap-table-initial-load py-5 text-center ap-muted small">
           <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
-          <span class="d-block mt-2 ap-muted small">در حال بارگذاری…</span>
+          <span class="d-block mt-2">در حال بارگذاری…</span>
         </div>
       </div>
     </div>

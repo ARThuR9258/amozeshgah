@@ -3,9 +3,12 @@
 
 <form method="post" class="ap-glass-form"
       action="{{ request.path }}"
+      data-ap-refresh="{{ refresh_event|default:'apRefreshUsers' }}"
       hx-post="{{ request.path }}"
       hx-target="#apModalBody"
-      hx-swap="innerHTML">
+      hx-swap="innerHTML"
+      hx-indicator="#apModalIndicator"
+      hx-disabled-elt="button[type=submit], .btn-submit">
   {% csrf_token %}
 
   {% if form.non_field_errors %}

@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
   <title>{% block title %}پنل مدیریت{% endblock %} | آیین‌نامه پلاس</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -14,7 +15,7 @@
   <link rel="stylesheet" href="{% static 'admin_panel/css/glass-theme.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
-<body class="ap-body">
+<body class="ap-body" data-ap-charts-js="{% static 'admin_panel/js/dashboard-charts.js' %}">
 <div class="ap-wrapper">
   <aside class="ap-sidebar" id="apSidebar">
     <button type="button" class="ap-sidebar-close d-lg-none" id="apSidebarClose" aria-label="بستن"><i class="fas fa-times"></i></button>
@@ -22,7 +23,13 @@
       <img src="{% static 'dashboard/images/logo.svg' %}" alt="">
       <span>پنل مدیریت</span>
     </div>
-    <nav class="ap-nav">
+    <nav class="ap-nav" id="apSidebarNav"
+         hx-boost="true"
+         hx-target="#apMainContent"
+         hx-select="#apMainContent"
+         hx-swap="innerHTML show:window:top"
+         hx-push-url="true"
+         hx-indicator="#apGlobalIndicator">
       <a href="{% url 'admin_panel:dashboard' %}" class="ap-nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
         <i class="fas fa-tachometer-alt"></i><span>داشبورد</span>
       </a>
@@ -34,7 +41,11 @@
         </button>
         <div class="ap-nav-sub {% if '/dashboard/users' in request.path %}show{% endif %}" id="apNavUsers">
           <a href="{% url 'admin_panel:users_list' %}" class="{% if request.resolver_match.url_name == 'users_list' %}active{% endif %}">لیست کاربران</a>
-          <a href="{% url 'admin_panel:users_create' %}" class="{% if request.resolver_match.url_name == 'users_create' %}active{% endif %}" hx-get="{% url 'admin_panel:users_create' %}" hx-target="#apModalBody" hx-swap="innerHTML">افزودن کاربر</a>
+          <a href="{% url 'admin_panel:users_create' %}" class="{% if request.resolver_match.url_name == 'users_create' %}active{% endif %}"
+             hx-boost="false"
+             hx-get="{% url 'admin_panel:users_create' %}"
+             hx-target="#apModalBody"
+             hx-swap="innerHTML">افزودن کاربر</a>
         </div>
       </div>
 
@@ -93,7 +104,10 @@
       </div>
       <a href="{% url 'log_out_page' %}" class="ap-icon-btn text-danger" title="خروج"><i class="fas fa-sign-out-alt"></i></a>
     </header>
-    <main class="ap-content">
+    <div id="apGlobalIndicator" class="ap-global-indicator htmx-indicator" aria-hidden="true">
+      <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+    </div>
+    <main class="ap-content" id="apMainContent">
       {% if messages %}
       <div class="ap-toast-stack">
         {% for message in messages %}
@@ -116,7 +130,11 @@
         <h5 class="modal-title fw-bold" id="apModalTitle">—</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body" id="apModalBody"></div>
+      <div class="modal-body position-relative" id="apModalBody">
+        <div id="apModalIndicator" class="ap-modal-indicator htmx-indicator" aria-hidden="true">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

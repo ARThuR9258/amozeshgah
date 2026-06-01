@@ -2,10 +2,13 @@
 <script>window.AP_MODAL_TITLE = "{{ title|escapejs }}";</script>
 <form method="post" class="ap-form-modal"
       action="{{ request.path }}"
+      data-ap-refresh="{{ refresh_event|default:'' }}"
       {% if multipart %}enctype="multipart/form-data" hx-encoding="multipart/form-data"{% endif %}
       hx-post="{{ request.path }}"
       hx-target="#apModalBody"
-      hx-swap="innerHTML">
+      hx-swap="innerHTML"
+      hx-indicator="#apModalIndicator"
+      hx-disabled-elt="button[type=submit]">
   {% csrf_token %}
   {% if form.non_field_errors %}
   <div class="alert alert-danger border-0 rounded-3">{{ form.non_field_errors }}</div>

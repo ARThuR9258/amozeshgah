@@ -60,6 +60,7 @@ class QuestionCreateView(ModalFormView):
     multipart = True
     form_extra_class = 'ap-glass-form--wide'
     refresh_event = 'apRefreshQuestions'
+    list_url_name = 'admin_panel:questions_list'
 
     def get(self, request):
         return self._render(request, self.form_class(), self.create_title, self.submit_create)
@@ -82,6 +83,7 @@ class QuestionUpdateView(ModalFormView):
     multipart = True
     form_extra_class = 'ap-glass-form--wide'
     refresh_event = 'apRefreshQuestions'
+    list_url_name = 'admin_panel:questions_list'
 
     def get(self, request, pk):
         obj = self.get_object(pk)
@@ -99,6 +101,7 @@ class QuestionUpdateView(ModalFormView):
 class QuestionDeleteView(ModalFormView):
     model = Question
     refresh_event = 'apRefreshQuestions'
+    list_url_name = 'admin_panel:questions_list'
 
     def post(self, request, pk):
         self.get_object(pk).delete()
