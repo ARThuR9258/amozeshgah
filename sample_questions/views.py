@@ -15,10 +15,46 @@ class SampleQuestionListView(ListView):
     model = SampleQuestion
     template_name = 'sample_questions/question_list.html'
     context_object_name = 'question_papers'
-    paginate_by = 10
+    paginate_by = 9
 
     def get_queryset(self):
-        return SampleQuestion.objects.filter(is_active=True).order_by('-created_at')
+        qs = SampleQuestion.objects.filter(is_active=True)
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            qs = qs.filter(Q(title__icontains=q) | Q(description__icontains=q))
+
+        sort = self.request.GET.get('sort', 'newest')
+        if sort == 'oldest':
+            qs = qs.order_by('created_at')
+        elif sort == 'title':
+            qs = qs.order_by('title')
+        else:
+            qs = qs.order_by('-created_at')
+
+        self._browse_query = build_pagination_query(self.request, exclude=('page',))
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        search_query = self.request.GET.get('q', '').strip()
+        sort = self.request.GET.get('sort', 'newest')
+        result_count = context['paginator'].count if context.get('paginator') else 0
+
+        context.update({
+            'search_query': search_query,
+            'sort': sort,
+            'result_count': result_count,
+            'has_active_filters': bool(search_query) or sort != 'newest',
+            'browse_query': getattr(self, '_browse_query', ''),
+            'toolbar_action': '',
+            'search_placeholder': 'جستجو در عنوان یا توضیحات...',
+            'sort_options': [
+                ('newest', 'جدیدترین'),
+                ('oldest', 'قدیمی‌ترین'),
+                ('title', 'عنوان (الفبا)'),
+            ],
+        })
+        return context
 
 
 def download_question_paper(request, pk):

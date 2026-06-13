@@ -1,174 +1,306 @@
 {% extends 'shared/_layout.html' %}
 {% load static humanize %}
 
-{% block title %}پنل کاربری — آیین‌نامه پلاس{% endblock %}
+{% block title %}پنل کاربری — آیین یار{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user_panel.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="user-panel-page">
-    <div class="container">
+<div class="up-page">
+    <div class="up-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
 
-        <header class="panel-header" data-aos="fade-up">
-            <div class="avatar-ring">
-                <div class="avatar-inner"><i class="fas fa-user"></i></div>
+        <header class="up-hero" data-aos="fade-up">
+            <div class="up-hero-profile">
+                <div class="up-avatar-ring">
+                    <div class="up-avatar-inner"><i class="fas fa-user"></i></div>
+                </div>
+                <div class="up-hero-info">
+                    <span class="up-welcome">خوش آمدید</span>
+                    <h1 class="up-name">{{ full_name }}</h1>
+                    <p class="up-meta">
+                        <span><i class="fas fa-mobile-alt"></i> {{ phone_number }}</span>
+                        {% if email != '—' %}
+                        <span><i class="fas fa-envelope"></i> {{ email }}</span>
+                        {% endif %}
+                    </p>
+                    <span class="up-plan-badge up-plan-badge--{% if user.subscription_status == 'premium' %}premium{% elif user.subscription_status == 'credit' %}credit{% else %}free{% endif %}">
+                        <i class="fas fa-{% if user.is_premium %}crown{% elif credits %}coins{% else %}user{% endif %}"></i>
+                        پلن {{ subscription_label }}
+                    </span>
+                </div>
             </div>
-            <div class="flex-grow-1">
-                <h1>{{ full_name }}</h1>
-                <p class="meta mb-2">
-                    <i class="fas fa-mobile-alt me-1"></i>{{ phone_number }}
-                    {% if email != '—' %} · <i class="fas fa-envelope me-1"></i>{{ email }}{% endif %}
-                </p>
-                <span class="badge-plan {% if user.subscription_status == 'premium' %}premium{% elif user.subscription_status == 'credit' %}credit{% else %}free{% endif %}">
-                    <i class="fas fa-{% if user.is_premium %}crown{% elif credits %}coins{% else %}user{% endif %}"></i>
-                    پلن {{ subscription_label }}
-                </span>
+
+            {% if total_quizzes_done %}
+            <div class="up-pass-ring" style="--up-pct: {% widthratio total_pass total_quizzes_done 100 %}">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="up-ring-bg" cx="60" cy="60" r="52"></circle>
+                    <circle class="up-ring-fill" cx="60" cy="60" r="52"></circle>
+                </svg>
+                <div class="up-pass-ring-label">
+                    <strong>{% widthratio total_pass total_quizzes_done 100 %}٪</strong>
+                    <small>نرخ قبولی</small>
+                </div>
             </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="{% url 'subscriptions:pricing' %}" class="btn-panel primary"><i class="fas fa-gem"></i> ارتقا پلن</a>
-                <a href="{% url 'quizbuilder:quiz_list' %}" class="btn-panel outline"><i class="fas fa-play"></i> آزمون‌ها</a>
-                <a href="{% url 'log_out_page' %}" class="btn-panel outline"><i class="fas fa-sign-out-alt"></i> خروج</a>
+            {% endif %}
+
+            <div class="up-hero-actions">
+                <a href="{% url 'quizbuilder:exam_hub' %}" class="up-btn-primary">
+                    <i class="fas fa-play"></i> آزمون آنلاین
+                </a>
+                <a href="{% url 'wrong_questions_list' %}" class="up-btn-outline">
+                    <i class="fas fa-book-open"></i> سوالات اشتباه
+                </a>
+                <a href="{% url 'subscriptions:pricing' %}" class="up-btn-outline">
+                    <i class="fas fa-gem"></i> ارتقا پلن
+                </a>
+                <a href="{% url 'log_out_page' %}" class="up-btn-ghost">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </a>
             </div>
         </header>
 
         {% if pending_session %}
-        <div class="resume-banner" data-aos="fade-up">
-            <div class="resume-banner-body">
-                <i class="fas fa-hourglass-half"></i>
-                <div>
-                    <strong>آزمون ناتمام دارید</strong>
-                    <p>جلسه #{{ pending_session.id }} — از همان‌جا ادامه دهید</p>
-                </div>
+        <div class="up-alert up-alert--resume" data-aos="fade-up">
+            <div class="up-alert-icon"><i class="fas fa-hourglass-half"></i></div>
+            <div class="up-alert-text">
+                <strong>آزمون ناتمام دارید</strong>
+                <span>جلسه #{{ pending_session.id }} — از همان‌جا ادامه دهید</span>
             </div>
-            <a href="{% url 'quizbuilder:exam_take' pending_session.pk %}" class="btn-panel primary">
-                <i class="fas fa-play"></i> ادامه آزمون
-            </a>
+            <a href="{% url 'quizbuilder:exam_take' pending_session.pk %}" class="up-btn-sm">ادامه آزمون</a>
         </div>
         {% endif %}
 
-        <div class="access-banner" data-aos="fade-up">
-            <p><i class="fas fa-info-circle me-2"></i>{{ quiz_access.message }}</p>
+        <div class="up-access-banner {% if quiz_access.allowed %}up-access-ok{% else %}up-access-warn{% endif %}" data-aos="fade-up">
+            <i class="fas fa-{% if quiz_access.allowed %}shield-halved{% else %}triangle-exclamation{% endif %}"></i>
+            <p>{{ quiz_access.message }}</p>
             {% if not user.is_premium and credits == 0 %}
-            <a href="{% url 'subscriptions:pricing' %}" class="btn-panel primary btn-sm">خرید اشتراک</a>
+            <a href="{% url 'subscriptions:pricing' %}" class="up-btn-sm">خرید اشتراک</a>
             {% endif %}
         </div>
 
-        <div class="stat-grid" data-aos="fade-up">
-            <div class="stat-card">
-                <div class="icon blue"><i class="fas fa-coins"></i></div>
-                <div class="value">{{ credits|intcomma }}</div>
-                <div class="label">اعتبار باقی‌مانده</div>
+        <div class="up-quick-actions" data-aos="fade-up">
+            <a href="{% url 'quizbuilder:exam_hub' %}" class="up-quick-card up-quick-exam">
+                <div class="up-quick-icon"><i class="fas fa-clipboard-list"></i></div>
+                <div>
+                    <strong>شروع آزمون</strong>
+                    <span>آزمون آنلاین آیین‌نامه</span>
+                </div>
+                <i class="fas fa-chevron-left up-quick-arrow"></i>
+            </a>
+            <a href="{% url 'wrong_questions_list' %}" class="up-quick-card up-quick-wrong">
+                <div class="up-quick-icon"><i class="fas fa-dumbbell"></i></div>
+                <div>
+                    <strong>تمرین اشتباهات</strong>
+                    <span>یادگیری سوالات غلط</span>
+                </div>
+                <i class="fas fa-chevron-left up-quick-arrow"></i>
+            </a>
+            <a href="{% url 'subscriptions:pricing' %}" class="up-quick-card up-quick-plan">
+                <div class="up-quick-icon"><i class="fas fa-gem"></i></div>
+                <div>
+                    <strong>پلن و اشتراک</strong>
+                    <span>ارتقا و خرید اعتبار</span>
+                </div>
+                <i class="fas fa-chevron-left up-quick-arrow"></i>
+            </a>
+        </div>
+
+        <div class="up-stats-grid" data-aos="fade-up">
+            <div class="up-stat-card up-stat-credits">
+                <div class="up-stat-icon"><i class="fas fa-coins"></i></div>
+                <div class="up-stat-body">
+                    <div class="up-stat-value">{{ credits|intcomma }}</div>
+                    <div class="up-stat-label">اعتبار باقی‌مانده</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="icon green"><i class="fas fa-calendar-day"></i></div>
-                <div class="value">{{ free_attempts_left }}</div>
-                <div class="label">آزمون رایگان امروز</div>
+            <div class="up-stat-card up-stat-free">
+                <div class="up-stat-icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="up-stat-body">
+                    <div class="up-stat-value">{{ free_attempts_left }}</div>
+                    <div class="up-stat-label">آزمون رایگان امروز</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="icon purple"><i class="fas fa-clipboard-check"></i></div>
-                <div class="value">{{ total_quizzes_done }}</div>
-                <div class="label">آزمون انجام‌شده</div>
+            <div class="up-stat-card up-stat-done">
+                <div class="up-stat-icon"><i class="fas fa-clipboard-check"></i></div>
+                <div class="up-stat-body">
+                    <div class="up-stat-value">{{ total_quizzes_done }}</div>
+                    <div class="up-stat-label">آزمون انجام‌شده</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="icon green"><i class="fas fa-trophy"></i></div>
-                <div class="value">{{ total_pass }}</div>
-                <div class="label">قبولی (≥{{ pass_percent_threshold }}٪)</div>
+            <div class="up-stat-card up-stat-pass">
+                <div class="up-stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="up-stat-body">
+                    <div class="up-stat-value">{{ total_pass }}</div>
+                    <div class="up-stat-label">قبولی (≥{{ pass_percent_threshold }}٪)</div>
+                </div>
             </div>
             {% if active_subscription %}
-            <div class="stat-card stat-card--wide">
-                <div class="icon purple"><i class="fas fa-clock"></i></div>
-                <div class="value value-sm">{{ subscription_expires }}</div>
-                <div class="label">انقضای {{ plan_name }}</div>
+            <div class="up-stat-card up-stat-expire">
+                <div class="up-stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="up-stat-body">
+                    <div class="up-stat-value up-stat-value--sm">{{ subscription_expires }}</div>
+                    <div class="up-stat-label">انقضای {{ plan_name }}</div>
+                </div>
             </div>
             {% endif %}
         </div>
 
         {% if chart_percents_json != '[]' %}
-        <div class="panel-card panel-card--chart" data-aos="fade-up">
-            <h2><i class="fas fa-chart-line me-2"></i>نمودار پیشرفت</h2>
-            <p class="chart-subtitle">درصد نمره در ۱۰ آزمون اخیر</p>
-            <canvas id="progressChart" height="120"></canvas>
+        <div class="up-panel up-panel-chart" data-aos="fade-up">
+            <div class="up-panel-head">
+                <div>
+                    <h2><i class="fas fa-chart-line"></i> نمودار پیشرفت</h2>
+                    <p>درصد نمره در ۱۰ آزمون اخیر</p>
+                </div>
+            </div>
+            <div class="up-chart-wrap">
+                <canvas id="progressChart" height="120"></canvas>
+            </div>
         </div>
         {% endif %}
 
-        <div class="panel-dashboard">
-            <div class="panel-card panel-card--history" data-aos="fade-up">
-                <h2><i class="fas fa-history me-2"></i>تاریخچه آزمون‌ها</h2>
+        <div class="up-dashboard" data-aos="fade-up">
+            <div class="up-panel up-panel-history">
+                <div class="up-panel-head">
+                    <h2><i class="fas fa-history"></i> تاریخچه آزمون‌ها</h2>
+                </div>
                 {% if exam_history %}
-                <div class="history-list">
+                <div class="up-history-list">
                     {% for item in exam_history %}
-                    <div class="history-item">
-                        <div class="history-main">
-                            <strong>آزمون #{{ item.session.id }}</strong>
-                            <span class="history-date">{{ item.session.finished_at|default:item.session.started_at|date:"Y/m/d H:i" }}</span>
+                    <div class="up-history-item">
+                        <div class="up-history-left">
+                            <span class="up-history-num">#{{ item.session.id }}</span>
+                            <div>
+                                <strong>آزمون {{ item.session.started_at|date:"Y/m/d" }}</strong>
+                                <span class="up-history-date">{{ item.session.finished_at|default:item.session.started_at|date:"H:i" }}</span>
+                            </div>
                         </div>
-                        <div class="history-meta">
-                            <span class="history-percent {% if item.passed %}pass{% else %}fail{% endif %}">{{ item.percent }}٪</span>
-                            <span class="history-score">{{ item.session.correct_count }} صحیح</span>
-                            <a href="{% url 'quizbuilder:exam_result' item.session.pk %}" class="btn-panel outline btn-sm">نتیجه</a>
+                        <div class="up-history-bar-wrap">
+                            <div class="up-history-bar">
+                                <div class="up-history-bar-fill {% if item.passed %}is-pass{% else %}is-fail{% endif %}" style="width: {{ item.percent }}%"></div>
+                            </div>
+                            <span class="up-history-percent {% if item.passed %}pass{% else %}fail{% endif %}">{{ item.percent }}٪</span>
+                        </div>
+                        <div class="up-history-right">
+                            <span class="up-history-score">{{ item.session.correct_count }} صحیح</span>
+                            <a href="{% url 'quizbuilder:exam_result' item.session.pk %}" class="up-btn-xs">نتیجه</a>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="empty-hint">هنوز آزمونی نداده‌اید. <a href="{% url 'quizbuilder:quiz_list' %}">شروع کنید</a></p>
+                <div class="up-empty">
+                    <div class="up-empty-icon"><i class="fas fa-clipboard"></i></div>
+                    <p>هنوز آزمونی نداده‌اید</p>
+                    <a href="{% url 'quizbuilder:exam_hub' %}" class="up-btn-primary up-btn-sm-inline">
+                        <i class="fas fa-play"></i> شروع اولین آزمون
+                    </a>
+                </div>
                 {% endif %}
             </div>
 
-            <div class="panel-card panel-card--account" data-aos="fade-up" data-aos-delay="50">
-                <h2><i class="fas fa-id-card me-2"></i>اطلاعات حساب</h2>
-                <div class="info-row"><span>نام کاربری</span><span>{{ user.username|default:"—" }}</span></div>
-                <div class="info-row"><span>وضعیت</span><span>{{ is_active }}</span></div>
-                <div class="info-row"><span>عضویت از</span><span>{{ date_joined }}</span></div>
-                {% if active_subscription %}
-                <div class="info-row"><span>اشتراک فعال</span><span class="text-accent">{{ plan_name }}</span></div>
-                <div class="info-row"><span>تاریخ انقضا</span><span>{{ subscription_expires }}</span></div>
+            <div class="up-side-col">
+                <div class="up-panel up-panel-wrong">
+                    <div class="up-panel-head">
+                        <h2><i class="fas fa-book-open"></i> سوالات اشتباه</h2>
+                    </div>
+                    <p class="up-panel-desc">سوالات اشتباه شما ذخیره می‌شوند تا بتوانید دوباره تمرین کنید.</p>
+                    <div class="up-panel-actions">
+                        <a href="{% url 'wrong_questions_list' %}" class="up-btn-primary up-btn-block">
+                            <i class="fas fa-list"></i> مشاهده لیست
+                        </a>
+                        <form method="post" action="{% url 'wrong_questions_exam_start' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="up-btn-outline up-btn-block">
+                                <i class="fas fa-dumbbell"></i> آزمون تمرین
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="up-panel up-panel-account">
+                    <div class="up-panel-head">
+                        <h2><i class="fas fa-id-card"></i> اطلاعات حساب</h2>
+                    </div>
+                    <div class="up-info-list">
+                        <div class="up-info-row">
+                            <span class="up-info-label"><i class="fas fa-user"></i> نام کاربری</span>
+                            <span>{{ user.username|default:"—" }}</span>
+                        </div>
+                        <div class="up-info-row">
+                            <span class="up-info-label"><i class="fas fa-circle-check"></i> وضعیت</span>
+                            <span class="up-info-badge">{{ is_active }}</span>
+                        </div>
+                        <div class="up-info-row">
+                            <span class="up-info-label"><i class="fas fa-calendar-plus"></i> عضویت از</span>
+                            <span>{{ date_joined }}</span>
+                        </div>
+                        {% if active_subscription %}
+                        <div class="up-info-row">
+                            <span class="up-info-label"><i class="fas fa-gem"></i> اشتراک</span>
+                            <span class="up-info-accent">{{ plan_name }}</span>
+                        </div>
+                        <div class="up-info-row">
+                            <span class="up-info-label"><i class="fas fa-hourglass-end"></i> انقضا</span>
+                            <span>{{ subscription_expires }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if recent_orders %}
+                <div class="up-panel up-panel-orders">
+                    <div class="up-panel-head">
+                        <h2><i class="fas fa-shopping-bag"></i> سفارش‌ها</h2>
+                    </div>
+                    <div class="up-orders-list">
+                        {% for order in recent_orders %}
+                        <div class="up-order-item">
+                            <div>
+                                <strong>{{ order.plan.name }}</strong>
+                                <span class="up-order-date">{{ order.created_at|date:"Y/m/d" }}</span>
+                            </div>
+                            <div class="up-order-right">
+                                <span class="up-order-amount">{{ order.amount|intcomma }} تومان</span>
+                                <span class="up-order-status up-order-status--{{ order.status }}">{{ order.get_status_display }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'subscriptions:pricing' %}" class="up-panel-link">مشاهده پلن‌ها <i class="fas fa-arrow-left"></i></a>
+                </div>
                 {% endif %}
             </div>
-
-            {% if recent_orders %}
-            <div class="panel-card panel-card--orders" data-aos="fade-up" data-aos-delay="100">
-                <h2><i class="fas fa-shopping-bag me-2"></i>سفارش‌ها و فاکتور</h2>
-                <div class="orders-list">
-                    {% for order in recent_orders %}
-                    <div class="order-item">
-                        <div>
-                            <strong>{{ order.plan.name }}</strong>
-                            <span class="order-date">{{ order.created_at|date:"Y/m/d" }}</span>
-                        </div>
-                        <div class="order-right">
-                            <span class="order-amount">{{ order.amount|intcomma }} تومان</span>
-                            <span class="order-status order-status--{{ order.status }}">{{ order.get_status_display }}</span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <a href="{% url 'subscriptions:pricing' %}" class="panel-link">مشاهده پلن‌ها <i class="fas fa-arrow-left"></i></a>
-            </div>
-            {% endif %}
-
-            {% if recent_transactions %}
-            <div class="panel-card panel-card--transactions" data-aos="fade-up">
-                <h2><i class="fas fa-receipt me-2"></i>تراکنش‌های اعتبار</h2>
-                <div class="tx-list">
-                    {% for tx in recent_transactions %}
-                    <div class="tx-item">
-                        <div class="tx-item-main">
-                            <span class="tx-type">{{ tx.get_transaction_type_display }}</span>
-                            <span class="tx-date">{{ tx.created_at|date:"Y/m/d H:i" }}</span>
-                        </div>
-                        <div class="tx-item-amount {% if tx.amount > 0 %}amount-plus{% else %}amount-minus{% endif %}">
-                            <span>{% if tx.amount > 0 %}+{% endif %}{{ tx.amount }}</span>
-                            <small>موجودی: {{ tx.balance_after }}</small>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
         </div>
+
+        {% if recent_transactions %}
+        <div class="up-panel up-panel-tx" data-aos="fade-up">
+            <div class="up-panel-head">
+                <h2><i class="fas fa-receipt"></i> تراکنش‌های اعتبار</h2>
+            </div>
+            <div class="up-tx-grid">
+                {% for tx in recent_transactions %}
+                <div class="up-tx-item">
+                    <div class="up-tx-icon {% if tx.amount > 0 %}plus{% else %}minus{% endif %}">
+                        <i class="fas fa-{% if tx.amount > 0 %}arrow-up{% else %}arrow-down{% endif %}"></i>
+                    </div>
+                    <div class="up-tx-main">
+                        <strong>{{ tx.get_transaction_type_display }}</strong>
+                        <span>{{ tx.created_at|date:"Y/m/d H:i" }}</span>
+                    </div>
+                    <div class="up-tx-amount {% if tx.amount > 0 %}plus{% else %}minus{% endif %}">
+                        <span>{% if tx.amount > 0 %}+{% endif %}{{ tx.amount }}</span>
+                        <small>موجودی: {{ tx.balance_after }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}
@@ -182,6 +314,11 @@
     var data = {{ chart_percents_json|safe }};
     var ctx = document.getElementById('progressChart');
     if (!ctx || typeof Chart === 'undefined') return;
+
+    var grad = ctx.getContext('2d').createLinearGradient(0, 0, 0, 200);
+    grad.addColorStop(0, 'rgba(77, 171, 247, 0.35)');
+    grad.addColorStop(1, 'rgba(139, 92, 246, 0.02)');
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -190,20 +327,50 @@
                 label: 'درصد نمره',
                 data: data,
                 borderColor: '#4dabf7',
-                backgroundColor: 'rgba(77, 171, 247, 0.15)',
+                backgroundColor: grad,
                 fill: true,
                 tension: 0.4,
-                pointRadius: 5,
+                pointRadius: 6,
+                pointHoverRadius: 8,
                 pointBackgroundColor: '#8b5cf6',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                borderWidth: 2.5,
             }],
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { min: 0, max: 100, ticks: { callback: function (v) { return v + '٪'; } } },
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(26, 32, 48, 0.95)',
+                    titleColor: '#f0f2f5',
+                    bodyColor: '#94a3b8',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderWidth: 1,
+                    padding: 12,
+                    callbacks: {
+                        label: function (ctx) { return ctx.parsed.y + '٪'; }
+                    }
+                }
             },
-        },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: { color: '#94a3b8', font: { size: 11 } }
+                },
+                y: {
+                    min: 0,
+                    max: 100,
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: {
+                        color: '#94a3b8',
+                        callback: function (v) { return v + '٪'; }
+                    }
+                }
+            }
+        }
     });
 })();
 </script>

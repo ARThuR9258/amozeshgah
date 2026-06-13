@@ -7,7 +7,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}آیین‌نامه پلاس - قبولی تضمینی آزمون آیین‌نامه ۱۴۰۴{% endblock %}</title>
+    <title>{% block title %}آیین یار — موفقیت در آزمون رانندگی{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/logo-icon.png' %}">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,6 +19,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
     <link rel="stylesheet" href="{% static 'css/header-footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site-logo.css' %}">
     
     <script src="{% static 'js/toaster.js' %}"></script>
     {% block extra_css %}{% endblock %}
@@ -28,9 +31,8 @@
         <div class="site-header-top">
             <div class="container">
                 <div class="header-top-inner">
-                    <a class="header-logo" href="{% url 'first_page' %}">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span>آیین‌نامه پلاس</span>
+                    <a class="header-logo" href="{% url 'first_page' %}" title="آیین یار">
+                        {% include 'shared/_site_logo.html' with variant='header' %}
                     </a>
 
                     <form class="header-search" action="{% url 'sample_questions:question_list' %}" method="get" role="search">
@@ -149,11 +151,10 @@
         <div class="container">
             <div class="site-footer-columns">
                 <div class="site-footer-col site-footer-brand">
-                    <a href="{% url 'first_page' %}" class="footer-logo">
-                        <i class="fas fa-graduation-cap"></i>
-                        آیین‌نامه پلاس
+                    <a href="{% url 'first_page' %}" class="footer-logo" title="آیین یار">
+                        {% include 'shared/_site_logo.html' with variant='footer' %}
                     </a>
-                    <p>سایت تخصصی آزمون آنلاین آیین‌نامه رانندگی با به‌روزترین سوالات، پاسخنامه تشریحی و بهترین کیفیت آموزش.</p>
+                    <p>آیین یار — پلتفرم تخصصی آزمون آنلاین آیین‌نامه رانندگی. موفقیت در آزمون رانندگی با به‌روزترین سوالات و پاسخنامه فوری.</p>
                 </div>
                 <div class="site-footer-col">
                     <h6>خدمات کاربران</h6>
@@ -192,7 +193,7 @@
             </div>
 
             <div class="site-footer-highlight">
-                <h5>آیین‌نامه پلاس؛ مسیر مطمئن قبولی در آزمون رانندگی</h5>
+                <h5>آیین یار؛ مسیر مطمئن قبولی در آزمون رانندگی</h5>
                 <p>با آزمون‌های شبیه‌سازی‌شده، تحلیل پیشرفت و پاسخنامه کامل، آماده قبولی در اولین بار شوید. هزاران کاربر با ما موفق شده‌اند.</p>
                 <a href="{% url 'quizbuilder:quiz_list' %}" class="read-more">
                     شروع رایگان <i class="fas fa-plus"></i>
@@ -217,8 +218,8 @@
             <div class="site-footer-bottom">
                 <p class="mb-0">
                     کپی‌رایت © ۱۴۰۴
-                    <span class="brand-highlight">آیین‌نامه پلاس</span>
-                    | طراحی و توسعه: تیم آیین‌نامه پلاس
+                    <span class="brand-highlight">آیین یار</span>
+                    | طراحی و توسعه: تیم آیین یار
                 </p>
             </div>
         </div>

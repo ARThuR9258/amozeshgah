@@ -59,18 +59,6 @@
     position: relative !important;
 }
 
-#sidebar.ds-sidebar .logo::before {
-    display: none !important;
-}
-
-#sidebar.ds-sidebar .logo img {
-    max-width: 130px !important;
-    width: auto !important;
-    margin: 0 auto !important;
-    filter: brightness(0) invert(1) !important;
-    opacity: 0.95;
-}
-
 #sidebar.ds-sidebar .sidebar-brand-text {
     display: block;
     margin-top: 0.65rem;

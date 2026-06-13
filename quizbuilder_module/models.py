@@ -5,6 +5,7 @@ from django.db import models
 from quizbuilder_module.helpers import (
     ChoiceNumber,
     ExamSessionStatus,
+    ExamSessionType,
     EXAM_DURATION_MINUTES,
     QuestionDifficulty,
 )
@@ -117,6 +118,12 @@ class ExamSession(models.Model):
         related_name='exam_sessions',
         verbose_name='کاربر',
     )
+    exam_type = models.CharField(
+        max_length=20,
+        choices=ExamSessionType.CHOICES,
+        default=ExamSessionType.STANDARD,
+        verbose_name='نوع آزمون',
+    )
     status = models.CharField(
         max_length=20,
         choices=ExamSessionStatus.CHOICES,
@@ -189,3 +196,46 @@ class UserAnswer(models.Model):
 
     def __str__(self):
         return f'{self.session_id} — Q{self.question_id}'
+
+
+class WrongQuestion(models.Model):
+    """سوالات اشتباه کاربر برای تمرین مجدد."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='wrong_questions',
+        verbose_name='کاربر',
+    )
+    question = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE,
+        related_name='wrong_records',
+        verbose_name='سوال',
+    )
+    wrong_count = models.PositiveIntegerField(default=1, verbose_name='تعداد اشتباه')
+    consecutive_correct = models.PositiveSmallIntegerField(
+        default=0,
+        verbose_name='پاسخ صحیح پیاپی در تمرین',
+    )
+    first_wrong_at = models.DateTimeField(auto_now_add=True, verbose_name='اولین اشتباه')
+    last_wrong_at = models.DateTimeField(auto_now=True, verbose_name='آخرین اشتباه')
+    is_mastered = models.BooleanField(default=False, verbose_name='یاد گرفته شده')
+
+    class Meta:
+        verbose_name = 'سوال اشتباه'
+        verbose_name_plural = 'سوالات اشتباه کاربران'
+        ordering = ['-last_wrong_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'question'],
+                name='unique_wrong_question_per_user',
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['user', 'is_mastered']),
+            models.Index(fields=['user', '-last_wrong_at']),
+        ]
+
+    def __str__(self):
+        return f'{self.user_id} — Q{self.question_id} (×{self.wrong_count})'

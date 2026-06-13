@@ -9,15 +9,36 @@
 
 {% block content %}
 <section class="static-page">
-    <div class="sp-hero" data-aos="fade-up">
-        <div class="container">
-            <span class="sp-badge"><i class="fas fa-headset"></i> پشتیبانی</span>
-            <h1>تماس با <span class="gradient-text">{{ site.brand }}</span></h1>
-            <p class="lead">سوال، پیشنهاد یا مشکل فنی دارید؟ تیم ما در اسرع وقت پاسخ می‌دهد.</p>
-        </div>
-    </div>
+    <div class="sp-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
 
-    <div class="container">
+        <nav class="sp-breadcrumb" data-aos="fade-up">
+            <a href="{% url 'first_page' %}"><i class="fas fa-arrow-right ms-1"></i> صفحه نخست</a>
+            <span>/</span>
+            <span>تماس با ما</span>
+        </nav>
+
+        <header class="sp-hero sp-hero--split" data-aos="fade-up">
+            <div class="sp-hero-copy">
+                <span class="sp-badge"><i class="fas fa-headset"></i> پشتیبانی</span>
+                <h1>تماس با <span class="gradient-text">{{ site.brand }}</span></h1>
+                <p class="lead">سوال، پیشنهاد یا مشکل فنی دارید؟ تیم ما در اسرع وقت پاسخ می‌دهد.</p>
+                <div class="sp-hero-chips">
+                    <span><i class="fas fa-clock"></i> {{ site.support_hours }}</span>
+                    <span><i class="fas fa-reply"></i> پاسخ تا ۲۴ ساعت</span>
+                </div>
+            </div>
+            <div class="sp-hero-visual" aria-hidden="true">
+                <div class="sp-visual-card sp-visual-card--contact">
+                    <div class="sp-visual-icon"><i class="fas fa-comments"></i></div>
+                    <strong>همیشه در دسترس</strong>
+                    <p>از طریق فرم، ایمیل یا تلفن با ما در ارتباط باشید</p>
+                </div>
+                <div class="sp-orb sp-orb--1"></div>
+                <div class="sp-orb sp-orb--2"></div>
+            </div>
+        </header>
+
         <div class="sp-contact-layout">
             <div class="sp-contact-cards" data-aos="fade-up">
                 <div class="sp-contact-card">
@@ -65,8 +86,8 @@
                         <p>{{ site.address }}</p>
                     </div>
                 </div>
-                <div class="sp-contact-card">
-                    <div class="sp-contact-card-icon sp-contact-card-icon--email">
+                <div class="sp-contact-card sp-contact-card--social">
+                    <div class="sp-contact-card-icon sp-contact-card-icon--social">
                         <i class="fas fa-share-alt"></i>
                     </div>
                     <div>
@@ -87,8 +108,13 @@
             </div>
 
             <div class="sp-form-card" data-aos="fade-up" data-aos-delay="100">
-                <h2>ارسال پیام</h2>
-                <p class="form-intro">فرم زیر را پر کنید؛ معمولاً ظرف ۲۴ ساعت کاری پاسخ می‌دهیم.</p>
+                <div class="sp-form-head">
+                    <div class="sp-form-head-icon"><i class="fas fa-paper-plane"></i></div>
+                    <div>
+                        <h2>ارسال پیام</h2>
+                        <p class="form-intro">فرم زیر را پر کنید؛ معمولاً ظرف ۲۴ ساعت کاری پاسخ می‌دهیم.</p>
+                    </div>
+                </div>
 
                 {% if form.non_field_errors %}
                 <div class="sp-form-alert sp-form-alert--error">
@@ -146,29 +172,46 @@
 
         <div class="sp-faq-quick sp-section" data-aos="fade-up">
             <div class="sp-section-head">
+                <span class="sp-section-label"><i class="fas fa-link"></i> لینک‌های مفید</span>
                 <h2>شاید این‌ها کمکتان کند</h2>
                 <p>پاسخ سوالات پرتکرار را در صفحه اصلی ببینید یا مستقیم شروع کنید.</p>
             </div>
             <div class="sp-faq-quick-grid">
                 <a href="{% url 'first_page' %}#faq" class="sp-faq-quick-item">
-                    <i class="fas fa-circle-question"></i>
-                    <span>پرسش‌های متداول</span>
+                    <div class="sp-faq-quick-icon"><i class="fas fa-circle-question"></i></div>
+                    <div>
+                        <strong>پرسش‌های متداول</strong>
+                        <span>سوالات رایج کاربران</span>
+                    </div>
+                    <i class="fas fa-chevron-left sp-faq-arrow"></i>
                 </a>
                 <a href="{% url 'subscriptions:pricing' %}" class="sp-faq-quick-item">
-                    <i class="fas fa-crown"></i>
-                    <span>پلن‌ها و قیمت</span>
+                    <div class="sp-faq-quick-icon"><i class="fas fa-gem"></i></div>
+                    <div>
+                        <strong>پلن‌ها و قیمت</strong>
+                        <span>مقایسه اشتراک‌ها</span>
+                    </div>
+                    <i class="fas fa-chevron-left sp-faq-arrow"></i>
                 </a>
-                <a href="{% url 'quizbuilder:quiz_list' %}" class="sp-faq-quick-item">
-                    <i class="fas fa-play"></i>
-                    <span>شروع آزمون</span>
+                <a href="{% url 'quizbuilder:exam_hub' %}" class="sp-faq-quick-item">
+                    <div class="sp-faq-quick-icon"><i class="fas fa-play"></i></div>
+                    <div>
+                        <strong>شروع آزمون</strong>
+                        <span>آزمون آنلاین</span>
+                    </div>
+                    <i class="fas fa-chevron-left sp-faq-arrow"></i>
                 </a>
                 <a href="{% url 'about_page' %}" class="sp-faq-quick-item">
-                    <i class="fas fa-info-circle"></i>
-                    <span>درباره ما</span>
+                    <div class="sp-faq-quick-icon"><i class="fas fa-info-circle"></i></div>
+                    <div>
+                        <strong>درباره ما</strong>
+                        <span>داستان {{ site.brand }}</span>
+                    </div>
+                    <i class="fas fa-chevron-left sp-faq-arrow"></i>
                 </a>
             </div>
         </div>
+
     </div>
 </section>
 {% endblock %}
-

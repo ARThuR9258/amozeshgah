@@ -216,6 +216,10 @@ def finalize_exam_session(session: ExamSession, post_data=None) -> ExamSession:
             'percent', 'passed', 'finished_at', 'time_spent_seconds',
         ]
     )
+
+    from quizbuilder_module.wrong_question_services import sync_wrong_questions_from_session
+    sync_wrong_questions_from_session(session)
+
     return session
 
 

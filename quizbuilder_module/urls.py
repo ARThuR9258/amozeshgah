@@ -2,7 +2,6 @@ from django.urls import path
 
 from . import dashboard_views as dv
 from . import views
-
 app_name = 'quizbuilder'
 
 urlpatterns = [

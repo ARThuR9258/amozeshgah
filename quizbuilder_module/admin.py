@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from quizbuilder_module.models import Category, ExamSession, Question, UserAnswer
+from quizbuilder_module.models import Category, ExamSession, Question, UserAnswer, WrongQuestion
 
 
 @admin.register(Category)
@@ -70,6 +70,7 @@ class ExamSessionAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'user',
+        'exam_type',
         'status',
         'percent',
         'correct_count',
@@ -77,7 +78,7 @@ class ExamSessionAdmin(admin.ModelAdmin):
         'started_at',
         'finished_at',
     )
-    list_filter = ('status', 'passed')
+    list_filter = ('status', 'passed', 'exam_type')
     search_fields = ('user__phone_number', 'user__username')
     readonly_fields = ('question_ids', 'started_at', 'expires_at')
     inlines = [UserAnswerInline]
@@ -87,3 +88,23 @@ class ExamSessionAdmin(admin.ModelAdmin):
 class UserAnswerAdmin(admin.ModelAdmin):
     list_display = ('session', 'question', 'selected_choice', 'is_correct', 'answered_at')
     list_filter = ('is_correct',)
+
+
+@admin.register(WrongQuestion)
+class WrongQuestionAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'question_preview',
+        'wrong_count',
+        'consecutive_correct',
+        'is_mastered',
+        'last_wrong_at',
+    )
+    list_filter = ('is_mastered',)
+    search_fields = ('user__phone_number', 'user__username', 'question__text')
+    readonly_fields = ('first_wrong_at', 'last_wrong_at')
+    autocomplete_fields = ('user', 'question')
+
+    @admin.display(description='سوال')
+    def question_preview(self, obj):
+        return obj.question.text[:50] + '…' if len(obj.question.text) > 50 else obj.question.text

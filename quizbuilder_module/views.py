@@ -29,6 +29,7 @@ from quizbuilder_module.helpers import (
     EXAM_DURATION_MINUTES,
     EXAM_QUESTION_COUNT,
     ExamSessionStatus,
+    ExamSessionType,
     PASS_PERCENT,
 )
 from quizbuilder_module.models import Category, ExamSession, Question, UserAnswer
@@ -150,6 +151,7 @@ class ExamTakeView(LoginRequiredMixin, View):
                 'quizbuilder:exam_submit',
                 kwargs={'session_id': session.pk},
             ),
+            'is_practice_exam': session.exam_type == ExamSessionType.WRONG_PRACTICE,
         })
 
     def post(self, request, session_id):

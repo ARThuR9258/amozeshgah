@@ -19,12 +19,19 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from quizbuilder_module.wrong_question_views import (
+    WrongQuestionsExamStartView,
+    WrongQuestionsListView,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('index_module.urls')),
     path('account/', include('account_module.urls')),
     path('questions/', include('sample_questions.urls')),
     path('quiz/', include('quizbuilder_module.urls')),
+    path('my-wrong-questions/', WrongQuestionsListView.as_view(), name='wrong_questions_list'),
+    path('my-wrong-questions/start/', WrongQuestionsExamStartView.as_view(), name='wrong_questions_exam_start'),
     path('pricing/', include('subscriptions_module.urls')),
 ]
 

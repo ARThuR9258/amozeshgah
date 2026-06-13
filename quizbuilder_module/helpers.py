@@ -13,6 +13,19 @@ class ExamSessionStatus:
     ]
 
 
+class ExamSessionType:
+    STANDARD = 'standard'
+    WRONG_PRACTICE = 'wrong_practice'
+
+    CHOICES = [
+        (STANDARD, 'آزمون عادی'),
+        (WRONG_PRACTICE, 'تمرین سوالات اشتباه'),
+    ]
+
+
+MASTERED_CORRECT_STREAK = 3
+
+
 class QuestionDifficulty:
     EASY = 'easy'
     MEDIUM = 'medium'

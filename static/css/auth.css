@@ -29,6 +29,13 @@
     max-width: 520px;
 }
 
+.auth-brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    text-decoration: none;
+}
+
 .auth-back {
     display: inline-flex;
     align-items: center;

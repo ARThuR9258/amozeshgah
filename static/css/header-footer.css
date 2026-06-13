@@ -40,25 +40,8 @@ body.site-theme {
 .header-logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     text-decoration: none;
-    color: var(--site-accent) !important;
-    font-weight: 800;
-    font-size: 1.35rem;
     flex-shrink: 0;
-    transition: opacity 0.2s ease;
-}
-
-.header-logo i {
-    font-size: 1.5rem;
-    background: var(--site-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.header-logo:hover {
-    opacity: 0.9;
 }
 
 /* جستجو — pill */
@@ -308,10 +291,6 @@ body.site-theme {
 }
 
 @media (max-width: 576px) {
-    .header-logo span {
-        font-size: 1.1rem;
-    }
-
     .header-actions {
         gap: 0.65rem;
     }
@@ -345,18 +324,14 @@ body.site-theme .site-footer {
 }
 
 .site-footer-brand .footer-logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--site-accent);
-    margin-bottom: 1rem;
     text-decoration: none;
+    margin-bottom: 0.5rem;
 }
 
 .site-footer-brand .footer-logo i {
-    font-size: 1.5rem;
+    display: none;
 }
 
 .site-footer-brand p {

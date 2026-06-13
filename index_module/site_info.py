@@ -1,7 +1,7 @@
 """اطلاعات تماس و برند — یکجا برای قالب‌ها."""
 
 SITE_INFO = {
-    'brand': 'آیین‌نامه پلاس',
+    'brand': 'آیین یار',
     'email': 'info@ayinnamehplus.ir',
     'phone': '021-91001234',
     'phone_display': '۰۲۱-۹۱۰۰۱۲۳۴',

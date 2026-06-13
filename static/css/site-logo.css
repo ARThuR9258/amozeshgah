@@ -1,0 +1,322 @@
+/* برند آیین یار — آیکون + تایپوگرافی */
+
+.site-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.site-brand-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: linear-gradient(145deg, rgba(77, 171, 247, 0.18), rgba(139, 92, 246, 0.12));
+    border: 1px solid rgba(77, 171, 247, 0.28);
+    box-shadow:
+        0 4px 16px rgba(77, 171, 247, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.site-brand-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.12), transparent 55%);
+    pointer-events: none;
+}
+
+.site-brand-icon-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* اندازه‌ها */
+.site-brand-icon--header {
+    width: 42px;
+    height: 42px;
+    padding: 5px;
+    border-radius: 12px;
+}
+
+.site-brand-icon--footer {
+    width: 52px;
+    height: 52px;
+    padding: 6px;
+}
+
+.site-brand-icon--auth {
+    width: 64px;
+    height: 64px;
+    padding: 8px;
+    border-radius: 18px;
+}
+
+.site-brand-icon--admin {
+    width: 48px;
+    height: 48px;
+    padding: 6px;
+}
+
+.site-brand-icon--md {
+    width: 48px;
+    height: 48px;
+    padding: 6px;
+}
+
+.site-brand-icon--lg {
+    width: 64px;
+    height: 64px;
+    padding: 8px;
+    border-radius: 18px;
+}
+
+.site-brand-icon--sm {
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+    border-radius: 8px;
+}
+
+.site-brand-icon--xl {
+    width: 140px;
+    height: 140px;
+    padding: 16px;
+    border-radius: 32px;
+}
+
+.site-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    line-height: 1.2;
+}
+
+.site-brand-name {
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #7ec8ff 0%, #4dabf7 45%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.site-brand-tagline {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #4ade80;
+    letter-spacing: 0.01em;
+}
+
+/* هدر */
+.site-brand--header .site-brand-name {
+    font-size: 1.05rem;
+}
+
+.header-logo {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.header-logo:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+}
+
+.header-logo:hover .site-brand-icon {
+    border-color: rgba(77, 171, 247, 0.45);
+    box-shadow: 0 6px 20px rgba(77, 171, 247, 0.22);
+}
+
+/* فوتر */
+.site-brand--footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.site-brand--footer .site-brand-name {
+    font-size: 1.35rem;
+}
+
+.site-brand--footer .site-brand-tagline {
+    font-size: 0.75rem;
+}
+
+.footer-logo {
+    text-decoration: none;
+}
+
+.footer-logo:hover .site-brand-icon {
+    border-color: rgba(77, 171, 247, 0.4);
+}
+
+/* احراز هویت */
+.site-brand--auth {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.25rem 1.5rem 1rem;
+    border-radius: 20px;
+    background: rgba(34, 42, 61, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+}
+
+.site-brand--auth .site-brand-name {
+    font-size: 1.5rem;
+}
+
+.site-brand--auth .site-brand-tagline {
+    font-size: 0.78rem;
+}
+
+.auth-brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    text-decoration: none;
+}
+
+.auth-brand:hover .site-brand--auth {
+    border-color: rgba(77, 171, 247, 0.25);
+    box-shadow: 0 20px 56px rgba(77, 171, 247, 0.12);
+}
+
+/* پنل مدیریت */
+.site-brand--admin {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.site-brand--admin .site-brand-name {
+    font-size: 0.95rem;
+}
+
+.site-brand--admin .site-brand-tagline {
+    font-size: 0.62rem;
+}
+
+/* لوگوی کامل — hero / درباره ما */
+.site-brand-showcase {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    padding: 1.25rem 1.5rem;
+    border-radius: 24px;
+    background: rgba(15, 18, 25, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+
+.site-brand-showcase-glow {
+    position: absolute;
+    inset: -20%;
+    background:
+        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(77, 171, 247, 0.2), transparent),
+        radial-gradient(ellipse 40% 40% at 70% 80%, rgba(74, 222, 128, 0.12), transparent);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.site-brand-full-img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+}
+
+.site-brand-showcase--md .site-brand-full-img {
+    max-height: 140px;
+}
+
+.site-brand-showcase--lg .site-brand-full-img {
+    max-height: 180px;
+}
+
+/* آیکون تنها در کارت‌های بصری */
+.eh-visual-logo .site-brand-icon,
+.sp-visual-logo .site-brand-icon {
+    margin: 0 auto;
+}
+
+.eh-visual-logo {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+/* هیرو صفحه نخست */
+.home-badge--brand {
+    gap: 0.55rem;
+    padding: 0.4rem 1rem 0.4rem 0.65rem;
+}
+
+.home-badge--brand .site-brand-icon {
+    box-shadow: 0 2px 10px rgba(77, 171, 247, 0.2);
+}
+
+.home-badge--brand span {
+    font-weight: 800;
+}
+
+.home-hero-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.home-hero-watermark .site-brand-icon {
+    opacity: 0.18;
+    border-color: rgba(77, 171, 247, 0.15);
+    box-shadow: 0 0 80px rgba(77, 171, 247, 0.15);
+}
+
+/* موبایل */
+@media (max-width: 991px) {
+    .site-brand--header .site-brand-text {
+        display: none;
+    }
+
+    .site-brand-icon--header {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+@media (max-width: 576px) {
+    .site-brand--auth {
+        padding: 1rem 1.25rem;
+    }
+
+    .site-brand--auth .site-brand-name {
+        font-size: 1.3rem;
+    }
+
+    .home-hero-watermark .site-brand-icon--xl {
+        width: 100px;
+        height: 100px;
+    }
+}

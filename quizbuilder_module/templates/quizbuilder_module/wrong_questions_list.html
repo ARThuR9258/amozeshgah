@@ -1,0 +1,202 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}سوالات اشتباه من — آیین یار{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/wrong_questions.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wq-page">
+    <div class="wq-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
+
+        <nav class="wq-breadcrumb" data-aos="fade-up">
+            <a href="{% url 'user_panel_page' %}"><i class="fas fa-arrow-right ms-1"></i> پنل کاربری</a>
+            <span>/</span>
+            <span>سوالات اشتباه من</span>
+        </nav>
+
+        <header class="wq-hero" data-aos="fade-up">
+            <div class="wq-hero-main">
+                <div class="wq-hero-icon"><i class="fas fa-book-open"></i></div>
+                <div>
+                    <span class="wq-hero-badge"><i class="fas fa-brain"></i> یادگیری هوشمند</span>
+                    <h1 class="wq-hero-title">سوالات اشتباه من</h1>
+                    <p class="wq-hero-sub mb-0">هر سوالی که اشتباه جواب دهید اینجا ذخیره می‌شود تا دوباره تمرین کنید و یاد بگیرید.</p>
+                </div>
+            </div>
+            <div class="wq-hero-side">
+                <div class="wq-progress-ring" style="--wq-pct: {{ stats.progress_percent }}">
+                    <svg viewBox="0 0 120 120" aria-hidden="true">
+                        <circle class="wq-ring-bg" cx="60" cy="60" r="52"></circle>
+                        <circle class="wq-ring-fill" cx="60" cy="60" r="52"></circle>
+                    </svg>
+                    <div class="wq-progress-ring-label">
+                        <strong>{{ stats.progress_percent }}٪</strong>
+                        <small>پیشرفت</small>
+                    </div>
+                </div>
+                <div class="wq-hero-actions">
+                    {% if can_start_practice %}
+                    <form method="post" action="{% url 'wrong_questions_exam_start' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="wq-btn-primary">
+                            <i class="fas fa-play"></i>
+                            <span>شروع آزمون تمرین</span>
+                        </button>
+                    </form>
+                    <p class="wq-hero-hint"><i class="fas fa-info-circle"></i> حداکثر ۲۰ سوال از لیست اشتباهات</p>
+                    {% else %}
+                    <a href="{% url 'quizbuilder:exam_hub' %}" class="wq-btn-outline">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>شرکت در آزمون</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <div class="wq-stats-grid" data-aos="fade-up">
+            <div class="wq-stat-card wq-stat-total">
+                <div class="wq-stat-icon"><i class="fas fa-list-ol"></i></div>
+                <div class="wq-stat-body">
+                    <div class="wq-stat-value">{{ stats.total }}</div>
+                    <div class="wq-stat-label">کل سوالات اشتباه</div>
+                </div>
+            </div>
+            <div class="wq-stat-card wq-stat-mastered">
+                <div class="wq-stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="wq-stat-body">
+                    <div class="wq-stat-value">{{ stats.mastered }}</div>
+                    <div class="wq-stat-label">یاد گرفته شده</div>
+                </div>
+            </div>
+            <div class="wq-stat-card wq-stat-practice">
+                <div class="wq-stat-icon"><i class="fas fa-dumbbell"></i></div>
+                <div class="wq-stat-body">
+                    <div class="wq-stat-value">{{ stats.needs_practice }}</div>
+                    <div class="wq-stat-label">نیاز به تمرین</div>
+                </div>
+            </div>
+            <div class="wq-stat-card wq-stat-progress">
+                <div class="wq-stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="wq-stat-body">
+                    <div class="wq-stat-value">{{ stats.progress_percent }}٪</div>
+                    <div class="wq-stat-label">درصد پیشرفت</div>
+                </div>
+            </div>
+        </div>
+
+        {% if active_session %}
+        <div class="wq-alert" data-aos="fade-up">
+            <div class="wq-alert-icon"><i class="fas fa-hourglass-half"></i></div>
+            <div class="wq-alert-text">
+                <strong>آزمون فعال دارید</strong>
+                <span>ابتدا آزمون جاری را تمام کنید، بعد تمرین را شروع کنید.</span>
+            </div>
+            <a href="{% url 'quizbuilder:exam_take' active_session.pk %}" class="wq-btn-sm">ادامه آزمون</a>
+        </div>
+        {% endif %}
+
+        <section class="wq-list-section" data-aos="fade-up">
+            <div class="wq-section-head">
+                <div>
+                    <h2 class="wq-section-title"><i class="fas fa-times-circle"></i> نیاز به تمرین</h2>
+                    <p class="wq-section-sub">۳ پاسخ صحیح پیاپی در آزمون تمرین = یاد گرفته شده</p>
+                </div>
+                <span class="wq-count-pill">{{ stats.needs_practice }} سوال</span>
+            </div>
+
+            {% if wrong_items %}
+            <div class="wq-questions-list">
+                {% for item in wrong_items %}
+                <article class="wq-question-card">
+                    <div class="wq-question-accent"></div>
+                    <div class="wq-question-inner">
+                        <div class="wq-question-top">
+                            <span class="wq-q-num">#{{ item.question.id }}</span>
+                            <span class="wq-wrong-badge">
+                                <i class="fas fa-redo"></i> {{ item.wrong_count }} بار اشتباه
+                            </span>
+                        </div>
+                        <div class="wq-question-content">
+                            {% if item.question.image %}
+                            <div class="wq-q-image-wrap">
+                                <img src="{{ item.question.image.url }}" alt="" class="wq-q-image" loading="lazy">
+                            </div>
+                            {% endif %}
+                            <div class="wq-q-main">
+                                <p class="wq-q-text">{{ item.question.text|linebreaksbr }}</p>
+                                <div class="wq-correct-box">
+                                    <div class="wq-correct-label">
+                                        <i class="fas fa-check-circle"></i> پاسخ صحیح
+                                    </div>
+                                    <div class="wq-correct-text">
+                                        {% for opt in item.question.get_options_display %}
+                                            {% if opt.is_correct %}{{ opt.text }}{% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wq-question-foot">
+                            <span class="wq-meta-item">
+                                <i class="far fa-clock"></i>
+                                {{ item.last_wrong_at|date:"Y/m/d H:i" }}
+                            </span>
+                            {% if item.consecutive_correct %}
+                            <div class="wq-streak">
+                                <div class="wq-streak-label">
+                                    <i class="fas fa-fire"></i>
+                                    {{ item.consecutive_correct }}/۳ پاسخ صحیح
+                                </div>
+                                <div class="wq-streak-bar">
+                                    <div class="wq-streak-fill" style="width: {% widthratio item.consecutive_correct 3 100 %}%"></div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <span class="wq-meta-item wq-meta-muted">
+                                <i class="fas fa-bullseye"></i> هنوز در تمرین درست نشده
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="wq-empty">
+                <div class="wq-empty-icon"><i class="fas fa-smile-beam"></i></div>
+                <h3>عالی! سوالی برای تمرین ندارید</h3>
+                <p>با شرکت در آزمون، سوالات اشتباه شما اینجا نمایش داده می‌شوند.</p>
+                <a href="{% url 'quizbuilder:exam_hub' %}" class="wq-btn-primary">
+                    <i class="fas fa-play"></i> شروع آزمون
+                </a>
+            </div>
+            {% endif %}
+        </section>
+
+        {% if mastered_preview %}
+        <section class="wq-mastered-section" data-aos="fade-up">
+            <div class="wq-section-head">
+                <div>
+                    <h2 class="wq-section-title wq-section-title--success"><i class="fas fa-graduation-cap"></i> یاد گرفته شده</h2>
+                    <p class="wq-section-sub">سوالاتی که با موفقیت یاد گرفته‌اید</p>
+                </div>
+            </div>
+            <div class="wq-mastered-grid">
+                {% for item in mastered_preview %}
+                <div class="wq-mastered-card">
+                    <span class="wq-mastered-badge"><i class="fas fa-check"></i> یاد گرفته</span>
+                    <p>{{ item.question.text|truncatechars:120 }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'shared/_layout.html' %}
 {% load static %}
 
-{% block title %}صفحه نخست | آیین‌نامه پلاس{% endblock %}
+{% block title %}صفحه نخست | آیین یار{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -9,39 +9,143 @@
 
 {% block content %}
 <div class="home-page">
+    <div class="home-bg-glow" aria-hidden="true"></div>
 
     <!-- Hero -->
     <section class="home-hero">
-        <div class="container">
-            <span class="home-badge" data-aos="fade-up">
-                <i class="fas fa-bolt"></i>
-                به‌روز ۱۴۰۴
-            </span>
-            <h1 data-aos="fade-up" data-aos-delay="50">
-                قبولی در آزمون آیین‌نامه،
-                <span class="gradient-text">ساده‌تر از همیشه</span>
-            </h1>
-            <p class="lead" data-aos="fade-up" data-aos-delay="100">
-                آزمون شبیه‌سازی‌شده، پاسخنامه تشریحی و تمرین روزانه — همه در یک پلتفرم تمیز و سریع.
-            </p>
-            <div class="home-hero-actions" data-aos="fade-up" data-aos-delay="150">
-                <a href="{% url 'quizbuilder:quiz_list' %}" class="home-btn home-btn-primary">
-                    <i class="fas fa-play"></i>
-                    شروع رایگان
-                </a>
-                <a href="{% url 'sample_questions:question_list' %}" class="home-btn home-btn-ghost">
-                    <i class="far fa-file-alt"></i>
-                    نمونه سوالات
-                </a>
-                <a href="{% url 'subscriptions:pricing' %}" class="home-btn home-btn-ghost d-none d-sm-inline-flex">
-                    <i class="far fa-gem"></i>
-                    پلن‌ها
-                </a>
+        <div class="container position-relative">
+            <div class="home-hero-grid">
+                <div class="home-hero-copy">
+                    <span class="home-badge home-badge--brand" data-aos="fade-up">
+                        {% include 'shared/_site_logo.html' with variant='icon' size='sm' %}
+                        <span>آیین یار · به‌روز ۱۴۰۴</span>
+                    </span>
+                    <h1 data-aos="fade-up" data-aos-delay="50">
+                        قبولی در آزمون آیین‌نامه،
+                        <span class="gradient-text">ساده‌تر از همیشه</span>
+                    </h1>
+                    <p class="lead" data-aos="fade-up" data-aos-delay="100">
+                        آزمون شبیه‌سازی‌شده، پاسخنامه فوری و تمرین هوشمند روی سوالات اشتباه — همه در یک پلتفرم تمیز و سریع.
+                    </p>
+
+                    <div class="home-hero-chips" data-aos="fade-up" data-aos-delay="120">
+                        <span><i class="fas fa-list-ol"></i> ۲۰ سوال</span>
+                        <span><i class="fas fa-clock"></i> ۳۰ دقیقه</span>
+                        <span><i class="fas fa-gift"></i> ۲ آزمون رایگان روزانه</span>
+                    </div>
+
+                    <div class="home-hero-actions" data-aos="fade-up" data-aos-delay="150">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'quizbuilder:exam_hub' %}" class="home-btn home-btn-primary">
+                            <i class="fas fa-play"></i>
+                            شروع آزمون
+                        </a>
+                        <a href="{% url 'user_panel_page' %}" class="home-btn home-btn-ghost">
+                            <i class="fas fa-user"></i>
+                            پنل کاربری
+                        </a>
+                        {% else %}
+                        <a href="{% url 'sign_up_page' %}" class="home-btn home-btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            ثبت‌نام رایگان
+                        </a>
+                        <a href="{% url 'sign_in_page' %}" class="home-btn home-btn-ghost">
+                            <i class="fas fa-sign-in-alt"></i>
+                            ورود
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'sample_questions:question_list' %}" class="home-btn home-btn-ghost">
+                            <i class="far fa-file-alt"></i>
+                            نمونه سوالات
+                        </a>
+                    </div>
+
+                    <div class="home-hero-trust" data-aos="fade-up" data-aos-delay="200">
+                        <span><i class="fas fa-check-circle"></i> بدون نیاز به نصب</span>
+                        <span><i class="fas fa-check-circle"></i> پاسخنامه فوری</span>
+                        <span><i class="fas fa-check-circle"></i> ذخیره سوالات اشتباه</span>
+                    </div>
+                </div>
+
+                <div class="home-hero-visual" data-aos="fade-left" aria-hidden="true">
+                    <div class="home-hero-watermark">
+                        {% include 'shared/_site_logo.html' with variant='icon' size='xl' %}
+                    </div>
+                    <div class="home-mockup">
+                        <div class="home-mockup-header">
+                            <span class="home-mockup-dot"></span>
+                            <span class="home-mockup-dot"></span>
+                            <span class="home-mockup-dot"></span>
+                            <span class="home-mockup-title">آزمون آنلاین</span>
+                        </div>
+                        <div class="home-mockup-body">
+                            <div class="home-mockup-q">
+                                <span class="home-mockup-qnum">سوال ۵ از ۲۰</span>
+                                <div class="home-mockup-progress"><span style="width: 25%"></span></div>
+                            </div>
+                            <div class="home-mockup-text">
+                                کدام یک از علائم زیر به معنای «ایست» است؟
+                            </div>
+                            <div class="home-mockup-options">
+                                <div class="home-mockup-opt"><span>الف</span> مثلث قرمز</div>
+                                <div class="home-mockup-opt is-selected"><span>ب</span> هشت‌ضلعی قرمز</div>
+                                <div class="home-mockup-opt"><span>ج</span> دایره آبی</div>
+                                <div class="home-mockup-opt"><span>د</span> مربع زرد</div>
+                            </div>
+                            <div class="home-mockup-timer">
+                                <i class="fas fa-clock"></i> ۲۴:۳۵
+                            </div>
+                        </div>
+                    </div>
+                    <div class="home-float-card home-float-card--1">
+                        <i class="fas fa-trophy"></i>
+                        <div>
+                            <strong>۹۸٪</strong>
+                            <small>رضایت کاربران</small>
+                        </div>
+                    </div>
+                    <div class="home-float-card home-float-card--2">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>قبولی</strong>
+                            <small>نمره ۲۶ از ۳۰</small>
+                        </div>
+                    </div>
+                    <div class="home-orb home-orb--1"></div>
+                    <div class="home-orb home-orb--2"></div>
+                </div>
             </div>
-            <div class="home-hero-trust" data-aos="fade-up" data-aos-delay="200">
-                <span><i class="fas fa-check"></i> ۲ آزمون رایگان روزانه</span>
-                <span><i class="fas fa-check"></i> بدون نیاز به نصب</span>
-                <span><i class="fas fa-check"></i> پاسخنامه فوری</span>
+        </div>
+    </section>
+
+    <!-- Quick links -->
+    <section class="home-quick">
+        <div class="container">
+            <div class="home-quick-grid" data-aos="fade-up">
+                <a href="{% url 'quizbuilder:exam_hub' %}" class="home-quick-card home-quick-exam">
+                    <div class="home-quick-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <div>
+                        <strong>آزمون آنلاین</strong>
+                        <span>شبیه‌ساز واقعی آیین‌نامه</span>
+                    </div>
+                    <i class="fas fa-chevron-left home-quick-arrow"></i>
+                </a>
+                <a href="{% url 'wrong_questions_list' %}" class="home-quick-card home-quick-wrong">
+                    <div class="home-quick-icon"><i class="fas fa-book-open"></i></div>
+                    <div>
+                        <strong>سوالات اشتباه</strong>
+                        <span>تمرین هوشمند روی غلط‌ها</span>
+                    </div>
+                    <i class="fas fa-chevron-left home-quick-arrow"></i>
+                </a>
+                <a href="{% url 'subscriptions:pricing' %}" class="home-quick-card home-quick-plan">
+                    <div class="home-quick-icon"><i class="fas fa-gem"></i></div>
+                    <div>
+                        <strong>پلن و اشتراک</strong>
+                        <span>دسترسی نامحدود یا اعتباری</span>
+                    </div>
+                    <i class="fas fa-chevron-left home-quick-arrow"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -49,22 +153,34 @@
     <!-- Stats -->
     <section class="home-stats">
         <div class="container">
-            <div class="home-stats-inner" data-aos="fade-up">
-                <div class="home-stat">
-                    <strong>۱۰K+</strong>
-                    <span>کاربر فعال</span>
+            <div class="home-stats-grid" data-aos="fade-up">
+                <div class="home-stat-card">
+                    <div class="home-stat-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <strong>۱۰K+</strong>
+                        <span>کاربر فعال</span>
+                    </div>
                 </div>
-                <div class="home-stat">
-                    <strong>۵۰۰K+</strong>
-                    <span>آزمون انجام‌شده</span>
+                <div class="home-stat-card">
+                    <div class="home-stat-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <div>
+                        <strong>۵۰۰K+</strong>
+                        <span>آزمون انجام‌شده</span>
+                    </div>
                 </div>
-                <div class="home-stat">
-                    <strong>۹۸٪</strong>
-                    <span>رضایت کاربران</span>
+                <div class="home-stat-card">
+                    <div class="home-stat-icon"><i class="fas fa-heart"></i></div>
+                    <div>
+                        <strong>۹۸٪</strong>
+                        <span>رضایت کاربران</span>
+                    </div>
                 </div>
-                <div class="home-stat">
-                    <strong>۱۴۰۴</strong>
-                    <span>سوالات به‌روز</span>
+                <div class="home-stat-card">
+                    <div class="home-stat-icon"><i class="fas fa-sync-alt"></i></div>
+                    <div>
+                        <strong>۱۴۰۴</strong>
+                        <span>سوالات به‌روز</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,24 +190,28 @@
     <section class="home-section">
         <div class="container">
             <div class="home-section-head" data-aos="fade-up">
-                <h2>چرا آیین‌نامه پلاس؟</h2>
+                <span class="home-section-label"><i class="fas fa-star"></i> مزایا</span>
+                <h2>چرا آیین یار؟</h2>
                 <p>سه دلیل اصلی که مسیر قبولی را برایت کوتاه‌تر می‌کند.</p>
             </div>
             <div class="home-features-grid">
                 <article class="home-feature" data-aos="fade-up" data-aos-delay="0">
-                    <div class="home-feature-icon"><i class="far fa-clipboard"></i></div>
+                    <div class="home-feature-accent"></div>
+                    <div class="home-feature-icon"><i class="fas fa-car-side"></i></div>
                     <h3>آزمون واقعی</h3>
-                    <p>۳۰ سوال، ۲۰ دقیقه — دقیقاً مثل آزمون اصلی پلیس، با نمره‌دهی خودکار.</p>
+                    <p>۲۰ سوال، ۳۰ دقیقه — دقیقاً مثل آزمون اصلی، با نمره‌دهی خودکار و تایمر زنده.</p>
                 </article>
                 <article class="home-feature" data-aos="fade-up" data-aos-delay="80">
-                    <div class="home-feature-icon"><i class="far fa-lightbulb"></i></div>
+                    <div class="home-feature-accent"></div>
+                    <div class="home-feature-icon"><i class="fas fa-lightbulb"></i></div>
                     <h3>پاسخنامه کامل</h3>
-                    <p>بعد از هر آزمون، دلیل درست و غلط هر سوال را با توضیح ساده ببین.</p>
+                    <p>بعد از هر آزمون، پاسخ صحیح هر سوال را ببین و نقاط ضعف را شناسایی کن.</p>
                 </article>
                 <article class="home-feature" data-aos="fade-up" data-aos-delay="160">
-                    <div class="home-feature-icon"><i class="far fa-chart-bar"></i></div>
-                    <h3>پیشرفت شفاف</h3>
-                    <p>در پنل کاربری، وضعیت اعتبار، آزمون‌ها و نتایج قبلی‌ات را یکجا ببین.</p>
+                    <div class="home-feature-accent"></div>
+                    <div class="home-feature-icon"><i class="fas fa-brain"></i></div>
+                    <h3>یادگیری هوشمند</h3>
+                    <p>سوالات اشتباه ذخیره می‌شوند تا با آزمون تمرین، آن‌ها را یاد بگیری.</p>
                 </article>
             </div>
         </div>
@@ -101,64 +221,73 @@
     <section class="home-section home-steps">
         <div class="container">
             <div class="home-section-head" data-aos="fade-up">
+                <span class="home-section-label"><i class="fas fa-route"></i> مسیر شروع</span>
                 <h2>چطور شروع کنم؟</h2>
                 <p>سه قدم تا اولین آزمون — کمتر از یک دقیقه.</p>
             </div>
             <div class="home-steps-row">
-                <div class="home-step" data-aos="fade-up">
+                <div class="home-step-card" data-aos="fade-up">
+                    <div class="home-step-num">۱</div>
+                    <div class="home-step-icon"><i class="fas fa-user-plus"></i></div>
                     <h3>ثبت‌نام رایگان</h3>
                     <p>با شماره موبایل وارد شو، بدون فرم پیچیده.</p>
                 </div>
-                <div class="home-step" data-aos="fade-up" data-aos-delay="80">
-                    <h3>انتخاب آزمون</h3>
-                    <p>از لیست آزمون‌های فعال، یکی را انتخاب کن.</p>
+                <div class="home-step-card" data-aos="fade-up" data-aos-delay="80">
+                    <div class="home-step-num">۲</div>
+                    <div class="home-step-icon"><i class="fas fa-play-circle"></i></div>
+                    <h3>شروع آزمون</h3>
+                    <p>۲۰ سوال تصادفی با ۳۰ دقیقه زمان دریافت کن.</p>
                 </div>
-                <div class="home-step" data-aos="fade-up" data-aos-delay="160">
-                    <h3>نتایج فوری</h3>
-                    <p>بلافاصله نمره و پاسخنامه را دریافت کن.</p>
+                <div class="home-step-card" data-aos="fade-up" data-aos-delay="160">
+                    <div class="home-step-num">۳</div>
+                    <div class="home-step-icon"><i class="fas fa-award"></i></div>
+                    <h3>نتیجه و مرور</h3>
+                    <p>بلافاصله نمره، پاسخنامه و لیست سوالات غلط را ببین.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Testimonials -->
-    <section class="home-section">
+    <section class="home-section home-testimonials">
         <div class="container">
             <div class="home-section-head" data-aos="fade-up">
-                <h2>نظر کاربران</h2>
-                <p>تجربه واقعی کسانی که با ما قبول شدند.</p>
+                <span class="home-section-label"><i class="fas fa-comments"></i> نظرات</span>
+                <h2>کاربران چه می‌گویند؟</h2>
+                <p>تجربه واقعی کسانی که با ما تمرین کردند.</p>
             </div>
             <div class="home-testimonials-grid">
                 <blockquote class="home-testimonial" data-aos="fade-up">
+                    <div class="home-testimonial-top">
+                        <div class="home-avatar">ا</div>
+                        <div class="home-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    </div>
                     <p class="quote">بار اول بدون غلط قبول شدم. فقط با همین سایت تمرین کردم.</p>
                     <footer class="home-testimonial-footer">
-                        <div>
-                            <strong>امیر محمدی</strong>
-                            <span>تهران</span>
-                        </div>
-                        <div class="home-stars" aria-label="۵ ستاره">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
+                        <strong>امیر محمدی</strong>
+                        <span>تهران</span>
                     </footer>
                 </blockquote>
                 <blockquote class="home-testimonial" data-aos="fade-up" data-aos-delay="80">
+                    <div class="home-testimonial-top">
+                        <div class="home-avatar home-avatar--2">ن</div>
+                        <div class="home-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    </div>
                     <p class="quote">پاسخنامه‌ها خیلی کمک کرد. دیگر سوالات تکراری را اشتباه نمی‌زنم.</p>
                     <footer class="home-testimonial-footer">
-                        <div>
-                            <strong>نگار احمدی</strong>
-                            <span>اصفهان</span>
-                        </div>
-                        <div class="home-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <strong>نگار احمدی</strong>
+                        <span>اصفهان</span>
                     </footer>
                 </blockquote>
                 <blockquote class="home-testimonial" data-aos="fade-up" data-aos-delay="160">
+                    <div class="home-testimonial-top">
+                        <div class="home-avatar home-avatar--3">ر</div>
+                        <div class="home-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    </div>
                     <p class="quote">رابط کاربری ساده است؛ حتی برای پدرم که اهل تکنولوژی نیست قابل استفاده بود.</p>
                     <footer class="home-testimonial-footer">
-                        <div>
-                            <strong>رضا کریمی</strong>
-                            <span>شیراز</span>
-                        </div>
-                        <div class="home-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <strong>رضا کریمی</strong>
+                        <span>شیراز</span>
                     </footer>
                 </blockquote>
             </div>
@@ -204,6 +333,16 @@
                         بسته اعتباری برای تعداد مشخص آزمون است؛ اشتراک ماهانه و سالانه دسترسی نامحدود به همه آزمون‌ها می‌دهد.
                     </div>
                 </details>
+                <details class="home-faq-item">
+                    <summary>
+                        <span class="home-faq-icon"><i class="fas fa-book-open"></i></span>
+                        <span class="home-faq-q">سوالات اشتباه من چیست؟</span>
+                        <span class="home-faq-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="home-faq-answer">
+                        هر سوالی که در آزمون اشتباه جواب دهید ذخیره می‌شود. می‌توانید از بخش «سوالات اشتباه من» دوباره تمرین کنید تا یاد بگیرید.
+                    </div>
+                </details>
             </div>
             <p class="home-faq-foot" data-aos="fade-up">
                 سوال دیگری دارید؟
@@ -221,21 +360,30 @@
                 <div class="home-cta-inner">
                     <span class="home-cta-badge"><i class="fas fa-bolt"></i> شروع در کمتر از یک دقیقه</span>
                     <h2>آماده‌ای؟ <span class="home-cta-highlight">همین الان</span> شروع کن</h2>
-                    <p>اولین آزمون رایگان را بده، نمره‌ات را ببین و با پاسخنامه تشریحی نقاط ضعف را پیدا کن.</p>
+                    <p>اولین آزمون رایگان را بده، نمره‌ات را ببین و با پاسخنامه نقاط ضعف را پیدا کن.</p>
                     <div class="home-cta-actions">
-                        <a href="{% url 'quizbuilder:quiz_list' %}" class="home-btn home-btn-cta-primary">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'quizbuilder:exam_hub' %}" class="home-btn home-btn-cta-primary">
                             <i class="fas fa-play"></i>
-                            ورود به آزمون‌ها
+                            شروع آزمون
                         </a>
+                        {% else %}
+                        <a href="{% url 'sign_up_page' %}" class="home-btn home-btn-cta-primary">
+                            <i class="fas fa-rocket"></i>
+                            ثبت‌نام رایگان
+                        </a>
+                        {% endif %}
                         <a href="{% url 'subscriptions:pricing' %}" class="home-btn home-btn-cta-ghost">
                             <i class="fas fa-gem"></i>
                             مشاهده پلن‌ها
                         </a>
                     </div>
+                    {% if not user.is_authenticated %}
                     <p class="home-cta-note">
-                        حساب ندارید؟
-                        <a href="{% url 'sign_up_page' %}">ثبت‌نام رایگان</a>
+                        حساب دارید؟
+                        <a href="{% url 'sign_in_page' %}">وارد شوید</a>
                     </p>
+                    {% endif %}
                 </div>
             </div>
         </div>
