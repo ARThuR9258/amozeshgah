@@ -1,0 +1,55 @@
+{% extends 'shared/_layout.html' %}
+{% load static seo_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/browse.css' %}">
+<link rel="stylesheet" href="{% static 'css/seo.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="static-page">
+    <div class="sp-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
+        {% render_breadcrumbs %}
+        <header class="sp-hero sp-hero--split" data-aos="fade-up">
+            <div class="sp-hero-copy">
+                <span class="sp-badge"><i class="fas fa-file-pdf"></i> نمونه سوال</span>
+                <h1>{{ paper.title }}</h1>
+                {% if paper.description %}
+                <p class="lead">{{ paper.description }}</p>
+                {% endif %}
+                <div class="sp-hero-chips">
+                    <span><i class="fas fa-weight-hanging"></i> {{ paper.get_file_size }}</span>
+                    <span><i class="fas fa-calendar"></i> {{ paper.created_at|date:"Y/m/d" }}</span>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="{% url 'sample_questions:view_question_paper' paper.pk %}" class="btn btn-primary rounded-pill px-4" target="_blank" rel="noopener">
+                        <i class="fas fa-eye ms-2"></i> مشاهده PDF
+                    </a>
+                    <a href="{% url 'sample_questions:download_question_paper' paper.pk %}" class="btn btn-outline-light rounded-pill px-4">
+                        <i class="fas fa-download ms-2"></i> دانلود
+                    </a>
+                    <a href="{% url 'quizbuilder:exam_hub' %}" class="btn btn-outline-light rounded-pill px-4">
+                        <i class="fas fa-play ms-2"></i> آزمون آنلاین
+                    </a>
+                </div>
+            </div>
+        </header>
+        {% if related_papers %}
+        <section class="mt-4" data-aos="fade-up">
+            <h2 class="h5 fw-bold mb-3">نمونه سوالات مرتبط</h2>
+            <div class="guide-card-grid">
+                {% for p in related_papers %}
+                <a href="{{ p.get_absolute_url }}" class="guide-card">
+                    <div class="guide-card-icon"><i class="fas fa-file-alt"></i></div>
+                    <h2>{{ p.title }}</h2>
+                    <p>{{ p.get_file_size }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        {% render_internal_links %}
+    </div>
+</section>
+{% endblock %}

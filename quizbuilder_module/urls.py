@@ -8,6 +8,7 @@ urlpatterns = [
     # عمومی
     path('', views.ExamHubView.as_view(), name='exam_hub'),
     path('', views.ExamHubView.as_view(), name='quiz_list'),
+    path('category/<str:slug>/', views.CategoryDetailView.as_view(), name='category_detail'),
     path('start/', views.ExamStartView.as_view(), name='exam_start'),
     path('session/<int:session_id>/', views.ExamTakeView.as_view(), name='exam_take'),
     path(

@@ -1,0 +1,188 @@
+/* SEO — breadcrumb، لینک داخلی، محتوا */
+.seo-breadcrumb {
+    margin-bottom: 1.5rem;
+}
+
+.seo-internal-links {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: 20px;
+    background: rgba(34, 42, 61, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.seo-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem 2rem;
+}
+
+.seo-links-col h3 {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--site-text);
+    margin-bottom: 0.85rem;
+}
+
+.seo-links-col h3 i {
+    color: var(--site-accent);
+    margin-left: 0.35rem;
+}
+
+.seo-links-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.seo-links-col li {
+    margin-bottom: 0.45rem;
+}
+
+.seo-links-col a {
+    color: var(--site-muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s ease;
+}
+
+.seo-links-col a:hover {
+    color: var(--site-accent);
+}
+
+.seo-content-body {
+    line-height: 1.9;
+    color: var(--site-muted);
+}
+
+.seo-content-body h2 {
+    color: var(--site-text);
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 2rem 0 0.75rem;
+}
+
+.seo-content-body h3 {
+    color: var(--site-text);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 1.5rem 0 0.5rem;
+}
+
+.seo-content-body p {
+    margin-bottom: 1rem;
+}
+
+.seo-content-body ul,
+.seo-content-body ol {
+    padding-right: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.seo-content-body li {
+    margin-bottom: 0.35rem;
+}
+
+.seo-content-body a {
+    color: var(--site-accent);
+}
+
+.guide-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+.guide-card {
+    display: block;
+    padding: 1.35rem;
+    border-radius: 18px;
+    background: var(--site-card);
+    border: 1px solid var(--site-border);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.guide-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(77, 171, 247, 0.35);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+}
+
+.guide-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: rgba(77, 171, 247, 0.12);
+    color: var(--site-accent);
+    margin-bottom: 0.85rem;
+}
+
+.guide-card h2 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--site-text);
+    margin: 0 0 0.5rem;
+}
+
+.guide-card p {
+    font-size: 0.85rem;
+    color: var(--site-muted);
+    margin: 0;
+    line-height: 1.65;
+}
+
+.article-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.article-card {
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--site-card);
+    border: 1px solid var(--site-border);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.article-card-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.article-card-body {
+    padding: 1.15rem;
+}
+
+.article-card-body h2 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+    color: var(--site-text);
+}
+
+.article-card-body p {
+    font-size: 0.85rem;
+    color: var(--site-muted);
+    margin: 0;
+    line-height: 1.65;
+}
+
+.article-card-date {
+    font-size: 0.75rem;
+    color: var(--site-muted);
+    margin-top: 0.65rem;
+}

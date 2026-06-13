@@ -1,0 +1,50 @@
+{% load static seo_tags %}
+{# SEO Meta Tags — Production Ready #}
+<meta name="description" content="{{ seo.description }}">
+<meta name="keywords" content="{{ seo.keywords }}">
+<meta name="author" content="{{ seo.site_name }}">
+<meta name="robots" content="{% if seo.noindex %}noindex{% if seo.nofollow %},nofollow{% endif %}{% else %}index,follow{% endif %}">
+<link rel="canonical" href="{{ seo.canonical }}">
+
+{# Theme & PWA #}
+<meta name="theme-color" content="{{ seo.theme_color }}">
+<meta name="msapplication-navbutton-color" content="{{ seo.theme_color }}">
+<meta name="apple-mobile-web-app-status-bar-style" content="{{ seo.theme_color }}">
+<link rel="manifest" href="{% static 'site.webmanifest' %}">
+
+{# Open Graph — تلگرام، واتساپ، لینکدین #}
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="{{ seo.site_name }}">
+<meta property="og:type" content="{{ seo.og_type }}">
+<meta property="og:title" content="{{ seo.title }}">
+<meta property="og:description" content="{{ seo.description }}">
+<meta property="og:url" content="{{ seo.canonical }}">
+<meta property="og:image" content="{{ seo.og_image }}">
+<meta property="og:image:alt" content="{{ seo.og_image_alt }}">
+
+{# Twitter Card #}
+<meta name="twitter:card" content="{{ seo.twitter_card }}">
+<meta name="twitter:title" content="{{ seo.title }}">
+<meta name="twitter:description" content="{{ seo.description }}">
+<meta name="twitter:image" content="{{ seo.og_image }}">
+
+{# Google Search Console Verification #}
+{% if google_site_verification %}
+<meta name="google-site-verification" content="{{ google_site_verification }}">
+{% endif %}
+
+{# Schema.org JSON-LD #}
+{% for schema in seo.schemas %}
+<script type="application/ld+json">{{ schema|to_json_ld }}</script>
+{% endfor %}
+
+{# Google Analytics #}
+{% if google_analytics_id %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ google_analytics_id }}');
+</script>
+{% endif %}

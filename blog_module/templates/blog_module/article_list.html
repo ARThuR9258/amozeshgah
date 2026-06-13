@@ -1,0 +1,49 @@
+{% extends 'shared/_layout.html' %}
+{% load static seo_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/static-pages.css' %}">
+<link rel="stylesheet" href="{% static 'css/seo.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="static-page">
+    <div class="sp-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
+        {% render_breadcrumbs %}
+        <header class="sp-hero" data-aos="fade-up">
+            <span class="sp-badge"><i class="fas fa-newspaper"></i> مقالات</span>
+            <h1>مقالات آموزشی <span class="gradient-text">آیین‌نامه</span></h1>
+            <p class="lead">نکات آزمون، راهنمای قبولی و آموزش تابلوها و قوانین رانندگی.</p>
+        </header>
+        <div class="article-card-grid" data-aos="fade-up">
+            {% for article in articles %}
+            <a href="{{ article.get_absolute_url }}" class="article-card">
+                {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" title="{{ article.title }}" class="article-card-img" loading="lazy" width="400" height="160">
+                {% endif %}
+                <div class="article-card-body">
+                    <h2>{{ article.title }}</h2>
+                    <p>{{ article.excerpt }}</p>
+                    <div class="article-card-date">{{ article.created_at|date:"Y/m/d" }}</div>
+                </div>
+            </a>
+            {% empty %}
+            <p class="text-muted">مقالات به‌زودی منتشر می‌شوند.</p>
+            {% endfor %}
+        </div>
+        {% if is_paginated %}
+        <nav class="mt-4 d-flex justify-content-center gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-light btn-sm rounded-pill">قبلی</a>
+            {% endif %}
+            <span class="align-self-center text-muted small">صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-light btn-sm rounded-pill">بعدی</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+        {% render_internal_links %}
+    </div>
+</section>
+{% endblock %}

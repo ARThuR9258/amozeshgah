@@ -4,8 +4,10 @@ from django.conf import settings
 from django.db.models import Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
+from seo_module.mixins import SEOMixin
+from seo_module.utils import build_seo
 from account_module.decorators import AdminRequiredMixin
 from amozeshga.dashboard_list import build_pagination_query
 from .models import SampleQuestion
@@ -54,6 +56,13 @@ class SampleQuestionListView(ListView):
                 ('title', 'عنوان (الفبا)'),
             ],
         })
+        context['seo'] = build_seo(self.request, override={
+            'canonical': self.request.build_absolute_uri('/questions/'),
+            'breadcrumbs': [
+                {'name': 'صفحه نخست', 'url': '/'},
+                {'name': 'نمونه سوالات', 'url': None},
+            ],
+        })
         return context
 
 
@@ -79,6 +88,37 @@ def view_question_paper(request, pk):
                 response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
                 return response
     raise Http404('فایل درخواستی یافت نشد')
+
+
+class SampleQuestionDetailView(SEOMixin, DetailView):
+    """صفحه HTML نمونه سوال — SEO Friendly."""
+
+    model = SampleQuestion
+    template_name = 'sample_questions/question_detail.html'
+    context_object_name = 'paper'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get_queryset(self):
+        return SampleQuestion.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        paper = self.object
+        context['seo'] = build_seo(self.request, override={
+            'title': f'{paper.title} | نمونه سوال آیین نامه — آیین‌یار',
+            'description': paper.description or f'دانلود {paper.title} — نمونه سوالات آیین نامه رانندگی به‌روز.',
+            'keywords': 'نمونه سوال آیین نامه, سوالات آیین نامه رانندگی, دانلود PDF آیین نامه',
+            'breadcrumbs': [
+                {'name': 'صفحه نخست', 'url': '/'},
+                {'name': 'نمونه سوالات', 'url': '/questions/'},
+                {'name': paper.title, 'url': paper.get_absolute_url()},
+            ],
+        })
+        context['related_papers'] = SampleQuestion.objects.filter(
+            is_active=True,
+        ).exclude(pk=paper.pk)[:4]
+        return context
 
 
 class QuestionListDashboard(AdminRequiredMixin, ListView):

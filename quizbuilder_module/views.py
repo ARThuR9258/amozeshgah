@@ -9,8 +9,10 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import View
 from django.views.decorators.http import require_POST
-from django.views.generic import ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView
 
+from seo_module.mixins import SEOMixin
+from seo_module.utils import build_seo
 from account_module.decorators import AdminRequiredMixin
 from quizbuilder_module.exam_services import (
     NotEnoughQuestionsError,
@@ -37,40 +39,50 @@ from subscriptions_module.mixins import QuizAccessMixin
 from subscriptions_module.services import consume_quiz_access
 
 
-class ExamHubView(LoginRequiredMixin, TemplateView):
-    """صفحه آزمون — شروع جدید یا ادامه جلسه فعال."""
+class ExamHubView(TemplateView):
+    """صفحه آزمون — عمومی برای SEO؛ شروع آزمون نیاز به ورود دارد."""
 
     template_name = 'quizbuilder_module/exam_hub.html'
 
     def get_context_data(self, **kwargs):
-        from subscriptions_module.services import can_take_quiz
-        from subscriptions_module.services import get_active_subscription
+        from subscriptions_module.services import can_take_quiz, get_active_subscription
 
         context = super().get_context_data(**kwargs)
-        active = get_active_session(self.request.user)
+        user = self.request.user
         active_count = Question.objects.filter(is_active=True).count()
-        completed = ExamSession.objects.filter(
-            user=self.request.user,
-            status__in=(ExamSessionStatus.COMPLETED, ExamSessionStatus.EXPIRED),
-        ).count()
-        passed_count = ExamSession.objects.filter(user=self.request.user, passed=True).count()
-        user_total = ExamSession.objects.filter(
-            user=self.request.user,
-            status__in=(ExamSessionStatus.COMPLETED, ExamSessionStatus.EXPIRED),
-        ).count()
-        user_pass_rate = int(round((passed_count / user_total) * 100)) if user_total else 0
 
-        sub = get_active_subscription(self.request.user)
-        plan_name = sub.plan.name if sub else 'رایگان'
-        plan_expires = sub.expires_at if sub else None
+        if user.is_authenticated:
+            active = get_active_session(user)
+            completed = ExamSession.objects.filter(
+                user=user,
+                status__in=(ExamSessionStatus.COMPLETED, ExamSessionStatus.EXPIRED),
+            ).count()
+            passed_count = ExamSession.objects.filter(user=user, passed=True).count()
+            user_total = completed
+            user_pass_rate = int(round((passed_count / user_total) * 100)) if user_total else 0
+            sub = get_active_subscription(user)
+            plan_name = sub.plan.name if sub else 'رایگان'
+            plan_expires = sub.expires_at if sub else None
+            quiz_access = can_take_quiz(user)
+            credits = user.credits or 0
+        else:
+            active = None
+            completed = 0
+            passed_count = 0
+            user_total = 0
+            user_pass_rate = 0
+            plan_name = 'مهمان'
+            plan_expires = None
+            quiz_access = {'allowed': False, 'message': 'برای شروع آزمون وارد حساب شوید.', 'access_type': 'guest'}
+            credits = 0
 
         context.update({
             'active_session': active,
             'active_question_count': active_count,
-            'can_start': active_count >= EXAM_QUESTION_COUNT,
+            'can_start': active_count >= EXAM_QUESTION_COUNT and user.is_authenticated,
             'required_questions': EXAM_QUESTION_COUNT,
             'exam_minutes': EXAM_DURATION_MINUTES,
-            'quiz_access': can_take_quiz(self.request.user),
+            'quiz_access': quiz_access,
             'completed_exams': completed,
             'pass_percent': PASS_PERCENT,
             'user_total_exams': user_total,
@@ -78,7 +90,14 @@ class ExamHubView(LoginRequiredMixin, TemplateView):
             'user_pass_rate': user_pass_rate,
             'plan_name': plan_name,
             'plan_expires': plan_expires,
-            'credits': self.request.user.credits or 0,
+            'credits': credits,
+            'is_guest': not user.is_authenticated,
+        })
+        context['seo'] = build_seo(self.request, override={
+            'breadcrumbs': [
+                {'name': 'صفحه نخست', 'url': '/'},
+                {'name': 'آزمون آنلاین', 'url': None},
+            ],
         })
         return context
 
@@ -282,3 +301,34 @@ class ExamSessionListDashboard(AdminRequiredMixin, ListView):
 
     def get_queryset(self):
         return ExamSession.objects.select_related('user').order_by('-started_at')
+
+
+class CategoryDetailView(SEOMixin, DetailView):
+    """صفحه لندینگ SEO برای هر دسته‌بندی سوالات."""
+
+    model = Category
+    template_name = 'quizbuilder_module/category_detail.html'
+    context_object_name = 'category'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get_queryset(self):
+        return Category.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cat = self.object
+        q_count = Question.objects.filter(category=cat, is_active=True).count()
+        context['question_count'] = q_count
+        context['seo'] = build_seo(self.request, override={
+            'title': f'سوالات {cat.name} آیین نامه | آیین‌یار',
+            'description': f'تمرین و آزمون آنلاین سوالات {cat.name} آیین نامه رانندگی — {q_count} سوال فعال در بانک آیین‌یار.',
+            'keywords': f'سوالات {cat.name}, آزمون آیین نامه, {cat.name} آیین نامه',
+            'breadcrumbs': [
+                {'name': 'صفحه نخست', 'url': '/'},
+                {'name': 'آزمون آنلاین', 'url': '/quiz/'},
+                {'name': cat.name, 'url': cat.get_absolute_url()},
+            ],
+        })
+        context['other_categories'] = Category.objects.filter(is_active=True).exclude(pk=cat.pk)[:6]
+        return context

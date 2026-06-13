@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
+from seo_module.utils import build_seo
+
 from .models import PaymentOrder, SubscriptionPlan
 from .services import fulfill_order
 
@@ -40,6 +42,12 @@ class PricingView(TemplateView):
             from .services import can_take_quiz
             context['user_access'] = can_take_quiz(self.request.user)
 
+        context['seo'] = build_seo(self.request, override={
+            'breadcrumbs': [
+                {'name': 'صفحه نخست', 'url': '/'},
+                {'name': 'پلن‌ها و قیمت', 'url': None},
+            ],
+        })
         return context
 
     def _comparison_rows(self):

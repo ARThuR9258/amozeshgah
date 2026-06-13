@@ -1,0 +1,52 @@
+{% extends 'shared/_layout.html' %}
+{% load static seo_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/static-pages.css' %}">
+<link rel="stylesheet" href="{% static 'css/seo.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="static-page">
+    <div class="sp-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
+        {% render_breadcrumbs %}
+        <article data-aos="fade-up">
+            <header class="sp-hero sp-hero--split mb-4">
+                <div class="sp-hero-copy">
+                    <span class="sp-badge"><i class="fas fa-newspaper"></i> مقاله</span>
+                    <h1>{{ article.title }}</h1>
+                    <p class="lead">{{ article.excerpt }}</p>
+                    <div class="sp-hero-chips">
+                        <span><i class="fas fa-calendar"></i> {{ article.created_at|date:"Y/m/d" }}</span>
+                    </div>
+                </div>
+                {% if article.image %}
+                <div class="sp-hero-visual">
+                    <img src="{{ article.image.url }}" alt="{{ article.title }}" title="{{ article.title }}" class="rounded-4 w-100" style="max-height:280px;object-fit:cover;" loading="lazy" width="600" height="280">
+                </div>
+                {% endif %}
+            </header>
+            <div class="seo-content-body sp-content-card">
+                {{ article.content|safe }}
+            </div>
+        </article>
+        {% if related_articles %}
+        <section class="mt-5" data-aos="fade-up">
+            <h2 class="h5 fw-bold mb-3">مقالات مرتبط</h2>
+            <div class="article-card-grid">
+                {% for a in related_articles %}
+                <a href="{{ a.get_absolute_url }}" class="article-card">
+                    <div class="article-card-body">
+                        <h2>{{ a.title }}</h2>
+                        <p>{{ a.excerpt }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        {% render_internal_links %}
+    </div>
+</section>
+{% endblock %}

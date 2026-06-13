@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.sitemaps',
     'index_module.apps.IndexModuleConfig',
     'django_render_partial',
     'account_module',
@@ -54,17 +55,21 @@ INSTALLED_APPS = [
     'subscriptions_module',
     'widget_tweaks',
     'admin_panel.apps.AdminPanelConfig',
+    'seo_module.apps.SeoModuleConfig',
+    'blog_module.apps.BlogModuleConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'seo_module.middleware.SEOSecurityHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'amozeshga.urls'
@@ -80,6 +85,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'index_module.context_processors.dashboard_sidebar',
+                'seo_module.context_processors.seo_context',
             ],
         },
     },
@@ -167,3 +173,10 @@ if not DEBUG:
 
 LOGIN_URL = '/account/sign-in/'
 LOGIN_REDIRECT_URL = 'first_page'
+
+# --- SEO (Production) ---
+
+SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'ayinyar.ir')
+SITE_URL = os.getenv('SITE_URL', f'https://{SITE_DOMAIN}')
+GOOGLE_SITE_VERIFICATION = os.getenv('GOOGLE_SITE_VERIFICATION', '')
+GOOGLE_ANALYTICS_ID = os.getenv('GOOGLE_ANALYTICS_ID', '')

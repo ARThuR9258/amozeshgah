@@ -120,7 +120,7 @@
                     </div>
                     <div class="browse-card-head">
                         <span class="browse-card-num">#{{ paper.id }}</span>
-                        <h3>{{ paper.title }}</h3>
+                        <h3><a href="{{ paper.get_absolute_url }}" class="text-decoration-none text-reset">{{ paper.title }}</a></h3>
                         {% if paper.description %}
                         <p class="browse-card-desc">{{ paper.description|truncatewords:18 }}</p>
                         {% endif %}
@@ -134,6 +134,10 @@
                     </div>
                 </div>
                 <div class="browse-card-footer">
+                    <a href="{{ paper.get_absolute_url }}" class="browse-btn browse-btn--outline">
+                        <i class="fas fa-info-circle"></i>
+                        جزئیات
+                    </a>
                     <a href="{% url 'sample_questions:download_question_paper' paper.id %}"
                        class="browse-btn browse-btn--primary" download>
                         <i class="fas fa-download"></i>

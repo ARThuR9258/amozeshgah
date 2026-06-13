@@ -1,20 +1,20 @@
 {% load static %}
 {% if variant == 'icon' %}
 <span class="site-brand-icon site-brand-icon--{{ size|default:'md' }}">
-    <img src="{% static 'images/logo-icon.png' %}" alt="" class="site-brand-icon-img" loading="eager">
+    <img src="{% static 'images/logo-icon.png' %}" alt="آیین‌یار" title="آیین‌یار" class="site-brand-icon-img" loading="lazy">
 </span>
 {% elif variant == 'full' %}
 <div class="site-brand-showcase site-brand-showcase--{{ size|default:'md' }}">
     <div class="site-brand-showcase-glow" aria-hidden="true"></div>
-    <img src="{% static 'images/logo-full.png' %}" alt="آیین یار — موفقیت در آزمون رانندگی" class="site-brand-full-img" loading="eager">
+    <img src="{% static 'images/logo-full.png' %}" alt="آیین‌یار — موفقیت در آزمون رانندگی" title="آیین‌یار" class="site-brand-full-img" loading="lazy">
 </div>
 {% else %}
 <div class="site-brand site-brand--{{ variant|default:'header' }}">
     <span class="site-brand-icon site-brand-icon--{{ variant|default:'header' }}">
-        <img src="{% static 'images/logo-icon.png' %}" alt="" class="site-brand-icon-img" loading="eager">
+        <img src="{% static 'images/logo-icon.png' %}" alt="آیین‌یار" title="آیین‌یار" class="site-brand-icon-img" loading="eager">
     </span>
     <span class="site-brand-text">
-        <strong class="site-brand-name">آیین یار</strong>
+        <strong class="site-brand-name">آیین‌یار</strong>
         {% if variant == 'footer' or variant == 'auth' %}
         <small class="site-brand-tagline">موفقیت در آزمون رانندگی</small>
         {% endif %}

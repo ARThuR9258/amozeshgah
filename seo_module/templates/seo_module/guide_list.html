@@ -1,0 +1,33 @@
+{% extends 'shared/_layout.html' %}
+{% load static seo_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/static-pages.css' %}">
+<link rel="stylesheet" href="{% static 'css/seo.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="static-page">
+    <div class="sp-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
+        {% render_breadcrumbs %}
+        <header class="sp-hero" data-aos="fade-up">
+            <span class="sp-badge"><i class="fas fa-book-open"></i> راهنمای آزمون</span>
+            <h1>راهنمای جامع <span class="gradient-text">آزمون آیین‌نامه</span></h1>
+            <p class="lead">آموزش تابلوها، سوالات فنی، حق تقدم، پارک دوبل و نکات کلیدی قبولی در آزمون رسمی.</p>
+        </header>
+        <div class="guide-card-grid" data-aos="fade-up">
+            {% for guide in guides %}
+            <a href="{{ guide.get_absolute_url }}" class="guide-card">
+                <div class="guide-card-icon"><i class="{{ guide.icon }}"></i></div>
+                <h2>{{ guide.title }}</h2>
+                <p>{{ guide.excerpt }}</p>
+            </a>
+            {% empty %}
+            <p class="text-muted">صفحات راهنما به‌زودی منتشر می‌شوند.</p>
+            {% endfor %}
+        </div>
+        {% render_internal_links %}
+    </div>
+</section>
+{% endblock %}

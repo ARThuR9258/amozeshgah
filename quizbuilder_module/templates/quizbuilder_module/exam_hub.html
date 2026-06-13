@@ -13,7 +13,7 @@
     <div class="container position-relative">
 
         <nav class="eh-breadcrumb" data-aos="fade-up">
-            <a href="{% url 'user_panel_page' %}"><i class="fas fa-arrow-right ms-1"></i> پنل کاربری</a>
+            <a href="{% url 'first_page' %}"><i class="fas fa-arrow-right ms-1"></i> صفحه نخست</a>
             <span>/</span>
             <span>آزمون آنلاین</span>
         </nav>
@@ -56,7 +56,16 @@
                             <span>مشاهده آمار</span>
                         </a>
                     {% else %}
-                        {% if can_start and quiz_access.allowed %}
+                        {% if is_guest %}
+                            <a href="{% url 'sign_up_page' %}" class="eh-btn-primary">
+                                <i class="fas fa-user-plus"></i>
+                                <span>ثبت‌نام رایگان</span>
+                            </a>
+                            <a href="{% url 'sign_in_page' %}" class="eh-btn-outline">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>ورود</span>
+                            </a>
+                        {% elif can_start and quiz_access.allowed %}
                             <form method="post" action="{% url 'quizbuilder:exam_start' %}" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="eh-btn-primary">
@@ -292,6 +301,8 @@
                 </a>
             </div>
         </div>
+
+        {% load seo_tags %}{% render_internal_links %}
 
     </div>
 </div>

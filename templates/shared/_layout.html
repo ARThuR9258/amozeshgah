@@ -7,7 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}آیین یار — موفقیت در آزمون رانندگی{% endblock %}</title>
+    <title>{% block title %}{{ seo.title }}{% endblock %}</title>
+    {% include 'shared/seo_tags.html' %}
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <link rel="apple-touch-icon" href="{% static 'images/logo-icon.png' %}">
     
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
     <link rel="stylesheet" href="{% static 'css/header-footer.css' %}">
     <link rel="stylesheet" href="{% static 'css/site-logo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/seo.css' %}">
     
     <script src="{% static 'js/toaster.js' %}"></script>
     {% block extra_css %}{% endblock %}
@@ -103,7 +105,7 @@
                     <div class="header-social">
                         <a href="#" aria-label="اینستاگرام"><i class="fab fa-instagram"></i></a>
                         <a href="#" aria-label="تلگرام"><i class="fab fa-telegram-plane"></i></a>
-                        <a href="mailto:info@ayinnamehplus.ir" aria-label="ایمیل"><i class="far fa-envelope"></i></a>
+                        <a href="mailto:{{ site.email }}" aria-label="ایمیل"><i class="far fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
@@ -127,9 +129,9 @@
                     {% endif %}
                 </nav>
                 <div class="header-social justify-content-center mt-3 pb-2">
-                    <a href="#" aria-label="اینستاگرام"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="تلگرام"><i class="fab fa-telegram-plane"></i></a>
-                    <a href="mailto:info@ayinnamehplus.ir" aria-label="ایمیل"><i class="far fa-envelope"></i></a>
+                        <a href="{{ site.instagram }}" aria-label="اینستاگرام" rel="noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="{{ site.telegram }}" aria-label="تلگرام" rel="noopener"><i class="fab fa-telegram-plane"></i></a>
+                        <a href="mailto:{{ site.email }}" aria-label="ایمیل"><i class="far fa-envelope"></i></a>
                 </div>
             </div>
         </div>
@@ -162,6 +164,8 @@
                         <li><a href="{% url 'about_page' %}">درباره ما</a></li>
                         <li><a href="{% url 'contact_page' %}">تماس با ما</a></li>
                         <li><a href="{% url 'subscriptions:pricing' %}">پلن‌ها و قیمت</a></li>
+                        <li><a href="{% url 'seo:guide_list' %}">راهنمای آزمون</a></li>
+                        <li><a href="{% url 'blog:article_list' %}">مقالات آموزشی</a></li>
                         <li><a href="{% url 'first_page' %}#faq">پرسش‌های متداول</a></li>
                     </ul>
                 </div>
@@ -178,7 +182,7 @@
                     <h6>ارتباط با ما</h6>
                     <div class="site-footer-contact-item">
                         <i class="fas fa-envelope"></i>
-                        <a href="mailto:info@ayinnamehplus.ir">info@ayinnamehplus.ir</a>
+                        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
                     </div>
                     <div class="site-footer-contact-item">
                         <i class="fas fa-headset"></i>
@@ -187,7 +191,7 @@
                     <div class="social-links">
                         <a href="#" aria-label="اینستاگرام"><i class="fab fa-instagram"></i></a>
                         <a href="#" aria-label="تلگرام"><i class="fab fa-telegram-plane"></i></a>
-                        <a href="mailto:info@ayinnamehplus.ir" aria-label="ایمیل"><i class="far fa-envelope"></i></a>
+                        <a href="mailto:{{ site.email }}" aria-label="ایمیل"><i class="far fa-envelope"></i></a>
                     </div>
                 </div>
             </div>

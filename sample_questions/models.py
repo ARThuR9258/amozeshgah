@@ -1,6 +1,8 @@
 import os
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 
 def question_pdf_path(instance, filename):
     # File will be uploaded to MEDIA_ROOT/sample_questions/<year>/<month>/<filename>
@@ -9,6 +11,7 @@ def question_pdf_path(instance, filename):
 
 class SampleQuestion(models.Model):
     title = models.CharField(max_length=200, verbose_name='عنوان سوال')
+    slug = models.SlugField(max_length=220, unique=True, allow_unicode=True, verbose_name='شناسه URL', blank=True)
     description = models.TextField(verbose_name='توضیحات', blank=True, null=True)
     pdf_file = models.FileField(upload_to=question_pdf_path, verbose_name='فایل PDF سوالات')
     is_active = models.BooleanField(default=True, verbose_name='فعال/غیرفعال')
@@ -22,6 +25,20 @@ class SampleQuestion(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title, allow_unicode=True) or f'sample-{self.pk or ""}'
+            slug = base
+            counter = 1
+            while SampleQuestion.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f'{base}-{counter}'
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('sample_questions:question_detail', kwargs={'slug': self.slug})
         
     def get_file_extension(self):
         name, extension = os.path.splitext(self.pdf_file.name)

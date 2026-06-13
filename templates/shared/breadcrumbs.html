@@ -1,0 +1,12 @@
+{% if breadcrumbs %}
+<nav class="sp-breadcrumb seo-breadcrumb" aria-label="مسیر صفحه" data-aos="fade-up">
+    {% for crumb in breadcrumbs %}
+        {% if crumb.url and not forloop.last %}
+            <a href="{{ crumb.url }}"><i class="fas fa-arrow-right ms-1"></i> {{ crumb.name }}</a>
+            <span>/</span>
+        {% else %}
+            <span>{{ crumb.name }}</span>
+        {% endif %}
+    {% endfor %}
+</nav>
+{% endif %}

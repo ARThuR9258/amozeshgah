@@ -1,5 +1,5 @@
 {% extends 'shared/_layout.html' %}
-{% load static %}
+{% load static seo_tags %}
 
 {% block title %}صفحه نخست | آیین یار{% endblock %}
 
@@ -388,6 +388,8 @@
             </div>
         </div>
     </section>
+
+    {% render_internal_links %}
 
 </div>
 

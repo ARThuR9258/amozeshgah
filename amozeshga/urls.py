@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,9 +24,27 @@ from quizbuilder_module.wrong_question_views import (
     WrongQuestionsExamStartView,
     WrongQuestionsListView,
 )
+from seo_module.sitemaps import (
+    ArticleSitemap,
+    CategorySitemap,
+    GuidePageSitemap,
+    SampleQuestionSitemap,
+    StaticViewSitemap,
+)
+from seo_module.views import robots_txt
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'guides': GuidePageSitemap,
+    'articles': ArticleSitemap,
+    'categories': CategorySitemap,
+    'samples': SampleQuestionSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django_sitemap'),
     path('', include('index_module.urls')),
     path('account/', include('account_module.urls')),
     path('questions/', include('sample_questions.urls')),
@@ -33,6 +52,8 @@ urlpatterns = [
     path('my-wrong-questions/', WrongQuestionsListView.as_view(), name='wrong_questions_list'),
     path('my-wrong-questions/start/', WrongQuestionsExamStartView.as_view(), name='wrong_questions_exam_start'),
     path('pricing/', include('subscriptions_module.urls')),
+    path('blog/', include('blog_module.urls')),
+    path('', include('seo_module.urls')),
 ]
 
 # media: در development یا با SERVE_MEDIA=True از Django سرو می‌شود

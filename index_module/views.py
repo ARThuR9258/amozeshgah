@@ -2,13 +2,40 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.views import View
 from django.contrib import messages
+
 from account_module.decorators import admin_required
+from seo_module.utils import build_seo
+
 from .forms import ContactForm
 from .site_info import SITE_INFO
 
 
+HOME_FAQ = [
+    {
+        'question': 'سوالات به‌روز هستند؟',
+        'answer': 'بله، بانک سوالات آیین‌یار به‌طور منظم با آخرین تغییرات آیین‌نامه ۱۴۰۴ به‌روزرسانی می‌شود.',
+    },
+    {
+        'question': 'آیا رایگان هم می‌توانم استفاده کنم؟',
+        'answer': 'بله، هر روز ۲ آزمون رایگان در اختیار شماست. برای آزمون نامحدود می‌توانید پلن اشتراک تهیه کنید.',
+    },
+    {
+        'question': 'پلن‌ها چه تفاوتی دارند؟',
+        'answer': 'پلن رایگان محدودیت روزانه دارد. پلن‌های پولی آزمون نامحدود، نمونه سوالات و تمرین هوشمند ارائه می‌دهند.',
+    },
+    {
+        'question': 'سوالات اشتباه من چیست؟',
+        'answer': 'سیستم هوشمند آیین‌یار سوالاتی که اشتباه پاسخ داده‌اید را ذخیره می‌کند تا بتوانید روی آن‌ها تمرین کنید.',
+    },
+]
+
+
 def first_page(request):
-    return render(request, 'index_module/main_page.html')
+    seo = build_seo(request, override={
+        'faq_items': HOME_FAQ,
+        'breadcrumbs': [{'name': 'صفحه نخست', 'url': '/'}],
+    })
+    return render(request, 'index_module/main_page.html', {'seo': seo, 'home_faq': HOME_FAQ})
 
 
 class AboutPageView(TemplateView):
@@ -17,6 +44,12 @@ class AboutPageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['site'] = SITE_INFO
+        context['seo'] = build_seo(self.request, override={
+            'breadcrumbs': [
+                {'name': 'صفحه نخست', 'url': '/'},
+                {'name': 'درباره ما', 'url': None},
+            ],
+        })
         return context
 
 
@@ -32,6 +65,12 @@ class ContactPageView(View):
         return render(request, self.template_name, {
             'form': ContactForm(initial=initial),
             'site': SITE_INFO,
+            'seo': build_seo(request, override={
+                'breadcrumbs': [
+                    {'name': 'صفحه نخست', 'url': '/'},
+                    {'name': 'تماس با ما', 'url': None},
+                ],
+            }),
         })
 
     def post(self, request):

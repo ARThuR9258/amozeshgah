@@ -1,0 +1,41 @@
+{% extends 'shared/_layout.html' %}
+{% load static seo_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/static-pages.css' %}">
+<link rel="stylesheet" href="{% static 'css/seo.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="static-page">
+    <div class="sp-bg-glow" aria-hidden="true"></div>
+    <div class="container position-relative">
+        {% render_breadcrumbs %}
+        <header class="sp-hero sp-hero--split" data-aos="fade-up">
+            <div class="sp-hero-copy">
+                <span class="sp-badge"><i class="{{ guide.icon }}"></i> راهنما</span>
+                <h1>{{ guide.title }}</h1>
+                <p class="lead">{{ guide.excerpt }}</p>
+            </div>
+        </header>
+        <article class="seo-content-body sp-content-card" data-aos="fade-up">
+            {{ guide.content|safe }}
+        </article>
+        {% if related_guides %}
+        <section class="mt-5" data-aos="fade-up">
+            <h2 class="h5 fw-bold mb-3">راهنماهای مرتبط</h2>
+            <div class="guide-card-grid">
+                {% for g in related_guides %}
+                <a href="{{ g.get_absolute_url }}" class="guide-card">
+                    <div class="guide-card-icon"><i class="{{ g.icon }}"></i></div>
+                    <h2>{{ g.title }}</h2>
+                    <p>{{ g.excerpt }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        {% render_internal_links %}
+    </div>
+</section>
+{% endblock %}
