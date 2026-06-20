@@ -28,7 +28,7 @@ from seo_module.sitemaps import (
     ArticleSitemap,
     CategorySitemap,
     GuidePageSitemap,
-    SampleQuestionSitemap,
+    # SampleQuestionSitemap,
     StaticViewSitemap,
 )
 from seo_module.views import robots_txt
@@ -38,7 +38,7 @@ sitemaps = {
     'guides': GuidePageSitemap,
     'articles': ArticleSitemap,
     'categories': CategorySitemap,
-    'samples': SampleQuestionSitemap,
+    # 'samples': SampleQuestionSitemap,  # نمونه سوالات — موقتاً غیرفعال
 }
 
 urlpatterns = [
@@ -47,6 +47,7 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django_sitemap'),
     path('', include('index_module.urls')),
     path('account/', include('account_module.urls')),
+    # نمونه سوالات عمومی — موقتاً غیرفعال؛ فقط مسیرهای داشبورد فعال
     path('questions/', include('sample_questions.urls')),
     path('quiz/', include('quizbuilder_module.urls')),
     path('my-wrong-questions/', WrongQuestionsListView.as_view(), name='wrong_questions_list'),

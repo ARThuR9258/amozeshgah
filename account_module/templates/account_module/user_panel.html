@@ -54,7 +54,7 @@
                     <i class="fas fa-book-open"></i> سوالات اشتباه
                 </a>
                 <a href="{% url 'subscriptions:pricing' %}" class="up-btn-outline">
-                    <i class="fas fa-gem"></i> ارتقا پلن
+                    <i class="fas fa-gem"></i> {% if quiz_free_mode %}پلن‌ها{% else %}ارتقا پلن{% endif %}
                 </a>
                 <a href="{% url 'log_out_page' %}" class="up-btn-ghost">
                     <i class="fas fa-sign-out-alt"></i> خروج
@@ -76,8 +76,10 @@
         <div class="up-access-banner {% if quiz_access.allowed %}up-access-ok{% else %}up-access-warn{% endif %}" data-aos="fade-up">
             <i class="fas fa-{% if quiz_access.allowed %}shield-halved{% else %}triangle-exclamation{% endif %}"></i>
             <p>{{ quiz_access.message }}</p>
-            {% if not user.is_premium and credits == 0 %}
+            {% if not quiz_free_mode and not user.is_premium and credits == 0 %}
             <a href="{% url 'subscriptions:pricing' %}" class="up-btn-sm">خرید اشتراک</a>
+            {% elif quiz_free_mode %}
+            <a href="{% url 'quizbuilder:exam_hub' %}" class="up-btn-sm">شروع آزمون</a>
             {% endif %}
         </div>
 

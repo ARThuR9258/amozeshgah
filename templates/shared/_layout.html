@@ -37,12 +37,7 @@
                         {% include 'shared/_site_logo.html' with variant='header' %}
                     </a>
 
-                    <form class="header-search" action="{% url 'sample_questions:question_list' %}" method="get" role="search">
-                        <input type="search" name="q" placeholder="جستجو در نمونه سوالات..." aria-label="جستجو">
-                        <button type="submit" class="header-search-btn" aria-label="جستجو">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
+                    {# جستجوی نمونه سوالات — موقتاً غیرفعال #}
 
                     <div class="header-actions">
                         {% if user.is_authenticated %}
@@ -81,9 +76,7 @@
                         <a href="{% url 'first_page' %}" class="{% if request.path == '/' %}active{% endif %}">
                             <i class="fas fa-home"></i> خانه
                         </a>
-                        <a href="{% url 'sample_questions:question_list' %}" class="{% if 'questions' in request.path %}active{% endif %}">
-                            <i class="far fa-file-alt"></i> نمونه سوالات
-                        </a>
+                        {# نمونه سوالات — موقتاً غیرفعال #}
                         <a href="{% url 'quizbuilder:quiz_list' %}" class="{% if '/quiz' in request.path %}active{% endif %}">
                             <i class="far fa-clipboard"></i> آزمون آنلاین
                         </a>
@@ -115,7 +108,7 @@
             <div class="container">
                 <nav class="header-nav-links">
                     <a href="{% url 'first_page' %}"><i class="fas fa-home"></i> خانه</a>
-                    <a href="{% url 'sample_questions:question_list' %}"><i class="far fa-file-alt"></i> نمونه سوالات</a>
+                    {# نمونه سوالات — موقتاً غیرفعال #}
                     <a href="{% url 'quizbuilder:quiz_list' %}"><i class="far fa-clipboard"></i> آزمون آنلاین</a>
                     <a href="{% url 'subscriptions:pricing' %}"><i class="far fa-gem"></i> پلن‌ها</a>
                     <a href="{% url 'about_page' %}"><i class="far fa-building"></i> درباره ما</a>
@@ -173,7 +166,7 @@
                     <h6>راهنمای استفاده</h6>
                     <ul>
                         <li><a href="{% url 'quizbuilder:quiz_list' %}">شروع آزمون</a></li>
-                        <li><a href="{% url 'sample_questions:question_list' %}">دانلود نمونه سوال</a></li>
+                        {# نمونه سوالات — موقتاً غیرفعال #}
                         <li><a href="{% url 'sign_up_page' %}">ثبت‌نام</a></li>
                         <li><a href="{% url 'sign_in_page' %}">ورود به حساب</a></li>
                     </ul>

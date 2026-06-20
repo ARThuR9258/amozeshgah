@@ -10,7 +10,7 @@ from django.views.generic import TemplateView
 from seo_module.utils import build_seo
 
 from .models import PaymentOrder, SubscriptionPlan
-from .services import fulfill_order
+from .services import fulfill_order, is_quiz_free_mode
 
 
 class PricingView(TemplateView):
@@ -36,6 +36,7 @@ class PricingView(TemplateView):
             'credit_plans': credit_plans,
             'subscription_plans': subscription_plans,
             'comparison_features': self._comparison_rows(),
+            'quiz_free_mode': is_quiz_free_mode(),
         })
 
         if self.request.user.is_authenticated:
@@ -51,6 +52,15 @@ class PricingView(TemplateView):
         return context
 
     def _comparison_rows(self):
+        if is_quiz_free_mode():
+            return [
+                {'name': 'تعداد آزمون', 'free': 'نامحدود (موقت)', 'credit': 'به‌زودی', 'monthly': 'به‌زودی', 'yearly': 'به‌زودی'},
+                {'name': 'پاسخنامه تشریحی', 'free': True, 'credit': True, 'monthly': True, 'yearly': True},
+                {'name': 'آمار پیشرفت', 'free': True, 'credit': True, 'monthly': True, 'yearly': True},
+                {'name': 'پشتیبانی اولویت‌دار', 'free': True, 'credit': True, 'monthly': True, 'yearly': True},
+                {'name': 'به‌روزرسانی سوالات', 'free': True, 'credit': True, 'monthly': True, 'yearly': True},
+                {'name': 'وضعیت فعلی', 'free': 'فعال', 'credit': 'غیرفعال', 'monthly': 'غیرفعال', 'yearly': 'غیرفعال'},
+            ]
         return [
             {'name': 'تعداد آزمون', 'free': '۲ در روز', 'credit': 'بر اساس بسته', 'monthly': 'نامحدود', 'yearly': 'نامحدود'},
             {'name': 'پاسخنامه تشریحی', 'free': False, 'credit': True, 'monthly': True, 'yearly': True},
@@ -67,6 +77,13 @@ class CheckoutView(LoginRequiredMixin, View):
     template_name = 'subscriptions_module/checkout.html'
 
     def get(self, request, plan_slug):
+        if is_quiz_free_mode():
+            messages.info(
+                request,
+                'فعلاً همه آزمون‌ها رایگان است. خرید پلن به‌زودی فعال می‌شود.',
+            )
+            return redirect('subscriptions:pricing')
+
         plan = get_object_or_404(
             SubscriptionPlan,
             slug=plan_slug,
@@ -83,6 +100,13 @@ class CheckoutView(LoginRequiredMixin, View):
 
     def post(self, request, plan_slug):
         """ایجاد سفارش — در حالت توسعه پرداخت شبیه‌سازی می‌شود."""
+        if is_quiz_free_mode():
+            messages.info(
+                request,
+                'فعلاً همه آزمون‌ها رایگان است. خرید پلن به‌زودی فعال می‌شود.',
+            )
+            return redirect('subscriptions:pricing')
+
         plan = get_object_or_404(
             SubscriptionPlan,
             slug=plan_slug,

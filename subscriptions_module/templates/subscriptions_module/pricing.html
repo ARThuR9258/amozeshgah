@@ -18,25 +18,57 @@
             <span>پلن‌ها و قیمت</span>
         </nav>
 
+        {% if quiz_free_mode %}
+        <div class="pricing-promo-banner" data-aos="fade-up">
+            <div class="pricing-promo-icon"><i class="fas fa-gift"></i></div>
+            <div class="pricing-promo-copy">
+                <strong>دوره رایگان آیین‌یار — فعلاً همه آزمون‌ها بدون محدودیت!</strong>
+                <p>
+                    برای آشنایی با پلتفرم، تا اطلاع ثانوی همه کاربران می‌توانند
+                    <strong>رایگان و نامحدود</strong> آزمون بدهند.
+                    پلن‌های پولی به‌زودی فعال می‌شوند — همین الان تمرین را شروع کنید.
+                </p>
+            </div>
+            <a href="{% url 'quizbuilder:exam_hub' %}" class="btn-pricing-cta primary pricing-promo-cta">
+                <i class="fas fa-play"></i> شروع آزمون رایگان
+            </a>
+        </div>
+        {% endif %}
+
         <header class="pricing-hero" data-aos="fade-up">
             <div class="pricing-hero-copy">
+                {% if quiz_free_mode %}
+                <span class="pricing-badge pricing-badge--promo"><i class="fas fa-sparkles"></i> دوره رایگان فعال</span>
+                <h1>همین الان <span class="highlight">رایگان</span> تمرین کنید</h1>
+                <p>
+                    آزمون‌های واقعی آیین‌نامه با پاسخنامه فوری — بدون پرداخت و بدون محدودیت روزانه.
+                    پلن‌های زیر برای آینده طراحی شده‌اند و به‌زودی قابل خرید خواهند بود.
+                </p>
+                <div class="pricing-hero-chips">
+                    <span><i class="fas fa-infinity"></i> آزمون نامحدود (موقت)</span>
+                    <span><i class="fas fa-check-circle"></i> پاسخنامه کامل</span>
+                    <span><i class="fas fa-heart"></i> کاملاً رایگان</span>
+                </div>
+                {% else %}
                 <span class="pricing-badge"><i class="fas fa-gem"></i> پلن‌های اشتراک</span>
                 <h1>با <span class="highlight">آیین یار</span> قبولی را تضمین کنید</h1>
                 <p>
                     هزاران داوطلب با آزمون‌های واقعی و پاسخنامه فوری ما تمرین کردند.
                     پلن مناسب خود را انتخاب کنید و همین امروز شروع کنید.
                 </p>
-
                 <div class="pricing-hero-chips">
                     <span><i class="fas fa-infinity"></i> آزمون نامحدود</span>
                     <span><i class="fas fa-check-circle"></i> پاسخنامه کامل</span>
                     <span><i class="fas fa-gift"></i> ۲ آزمون رایگان روزانه</span>
                 </div>
+                {% endif %}
 
                 {% if user.is_authenticated and user_access %}
                 <div class="pricing-status-bar {% if user_access.allowed %}is-ok{% else %}is-warn{% endif %}">
                     <i class="fas fa-{% if user_access.allowed %}check-circle{% else %}info-circle{% endif %}"></i>
-                    {% if user_access.access_type == 'unlimited' %}
+                    {% if quiz_free_mode %}
+                        دوره رایگان فعال — آزمون نامحدود
+                    {% elif user_access.access_type == 'unlimited' %}
                         اشتراک فعال — آزمون نامحدود
                     {% elif user_access.access_type == 'credit' %}
                         {{ user_access.credits_remaining }} اعتبار باقی‌مانده
@@ -51,9 +83,15 @@
 
             <div class="pricing-hero-visual" aria-hidden="true">
                 <div class="pricing-mockup">
+                    {% if quiz_free_mode %}
+                    <div class="pricing-mockup-crown"><i class="fas fa-gift"></i></div>
+                    <div class="pricing-mockup-title">دوره رایگان</div>
+                    <div class="pricing-mockup-price">نامحدود</div>
+                    {% else %}
                     <div class="pricing-mockup-crown"><i class="fas fa-crown"></i></div>
                     <div class="pricing-mockup-title">پلن پرمیوم</div>
                     <div class="pricing-mockup-price">نامحدود</div>
+                    {% endif %}
                     <div class="pricing-mockup-features">
                         <span><i class="fas fa-check"></i> همه آزمون‌ها</span>
                         <span><i class="fas fa-check"></i> پاسخنامه</span>
@@ -66,8 +104,14 @@
         </header>
 
         <div class="pricing-grid">
+            {% if quiz_free_mode %}
+            <p class="pricing-coming-soon-note" data-aos="fade-up">
+                <i class="fas fa-info-circle"></i>
+                پلن‌های زیر به‌زودی فعال می‌شوند. فعلاً نیازی به خرید نیست — همه آزمون‌ها رایگان است.
+            </p>
+            {% endif %}
             {% for plan in subscription_plans %}
-            <article class="pricing-card {% if plan.is_popular %}popular{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+            <article class="pricing-card {% if plan.is_popular %}popular{% endif %}{% if quiz_free_mode %} pricing-card--disabled{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
                 <div class="pricing-card-accent"></div>
                 {% if plan.is_popular %}
                 <span class="pricing-popular-badge"><i class="fas fa-star"></i> محبوب‌ترین</span>
@@ -91,7 +135,9 @@
                     <li><i class="fas fa-check"></i> سوالات اشتباه من</li>
                     {% endfor %}
                 </ul>
-                {% if user.is_authenticated %}
+                {% if quiz_free_mode %}
+                <span class="btn-pricing-cta muted"><i class="fas fa-clock"></i> به‌زودی</span>
+                {% elif user.is_authenticated %}
                 <a href="{% url 'subscriptions:checkout' plan.slug %}{% if request.GET.quiz_id %}?quiz_id={{ request.GET.quiz_id }}{% endif %}" class="btn-pricing-cta {% if plan.is_popular %}primary{% else %}outline{% endif %}">
                     {% if plan.is_popular %}همین الان شروع کن{% else %}خرید اشتراک{% endif %}
                 </a>
@@ -104,21 +150,40 @@
             {% endfor %}
 
             {% if free_plan %}
-            <article class="pricing-card pricing-card--free" data-aos="fade-up">
+            <article class="pricing-card pricing-card--free {% if quiz_free_mode %}pricing-card--active-free{% endif %}" data-aos="fade-up">
                 <div class="pricing-card-accent"></div>
+                {% if quiz_free_mode %}
+                <span class="pricing-popular-badge pricing-popular-badge--free"><i class="fas fa-check"></i> پلن فعال شما</span>
+                {% endif %}
                 <div class="pricing-card-icon"><i class="fas fa-gift"></i></div>
                 <h3>{{ free_plan.name }}</h3>
-                <p class="plan-desc">شروع رایگان برای آشنایی با پلتفرم</p>
+                <p class="plan-desc">
+                    {% if quiz_free_mode %}
+                    دسترسی کامل و نامحدود — دوره رایگان آیین‌یار
+                    {% else %}
+                    شروع رایگان برای آشنایی با پلتفرم
+                    {% endif %}
+                </p>
                 <div class="pricing-price">
                     <span class="amount">۰</span>
                     <span class="currency">تومان</span>
                 </div>
                 <ul class="pricing-features">
+                    {% if quiz_free_mode %}
+                    <li><i class="fas fa-check"></i> آزمون نامحدود (موقت)</li>
+                    <li><i class="fas fa-check"></i> پاسخنامه کامل</li>
+                    <li><i class="fas fa-check"></i> ذخیره سوالات اشتباه</li>
+                    {% else %}
                     {% for feature in free_plan.features %}
                     <li><i class="fas fa-check"></i> {{ feature }}</li>
                     {% endfor %}
+                    {% endif %}
                 </ul>
+                {% if quiz_free_mode %}
+                <a href="{% url 'quizbuilder:exam_hub' %}" class="btn-pricing-cta primary">شروع آزمون رایگان</a>
+                {% else %}
                 <span class="btn-pricing-cta muted">پلن فعلی شما</span>
+                {% endif %}
             </article>
             {% endif %}
         </div>
@@ -127,11 +192,17 @@
             <div class="pricing-section-head">
                 <span class="pricing-section-label"><i class="fas fa-coins"></i> اعتباری</span>
                 <h2>بسته‌های اعتباری</h2>
-                <p>فقط به تعداد مشخصی آزمون نیاز دارید؟ بسته اعتبار بخرید و هر وقت خواستید استفاده کنید.</p>
+                <p>
+                    {% if quiz_free_mode %}
+                    این بسته‌ها به‌زودی فعال می‌شوند. فعلاً همه آزمون‌ها رایگان است.
+                    {% else %}
+                    فقط به تعداد مشخصی آزمون نیاز دارید؟ بسته اعتبار بخرید و هر وقت خواستید استفاده کنید.
+                    {% endif %}
+                </p>
             </div>
             <div class="credit-grid">
                 {% for plan in credit_plans %}
-                <article class="pricing-card pricing-card--credit" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:50 }}">
+                <article class="pricing-card pricing-card--credit{% if quiz_free_mode %} pricing-card--disabled{% endif %}" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:50 }}">
                     <div class="pricing-card-accent"></div>
                     <div class="pricing-card-icon"><i class="fas fa-coins"></i></div>
                     <h3>{{ plan.name }}</h3>
@@ -145,7 +216,9 @@
                         <li><i class="fas fa-check"></i> {{ feature }}</li>
                         {% endfor %}
                     </ul>
-                    {% if user.is_authenticated %}
+                    {% if quiz_free_mode %}
+                    <span class="btn-pricing-cta muted"><i class="fas fa-clock"></i> به‌زودی</span>
+                    {% elif user.is_authenticated %}
                     <a href="{% url 'subscriptions:checkout' plan.slug %}{% if request.GET.quiz_id %}?quiz_id={{ request.GET.quiz_id }}{% endif %}" class="btn-pricing-cta outline">خرید بسته</a>
                     {% else %}
                     <a href="{% url 'sign_in_page' %}" class="btn-pricing-cta outline">ورود و خرید</a>
@@ -159,7 +232,13 @@
             <div class="pricing-section-head">
                 <span class="pricing-section-label"><i class="fas fa-table"></i> مقایسه</span>
                 <h2>مقایسه امکانات</h2>
-                <p>مقایسه سریع پلن‌ها برای انتخاب بهتر</p>
+                <p>
+                    {% if quiz_free_mode %}
+                    در دوره رایگان فعلی، همه امکانات آزمون آنلاین در دسترس است.
+                    {% else %}
+                    مقایسه سریع پلن‌ها برای انتخاب بهتر
+                    {% endif %}
+                </p>
             </div>
             <div class="comparison-wrap">
                 <table class="comparison-table">

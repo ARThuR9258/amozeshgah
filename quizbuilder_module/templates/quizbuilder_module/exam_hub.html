@@ -188,7 +188,9 @@
                         {% endif %}
                     </div>
                     <div class="eh-stat-label">
-                        {% if quiz_access.access_type == 'free_daily' %}
+                        {% if quiz_access.access_type == 'free_promo' %}
+                            دوره رایگان فعال
+                        {% elif quiz_access.access_type == 'free_daily' %}
                             آزمون رایگان امروز
                         {% elif quiz_access.access_type == 'credit' %}
                             اعتبار باقی‌مانده

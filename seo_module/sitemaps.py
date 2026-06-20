@@ -17,7 +17,7 @@ class StaticViewSitemap(Sitemap):
             'first_page',
             'about_page',
             'contact_page',
-            'sample_questions:question_list',
+            # 'sample_questions:question_list',  # موقتاً غیرفعال
             'subscriptions:pricing',
             'blog:article_list',
             'quizbuilder:exam_hub',
@@ -29,7 +29,7 @@ class StaticViewSitemap(Sitemap):
     def priority(self, item):
         if item == 'first_page':
             return 1.0
-        if item in ('sample_questions:question_list', 'quizbuilder:exam_hub'):
+        if item in ('quizbuilder:exam_hub',):
             return 0.9
         return 0.7
 

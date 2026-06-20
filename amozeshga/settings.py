@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'index_module.context_processors.dashboard_sidebar',
                 'seo_module.context_processors.seo_context',
+                'subscriptions_module.context_processors.subscription_context',
             ],
         },
     },
@@ -180,3 +181,7 @@ SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'ayinyar.ir')
 SITE_URL = os.getenv('SITE_URL', f'https://{SITE_DOMAIN}')
 GOOGLE_SITE_VERIFICATION = os.getenv('GOOGLE_SITE_VERIFICATION', '')
 GOOGLE_ANALYTICS_ID = os.getenv('GOOGLE_ANALYTICS_ID', '')
+
+# --- اشتراک و دسترسی آزمون ---
+# True = همه آزمون‌ها رایگان (پرداخت غیرفعال) | False = حالت عادی پولی
+QUIZ_ACCESS_FREE_MODE = _env_bool('QUIZ_ACCESS_FREE_MODE', True)

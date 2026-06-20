@@ -31,7 +31,11 @@
                     <div class="home-hero-chips" data-aos="fade-up" data-aos-delay="120">
                         <span><i class="fas fa-list-ol"></i> ۲۰ سوال</span>
                         <span><i class="fas fa-clock"></i> ۳۰ دقیقه</span>
+                        {% if quiz_free_mode %}
+                        <span><i class="fas fa-infinity"></i> آزمون نامحدود رایگان</span>
+                        {% else %}
                         <span><i class="fas fa-gift"></i> ۲ آزمون رایگان روزانه</span>
+                        {% endif %}
                     </div>
 
                     <div class="home-hero-actions" data-aos="fade-up" data-aos-delay="150">
@@ -54,10 +58,7 @@
                             ورود
                         </a>
                         {% endif %}
-                        <a href="{% url 'sample_questions:question_list' %}" class="home-btn home-btn-ghost">
-                            <i class="far fa-file-alt"></i>
-                            نمونه سوالات
-                        </a>
+                        {# نمونه سوالات — موقتاً غیرفعال #}
                     </div>
 
                     <div class="home-hero-trust" data-aos="fade-up" data-aos-delay="200">
@@ -320,7 +321,11 @@
                         <span class="home-faq-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
                     </summary>
                     <div class="home-faq-answer">
+                        {% if quiz_free_mode %}
+                        فعلاً همه آزمون‌ها کاملاً رایگان و بدون محدودیت است. پلن‌های پولی به‌زودی فعال می‌شوند.
+                        {% else %}
                         هر روز ۲ آزمون رایگان دارید. برای تمرین بیشتر می‌توانید بسته اعتباری یا اشتراک نامحدود بگیرید.
+                        {% endif %}
                     </div>
                 </details>
                 <details class="home-faq-item">
@@ -330,7 +335,11 @@
                         <span class="home-faq-chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
                     </summary>
                     <div class="home-faq-answer">
+                        {% if quiz_free_mode %}
+                        پلن‌های اعتباری و اشتراکی به‌زودی فعال می‌شوند. فعلاً همه امکانات آزمون آنلاین رایگان است.
+                        {% else %}
                         بسته اعتباری برای تعداد مشخص آزمون است؛ اشتراک ماهانه و سالانه دسترسی نامحدود به همه آزمون‌ها می‌دهد.
+                        {% endif %}
                     </div>
                 </details>
                 <details class="home-faq-item">

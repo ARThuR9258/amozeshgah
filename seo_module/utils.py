@@ -108,14 +108,15 @@ def _build_schemas(request, title, description, canonical, **kwargs):
         'url': site_url,
         'description': cfg.DEFAULT_DESCRIPTION,
         'inLanguage': 'fa-IR',
-        'potentialAction': {
-            '@type': 'SearchAction',
-            'target': {
-                '@type': 'EntryPoint',
-                'urlTemplate': f'{site_url}/questions/?q={{search_term_string}}',
-            },
-            'query-input': 'required name=search_term_string',
-        },
+        # نمونه سوالات — موقتاً غیرفعال
+        # 'potentialAction': {
+        #     '@type': 'SearchAction',
+        #     'target': {
+        #         '@type': 'EntryPoint',
+        #         'urlTemplate': f'{site_url}/questions/?q={{search_term_string}}',
+        #     },
+        #     'query-input': 'required name=search_term_string',
+        # },
     })
 
     schemas.append({

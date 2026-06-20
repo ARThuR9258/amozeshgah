@@ -43,6 +43,97 @@
 
 .pricing-breadcrumb a:hover { opacity: 0.85; }
 
+/* promo banner — دوره رایگان */
+.pricing-promo-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.12) 0%, rgba(77, 171, 247, 0.1) 100%);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    box-shadow: 0 12px 40px rgba(52, 211, 153, 0.08);
+}
+
+.pricing-promo-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--pr-success);
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.pricing-promo-copy {
+    flex: 1;
+    min-width: 220px;
+    text-align: right;
+}
+
+.pricing-promo-copy strong {
+    display: block;
+    color: var(--site-text);
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+}
+
+.pricing-promo-copy p {
+    margin: 0;
+    color: var(--site-muted);
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.pricing-promo-cta {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.pricing-badge--promo {
+    background: rgba(52, 211, 153, 0.12);
+    border-color: rgba(52, 211, 153, 0.35);
+    color: var(--pr-success);
+}
+
+.pricing-coming-soon-note {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.1rem;
+    border-radius: 14px;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    color: var(--pr-warning);
+    font-size: 0.88rem;
+    margin-bottom: 0.25rem;
+}
+
+.pricing-card--disabled {
+    opacity: 0.72;
+}
+
+.pricing-card--disabled .pricing-price .amount {
+    text-decoration: line-through;
+    text-decoration-color: rgba(255, 255, 255, 0.25);
+}
+
+.pricing-card--active-free {
+    border-color: rgba(52, 211, 153, 0.45) !important;
+    box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.2), 0 16px 48px rgba(52, 211, 153, 0.1);
+}
+
+.pricing-popular-badge--free {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--pr-success);
+}
+
 /* hero */
 .pricing-hero {
     display: grid;

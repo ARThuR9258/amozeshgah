@@ -4,6 +4,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -13,6 +14,11 @@ from .models import CreditTransaction, SubscriptionPlan, UserSubscription
 
 # حداکثر آزمون رایگان روزانه برای کاربران بدون اشتراک/اعتبار
 MAX_DAILY_FREE_ATTEMPTS = 2
+
+
+def is_quiz_free_mode() -> bool:
+    """دوره موقت رایگان — همه آزمون‌ها بدون محدودیت."""
+    return getattr(settings, 'QUIZ_ACCESS_FREE_MODE', False)
 
 
 @dataclass
@@ -68,6 +74,13 @@ def can_take_quiz(user) -> QuizAccessResult:
     - سهمیه رایگان روزانه → مجاز
     - غیر این صورت → رد
     """
+    if is_quiz_free_mode() and user.is_authenticated:
+        return QuizAccessResult(
+            allowed=True,
+            access_type='free_promo',
+            message='فعلاً همه آزمون‌ها رایگان است — بدون محدودیت تمرین کنید!',
+        )
+
     if user.is_staff or user.is_superuser:
         return QuizAccessResult(
             allowed=True,
@@ -116,6 +129,9 @@ def can_take_quiz(user) -> QuizAccessResult:
 @transaction.atomic
 def consume_quiz_access(user, access_type: str) -> None:
     """پس از شروع آزمون، سهمیه یا اعتبار را کسر کن."""
+    if is_quiz_free_mode():
+        return
+
     if access_type == 'unlimited':
         return
 

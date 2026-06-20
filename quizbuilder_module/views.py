@@ -45,11 +45,12 @@ class ExamHubView(TemplateView):
     template_name = 'quizbuilder_module/exam_hub.html'
 
     def get_context_data(self, **kwargs):
-        from subscriptions_module.services import can_take_quiz, get_active_subscription
+        from subscriptions_module.services import can_take_quiz, get_active_subscription, is_quiz_free_mode
 
         context = super().get_context_data(**kwargs)
         user = self.request.user
         active_count = Question.objects.filter(is_active=True).count()
+        free_mode = is_quiz_free_mode()
 
         if user.is_authenticated:
             active = get_active_session(user)
@@ -61,8 +62,12 @@ class ExamHubView(TemplateView):
             user_total = completed
             user_pass_rate = int(round((passed_count / user_total) * 100)) if user_total else 0
             sub = get_active_subscription(user)
-            plan_name = sub.plan.name if sub else 'رایگان'
-            plan_expires = sub.expires_at if sub else None
+            if free_mode:
+                plan_name = 'رایگان (موقت)'
+                plan_expires = None
+            else:
+                plan_name = sub.plan.name if sub else 'رایگان'
+                plan_expires = sub.expires_at if sub else None
             quiz_access = can_take_quiz(user)
             credits = user.credits or 0
         else:
