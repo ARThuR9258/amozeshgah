@@ -271,7 +271,15 @@
                         <i class="fas fa-play"></i> ادامه آزمون
                     </a>
                 {% else %}
-                    {% if can_start and quiz_access.allowed %}
+                    {% if is_guest %}
+                        <p class="eh-panel-desc">برای شروع آزمون لطفاً وارد حساب شوید یا ثبت‌نام کنید.</p>
+                        <a href="{% url 'sign_up_page' %}" class="eh-btn-primary eh-btn-block">
+                            <i class="fas fa-user-plus"></i> ثبت‌نام رایگان
+                        </a>
+                        <a href="{% url 'sign_in_page' %}" class="eh-btn-outline eh-btn-block">
+                            <i class="fas fa-sign-in-alt"></i> ورود
+                        </a>
+                    {% elif can_start and quiz_access.allowed %}
                         <p class="eh-panel-desc">آماده‌ای؟ با یک کلیک آزمون {{ required_questions }} سوالی شروع می‌شود.</p>
                         <form method="post" action="{% url 'quizbuilder:exam_start' %}">
                             {% csrf_token %}
